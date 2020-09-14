@@ -22,7 +22,10 @@ class IPWhitelist
         }
         if (!\in_array($remote_address, $ip_whitelist)) {
             $message = $request->method() . ' ' . $request->path() . '  Unauthorized access. You don\'t have the required privileges to access the ressource.';
-            return response($message, 401);
+            if (function_exists('response')) {
+                return call_user_func_array('response', array($message, 401));
+            }
+            throw new \RuntimeException('response handler method not defined...', 500);
         }
         return $next($request);
     }

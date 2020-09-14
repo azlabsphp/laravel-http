@@ -2,12 +2,11 @@
 
 namespace Drewlabs\Packages\Http\Controllers;
 
-use Drewlabs\Packages\Http\Controllers\RessourcesBaseController as Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\DatabaseManager;
 
-class IsUniqueValidatorController extends Controller
+class IsUniqueValidatorController extends ApiController
 {
 
     /**

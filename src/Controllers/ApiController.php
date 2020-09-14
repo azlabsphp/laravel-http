@@ -5,11 +5,13 @@ namespace Drewlabs\Packages\Http\Controllers;
 use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Contracts\Container\Container as Application;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Illuminate\Routing\Controller;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
+use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
 
-abstract class ApiController extends Controller
+abstract class ApiController
 {
+    use LaravelOrLumenFrameworksApiController;
+
     /**
      *
      * @var Application

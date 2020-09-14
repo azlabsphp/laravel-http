@@ -2,8 +2,33 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
+use BadMethodCallException;
+use Illuminate\Routing\ControllerMiddlewareOptions;
+use Closure as BaseClosure;
+use Illuminate\Contracts\Auth\Access\Gate;
+// TODO : In future release delete these lines
+// use Illuminate\Http\JsonResponse;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Str;
+
+
 trait LaravelOrLumenFrameworksApiController {
-        /**
+
+    /**
+     * The response builder callback.
+     *
+     * @var \Closure
+     */
+    protected static $responseBuilder;
+
+    /**
+     * The error formatter callback.
+     *
+     * @var \Closure
+     */
+    protected static $errorFormatter;
+
+    /**
      * The middleware registered on the controller.
      *
      * @var array
@@ -19,13 +44,40 @@ trait LaravelOrLumenFrameworksApiController {
      */
     public function middleware($middleware, array $options = [])
     {
+        if (is_lumen(app())) {
+            $this->middleware[$middleware] = $options;
+        }
+        return $this->reateLaravelMiddleware($middleware, $options);
+    }
+
+    /**
+     * Get the middleware for a given method.
+     *
+     * @param  string  $method
+     * @return array
+     */
+    public function getMiddlewareForMethod($method)
+    {
+        $middleware = [];
+        foreach ($this->middleware as $name => $options) {
+            if (isset($options['only']) && ! in_array($method, (array) $options['only'])) {
+                continue;
+            }
+            if (isset($options['except']) && in_array($method, (array) $options['except'])) {
+                continue;
+            }
+            $middleware[] = $name;
+        }
+        return $middleware;
+    }
+
+    private function createLaravelMiddleware($middleware, array $options = []) {
         foreach ((array) $middleware as $m) {
             $this->middleware[] = [
                 'middleware' => $m,
                 'options' => &$options,
             ];
         }
-
         return new ControllerMiddlewareOptions($options);
     }
 
@@ -65,5 +117,81 @@ trait LaravelOrLumenFrameworksApiController {
         throw new BadMethodCallException(sprintf(
             'Method %s::%s does not exist.', static::class, $method
         ));
+    }
+
+    // Lumen routing controller static methods
+
+    /**
+     * Set the response builder callback.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public static function buildResponseUsing(BaseClosure $callback)
+    {
+        static::$responseBuilder = $callback;
+    }
+
+    /**
+     * Set the error formatter callback.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public static function formatErrorsUsing(BaseClosure $callback)
+    {
+        static::$errorFormatter = $callback;
+    }
+
+    // Lumen Authorization functions
+
+
+    /**
+     * Authorize a given action against a set of arguments.
+     *
+     * @param  mixed  $ability
+     * @param  mixed|array  $arguments
+     * @return \Illuminate\Auth\Access\Response
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function authorize($ability, $arguments = [])
+    {
+        [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
+
+        return app(Gate::class)->authorize($ability, $arguments);
+    }
+
+    /**
+     * Authorize a given action for a user.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable|mixed  $user
+     * @param  mixed  $ability
+     * @param  mixed|array  $arguments
+     * @return \Illuminate\Auth\Access\Response
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function authorizeForUser($user, $ability, $arguments = [])
+    {
+        [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
+
+        return app(Gate::class)->forUser($user)->authorize($ability, $arguments);
+    }
+
+    /**
+     * Guesses the ability's name if it wasn't provided.
+     *
+     * @param  mixed  $ability
+     * @param  mixed|array  $arguments
+     * @return array
+     */
+    protected function parseAbilityAndArguments($ability, $arguments)
+    {
+        if (is_string($ability)) {
+            return [$ability, $arguments];
+        }
+
+        return [debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2]['function'], $ability];
     }
 }

@@ -7,13 +7,14 @@ use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Http\Request;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Illuminate\Routing\Controller;
+use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
 
 /**
  * @package Drewlabs\Packages\Http
  */
-class ApiDataProviderController extends Controller
+class ApiDataProviderController
 {
+    use LaravelOrLumenFrameworksApiController;
     /**
      * Undocumented variable
      *

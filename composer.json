@@ -1,0 +1,46 @@
+{
+    "name": "drewlabs/http",
+    "description": "Simple HTTP packages definitions",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "azandrew-sidoine",
+        "email": "asmyns.platonnas29@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/routing": "^7.0",
+        "illuminate/support": "^7.0",
+        "illuminate/contracts": "^7.0",
+        "drewlabs/contracts": "dev-master",
+        "drewlabs/core": "dev-master",
+        "drewlabs/utils": "dev-master",
+        "drewlabs/helpers": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Drewlabs\\Packages\\Http\\": "src/"
+        },
+        "files": [
+            "helpers.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:azandrew-sidoine/drewlabs-php-contracts.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:azandrew-sidoine/drewlabs-php-core.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:azandrew-sidoine/drewlabs-php-utils.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:azandrew-sidoine/drewlabs-helpers.git"
+        }
+    ]
+}

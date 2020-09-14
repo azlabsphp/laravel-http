@@ -2,8 +2,6 @@
 
 namespace Drewlabs\Packages\Http\Requests;
 
-
-
 class LoginRequest implements \Drewlabs\Core\Validator\Contracts\Validatable
 {
     /**

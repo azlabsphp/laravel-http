@@ -14,25 +14,31 @@ trait ActionResponseHandler
      */
     public function respond($data, $status, $headers = array())
     {
-        return response()->json(
-            $data,
-            $status,
-            $headers,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-        );
+        if (function_exists('response')) {
+            return call_user_func('response')->json(
+                $data,
+                $status,
+                $headers,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            );
+        }
+        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
     }
 
     /**
      * Convert an authorization exception into a response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  \Exception|null  $exception
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
-    public function unauthorized($request, \Exception $exception = null)
+    protected function unauthorized($request, \Exception $exception = null)
     {
-        $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . (isset($exception) ? ' [ERROR] : ' . $exception->getMessage() : '');
-        return response($message, 401);
+        if (function_exists('response')) {
+            $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . (isset($exception) ? ' [ERROR] : ' . $exception->getMessage() : '');
+            return call_user_func_array('response', array($message, 401));
+        }
+        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
     }
 
     // Provides functionnalities for managing file download
@@ -45,10 +51,13 @@ trait ActionResponseHandler
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function download($pathToFile, $downloadedFileName = null, $headers = array(), $deleteAfterSend = false)
+    protected function download($pathToFile, $downloadedFileName = null, $headers = array(), $deleteAfterSend = false)
     {
-        $result = response()->download($pathToFile, $downloadedFileName, $headers);
-        return $result->deleteFileAfterSend($deleteAfterSend);
+        if (function_exists('response')) {
+            $result = call_user_func('response')->download($pathToFile, $downloadedFileName, $headers);
+            return $result->deleteFileAfterSend($deleteAfterSend);
+        }
+        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
     }
 
     /**
@@ -58,9 +67,13 @@ trait ActionResponseHandler
      * @param \Closure $callback
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
-    public function streamDownload($filename, \Closure $callback)
+    protected function streamDownload($filename, \Closure $callback)
     {
-        return response()->streamDownload($callback, $filename);
+        if (function_exists('response')) {
+            return call_user_func('response')->streamDownload($callback, $filename);
+        }
+        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
+
     }
     /**
      * This method is a wrapper arround of the [\Illuminate\Contracts\Routing\ResponseFactory::class] [[file]]
@@ -71,8 +84,11 @@ trait ActionResponseHandler
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function loadFile($pathToFile, $headers = array())
+    protected function loadFile($pathToFile, $headers = array())
     {
-        return response()->file($pathToFile, $headers);
+        if (function_exists('response')) {
+            return call_user_func('response')->file($pathToFile, $headers);
+        }
+        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
     }
 }

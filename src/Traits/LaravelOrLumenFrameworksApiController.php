@@ -6,10 +6,6 @@ use BadMethodCallException;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use Closure as BaseClosure;
 use Illuminate\Contracts\Auth\Access\Gate;
-// TODO : In future release delete these lines
-// use Illuminate\Http\JsonResponse;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Str;
 
 
 trait LaravelOrLumenFrameworksApiController {

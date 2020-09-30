@@ -9,6 +9,7 @@
     }],
     "minimum-stability": "dev",
     "require": {
+        "php": ">=7.2",
         "illuminate/routing": "^7.0",
         "illuminate/support": "^7.0",
         "illuminate/contracts": "^7.0",

@@ -1,5 +1,5 @@
 {
-    "name": "drewlabs/laravel-lumen-http",
+    "name": "drewlabs/http",
     "description": "Simple HTTP packages definitions",
     "type": "library",
     "license": "MIT",
@@ -12,7 +12,7 @@
         "illuminate/routing": "^8.0",
         "illuminate/support": "^8.0",
         "illuminate/contracts": "^8.0",
-        "drewlabs/core": "v1.1.8.x-dev",
+        "drewlabs/core": "v1.8.x-dev",
         "drewlabs/helpers": "v1.8.x-dev"
     },
     "autoload": {

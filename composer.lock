@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83e397ee3f0038580c48dbcb606a56ea",
+    "content-hash": "4e5f8b442b239ed09e1a14aab475c09e",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -138,7 +138,7 @@
         },
         {
             "name": "drewlabs/core",
-            "version": "v1.1.8.x-dev",
+            "version": "v1.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:azandrew-sidoine/drewlabs-php-core.git",
@@ -175,7 +175,7 @@
             ],
             "description": "Basic provider classes",
             "support": {
-                "source": "https://github.com/azandrew-sidoine/drewlabs-php-core/tree/v1.1.8",
+                "source": "https://github.com/azandrew-sidoine/drewlabs-php-core/tree/v1.8",
                 "issues": "https://github.com/azandrew-sidoine/drewlabs-php-core/issues"
             },
             "time": "2020-09-30T09:34:12+00:00"

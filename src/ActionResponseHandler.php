@@ -20,9 +20,15 @@ class ActionResponseHandler implements IActionResponseHandler
     {
         return $this->respond(
             array(
-                'success' => $success,
-                'body' => array('error_message' => null, 'response_data' => $data, 'errors' => $errors),
-                'code' => 200,
+                "data" => array(
+                    'success' => $success,
+                    'body' => array(
+                        'error_message' => null,
+                        'response_data' => $data,
+                        'errors' => $errors
+                    ),
+                    'code' => 200,
+                ),
             ),
             200
         );
@@ -36,18 +42,21 @@ class ActionResponseHandler implements IActionResponseHandler
      */
     public function respondError(\Exception $e, array $errors = null)
     {
-        $response_message = $e->getMessage();
-        app()['log']->error('API_ERROR_MESSAGE : ' . $e->getMessage());
-        // Checks if running in production or dev for error message to be send
+        app()['log']->error('HTTP ERROR : ' . $e->getMessage());
         return $this->respond(
             array(
-                'success' => false,
-                'body' => array(
-                    'error_message' => filter_var(config('app.debug'), FILTER_VALIDATE_BOOLEAN) === false ?
-                        'Server Error' : $response_message,
-                    'response_data' => null, 'errors' => $errors
+                "data" => array(
+                    'success' => false,
+                    'body' => array(
+                        'error_message' => filter_var(
+                            config('app.debug'),
+                            FILTER_VALIDATE_BOOLEAN
+                        ) === false ?
+                            'Server Error' : $e->getMessage(),
+                        'response_data' => null, 'errors' => $errors
+                    ),
+                    'code' => 500,
                 ),
-                'code' => 500,
             ),
             500
         );
@@ -60,12 +69,16 @@ class ActionResponseHandler implements IActionResponseHandler
      */
     public function respondBadRequest(array $errors)
     {
-        $response_message = 'Bad request... Invalid request inputs';
         return $this->respond(
             array(
-                'success' => false,
-                'body' => array('error_message' => $response_message, 'response_data' => null, 'errors' => $errors),
-                'code' => 422,
+                "data" => array(
+                    'success' => false,
+                    'body' => array(
+                        'error_message' => 'Bad request... Invalid request inputs',
+                        'response_data' => null, 'errors' => $errors
+                    ),
+                    'code' => 422,
+                ),
             ),
             422
         );

@@ -1,5 +1,5 @@
 {
-    "name": "drewlabs/laravel-lumen-http",
+    "name": "drewlabs/http",
     "description": "Simple HTTP packages definitions",
     "type": "library",
     "license": "MIT",

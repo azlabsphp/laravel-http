@@ -13,7 +13,7 @@
         "illuminate/routing": "^7.0",
         "illuminate/support": "^7.0",
         "illuminate/contracts": "^7.0",
-        "drewlabs/core": "v1.1.x-dev",
+        "drewlabs/core": "dev-master",
         "drewlabs/helpers": "v1.1.x-dev"
     },
     "autoload": {

@@ -32,7 +32,7 @@ trait ActionResponseHandler
      * @param  \Exception|null  $exception
      * @return Response
      */
-    protected function unauthorized($request, \Exception $exception = null)
+    public function unauthorized($request, \Exception $exception = null)
     {
         if (function_exists('response')) {
             $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . (isset($exception) ? ' [ERROR] : ' . $exception->getMessage() : '');
@@ -51,7 +51,7 @@ trait ActionResponseHandler
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    protected function download($pathToFile, $downloadedFileName = null, $headers = array(), $deleteAfterSend = false)
+    public function download($pathToFile, $downloadedFileName = null, $headers = array(), $deleteAfterSend = false)
     {
         if (function_exists('response')) {
             $result = call_user_func('response')->download($pathToFile, $downloadedFileName, $headers);
@@ -67,13 +67,12 @@ trait ActionResponseHandler
      * @param \Closure $callback
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
-    protected function streamDownload($filename, \Closure $callback)
+    public function streamDownload($filename, \Closure $callback)
     {
         if (function_exists('response')) {
             return call_user_func('response')->streamDownload($callback, $filename);
         }
         throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
-
     }
     /**
      * This method is a wrapper arround of the [\Illuminate\Contracts\Routing\ResponseFactory::class] [[file]]
@@ -84,7 +83,7 @@ trait ActionResponseHandler
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    protected function loadFile($pathToFile, $headers = array())
+    public function loadFile($pathToFile, $headers = array())
     {
         if (function_exists('response')) {
             return call_user_func('response')->file($pathToFile, $headers);

@@ -7,7 +7,7 @@
         "name": "azandrew-sidoine",
         "email": "asmyns.platonnas29@gmail.com"
     }],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "illuminate/routing": "^7.0",
         "illuminate/support": "^7.0",

@@ -12,7 +12,8 @@ use Illuminate\Contracts\Auth\Access\Gate;
 // use Illuminate\Support\Str;
 
 
-trait LaravelOrLumenFrameworksApiController {
+trait LaravelOrLumenFrameworksApiController
+{
 
     /**
      * The response builder callback.
@@ -47,7 +48,7 @@ trait LaravelOrLumenFrameworksApiController {
         if (is_lumen(app())) {
             $this->middleware[$middleware] = $options;
         }
-        return $this->reateLaravelMiddleware($middleware, $options);
+        return $this->createLaravelMiddleware($middleware, $options);
     }
 
     /**
@@ -60,7 +61,7 @@ trait LaravelOrLumenFrameworksApiController {
     {
         $middleware = [];
         foreach ($this->middleware as $name => $options) {
-            if (isset($options['only']) && ! in_array($method, (array) $options['only'])) {
+            if (isset($options['only']) && !in_array($method, (array) $options['only'])) {
                 continue;
             }
             if (isset($options['except']) && in_array($method, (array) $options['except'])) {
@@ -71,7 +72,8 @@ trait LaravelOrLumenFrameworksApiController {
         return $middleware;
     }
 
-    private function createLaravelMiddleware($middleware, array $options = []) {
+    private function createLaravelMiddleware($middleware, array $options = [])
+    {
         foreach ((array) $middleware as $m) {
             $this->middleware[] = [
                 'middleware' => $m,
@@ -115,7 +117,9 @@ trait LaravelOrLumenFrameworksApiController {
     public function __call($method, $parameters)
     {
         throw new BadMethodCallException(sprintf(
-            'Method %s::%s does not exist.', static::class, $method
+            'Method %s::%s does not exist.',
+            static::class,
+            $method
         ));
     }
 

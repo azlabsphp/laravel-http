@@ -14,7 +14,6 @@
         "illuminate/contracts": "^7.0",
         "drewlabs/contracts": "dev-master",
         "drewlabs/core": "dev-master",
-        "drewlabs/utils": "dev-master",
         "drewlabs/helpers": "dev-master"
     },
     "autoload": {

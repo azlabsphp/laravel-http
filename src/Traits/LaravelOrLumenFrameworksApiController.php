@@ -42,7 +42,7 @@ trait LaravelOrLumenFrameworksApiController
     public function middleware($middleware, array $options = [])
     {
         if (is_lumen(app())) {
-            $this->middleware[$middleware] = $options;
+            return $this->middleware[$middleware] = $options;
         }
         return $this->createLaravelMiddleware($middleware, $options);
     }

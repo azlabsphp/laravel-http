@@ -6,10 +6,6 @@ use BadMethodCallException;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use Closure as BaseClosure;
 use Illuminate\Contracts\Auth\Access\Gate;
-// TODO : In future release delete these lines
-// use Illuminate\Http\JsonResponse;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Str;
 
 
 trait LaravelOrLumenFrameworksApiController
@@ -46,7 +42,7 @@ trait LaravelOrLumenFrameworksApiController
     public function middleware($middleware, array $options = [])
     {
         if (is_lumen(app())) {
-            $this->middleware[$middleware] = $options;
+            return $this->middleware[$middleware] = $options;
         }
         return $this->createLaravelMiddleware($middleware, $options);
     }

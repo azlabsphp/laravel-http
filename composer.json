@@ -14,7 +14,8 @@
         "illuminate/support": "^8.0",
         "illuminate/contracts": "^8.0",
         "drewlabs/core": "dev-master",
-        "drewlabs/helpers": "v1.8.x-dev"
+        "drewlabs/helpers": "v1.8.x-dev",
+        "drewlabs/core-helpers": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -27,19 +28,19 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:azandrew-sidoine/drewlabs-php-contracts.git"
+            "url": "git@github.com:liksoft/drewlabs-php-contracts.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:azandrew-sidoine/drewlabs-php-core.git"
+            "url": "git@github.com:liksoft/drewlabs-php-core.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:azandrew-sidoine/drewlabs-php-utils.git"
+            "url": "git@github.com:liksoft/drewlabs-helpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:azandrew-sidoine/drewlabs-helpers.git"
+            "url": "git@github.com:liksoft/drewlabs-php-core-helpers.git"
         }
     ]
 }

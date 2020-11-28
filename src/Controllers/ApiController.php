@@ -22,7 +22,7 @@ abstract class ApiController
      *
      * @var IActionResponseHandler
      */
-    private $responseHandler;
+    protected $responseHandler;
 
     /**
      * Base controller object initialiser
@@ -33,7 +33,6 @@ abstract class ApiController
     {
         $this->app = app();
         $this->responseHandler = $this->app->make(IActionResponseHandler::class);
-
     }
 
     /**
@@ -139,7 +138,6 @@ abstract class ApiController
             return call_user_func('response')->streamDownload($callback, $filename);
         }
         throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
-
     }
     /**
      * This method is a wrapper arround of the [\Illuminate\Contracts\Routing\ResponseFactory::class] [[file]]

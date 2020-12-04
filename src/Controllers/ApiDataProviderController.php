@@ -91,7 +91,8 @@ class ApiDataProviderController
                 $filters,
                 ['*'],
                 \config("drewlabs_http_handlers.requests.$collection.actions.index.relationQuery", true),
-                $request->has('page')
+                $request->has('page'),
+                $request->get('per_page')
             );
             return $this->actionResponseHandler->respondOk(
                 $this->actionHandler->applyTransformResponseBody(

@@ -32,7 +32,7 @@ abstract class ApiController
     public function __construct()
     {
         $this->app = app();
-        $this->responseHandler = $this->app->make(IActionResponseHandler::class);
+        $this->responseHandler = $this->app->get(IActionResponseHandler::class);
     }
 
     /**

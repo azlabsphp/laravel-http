@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Container\Container;
+use Psr\Container\ContainerInterface;
+
 
 if (! function_exists('app')) {
     /**
@@ -8,14 +10,13 @@ if (! function_exists('app')) {
      *
      * @param  string|null  $make
      * @param  array  $parameters
-     * @return mixed|\Laravel\Lumen\Application
+     * @return mixed|ContainerInterface
      */
     function app($make = null, array $parameters = [])
     {
         if (is_null($make)) {
             return Container::getInstance();
         }
-
         return Container::getInstance()->make($make, $parameters);
     }
 }
@@ -33,13 +34,13 @@ if (! function_exists('config')) {
     function config($key = null, $default = null)
     {
         if (is_null($key)) {
-            return app('config');
+            return \app()->get('config');
         }
 
         if (is_array($key)) {
-            return app('config')->set($key);
+            return \app()->get('config')->set($key);
         }
 
-        return app('config')->get($key, $default);
+        return \app()->get('config')->get($key, $default);
     }
 }

@@ -42,5 +42,13 @@
             "type": "vcs",
             "url": "git@github.com:liksoft/drewlabs-helpers.git"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Drewlabs\\Packages\\Http\\HttpServiceProvider"
+            ],
+            "aliases": {}
+        }
+    }
 }

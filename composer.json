@@ -41,5 +41,13 @@
             "type": "vcs",
             "url": "git@github.com:azandrew-sidoine/drewlabs-helpers.git"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Drewlabs\\Packages\\Http\\HttpServiceProvider"
+            ],
+            "aliases": {}
+        }
+    }
 }

@@ -44,3 +44,18 @@ if (! function_exists('config')) {
         return \app()->get('config')->get($key, $default);
     }
 }
+
+if (!function_exists('drewlabs_http_handlers_configs')) {
+    /**
+     * Get configuration values from the drewlabs_http_handlers.php configuration file
+     *
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed|null
+     */
+    function drewlabs_http_handlers_configs($key, $default = null)
+    {
+        $key = 'drewlabs_http_handlers.' . $key;
+        return \config($key, $default);
+    }
+}

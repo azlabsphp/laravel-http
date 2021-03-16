@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http\Middleware\Cors;
 
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\ICorsServices;
+use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
 use Drewlabs\Packages\Http\Middleware\Cors\CorsServices;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -27,7 +27,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ICorsServices::class, function () {
+        $this->app->bind(CorsServicesInterface::class, function () {
             return new CorsServices(\config('cors', null));
         });
     }

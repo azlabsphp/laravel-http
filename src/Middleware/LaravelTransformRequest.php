@@ -5,7 +5,7 @@ namespace Drewlabs\Packages\Http\Middleware;
 use Closure;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class LaravelTransformRequest
+abstract class LaravelTransformRequest
 {
     /**
      * Handle an incoming request.
@@ -86,8 +86,5 @@ class LaravelTransformRequest
      * @param  mixed  $value
      * @return mixed
      */
-    protected function transform($key, $value)
-    {
-        return $value;
-    }
+    abstract protected function transform($key, $value);
 }

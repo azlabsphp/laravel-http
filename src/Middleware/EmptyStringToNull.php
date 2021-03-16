@@ -5,11 +5,7 @@ namespace Drewlabs\Packages\Http\Middleware;
 class EmptyStringToNull extends LaravelTransformRequest
 {
     /**
-     * Transform the given value.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return mixed
+     * @inheritDoc
      */
     protected function transform($key, $value)
     {

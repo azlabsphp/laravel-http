@@ -5,7 +5,7 @@ namespace Drewlabs\Packages\Http\Middleware\Cors\Contracts;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-interface ICorsServices
+interface CorsServicesInterface
 {
     /**
      * Returns whether or not the request is a CORS request.

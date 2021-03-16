@@ -1,7 +1,6 @@
 <?php //
 
 namespace Drewlabs\Packages\Http\Exceptions;
-
 class TransformRequestBodyException extends \RuntimeException
 {
     public function __construct(\Illuminate\Http\Request $request = null, $message = 'Bad transform request configuration error', $code = 500)

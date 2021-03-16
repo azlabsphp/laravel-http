@@ -2,12 +2,12 @@
 
 namespace Drewlabs\Packages\Http\Middleware\Cors;
 
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\ICorsServices;
+use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CorsServices implements ICorsServices
+class CorsServices implements CorsServicesInterface
 {
     /**
      * List of allowed hosts

@@ -2,8 +2,8 @@
 
 namespace Drewlabs\Packages\Http\Contracts;
 
-use Drewlabs\Core\Validator\Contracts\IValidator;
 use Drewlabs\Contracts\Data\IDataProvider;
+use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**
  * @package Drewlabs\Packages\Http
@@ -62,12 +62,12 @@ interface IDataProviderControllerActionHandler
      *
      * @param \Closure|callable $callback
      * @param  \Illuminate\Http\Request|\Psr\Http\Message\RequestInterface $request
-     * @param IValidator $validator
+     * @param ValidatorContract $validator
      * @param array $params
      *
      * @return array|null
      */
-    public function applyValidationHandler($callback, $request, IValidator $validator, $params = []);
+    public function applyValidationHandler($callback, $request, ValidatorContract $validator, $params = []);
 
     /**
      * Undocumented function

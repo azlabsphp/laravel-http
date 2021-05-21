@@ -3,6 +3,9 @@
 namespace Drewlabs\Packages\Http;
 
 use Illuminate\Support\ServiceProvider;
+use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
+use Drewlabs\Core\Validator\Contracts\IValidator as Validator;
+use Drewlabs\Core\Validator\InputsValidator;
 
 class HttpServiceProvider extends ServiceProvider
 {
@@ -32,14 +35,17 @@ class HttpServiceProvider extends ServiceProvider
                 return new DataProviderControllerActionHandler();
             });
         // Register ViewModel validator providers
-        $this->app->bind(\Drewlabs\Core\Validator\Contracts\IValidator::class, function ($app) {
-            return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
+        $this->app->bind(Validator::class, function ($app) {
+            return new InputsValidator($app['validator']);
         });
-        $this->app->when(\Drewlabs\Packages\Http\Controllers\ApiDataProviderController::class)
-            ->needs(\Drewlabs\Core\Validator\Contracts\IValidator::class)
-            ->give(function ($app) {
-                return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
-            });
+        $this->app->bind(ValidatorContract::class, function ($app) {
+            return new InputsValidator($app['validator']);
+        });
+        // $this->app->when(\Drewlabs\Packages\Http\Controllers\ApiDataProviderController::class)
+        //     ->needs(\Drewlabs\Core\Validator\Contracts\IValidator::class)
+        //     ->give(function ($app) {
+        //         return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
+        //     });
         $this->app->when(\Drewlabs\Packages\Http\Controllers\ApiDataProviderController::class)
             ->needs(\Drewlabs\Packages\Http\Contracts\IActionResponseHandler::class)
             ->give(function () {

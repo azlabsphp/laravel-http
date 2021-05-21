@@ -2,12 +2,12 @@
 
 namespace Drewlabs\Packages\Http\Controllers;
 
-use Drewlabs\Core\Validator\Contracts\IValidator;
 use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Http\Request;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
+use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**
  * @package Drewlabs\Packages\Http
@@ -18,7 +18,7 @@ class ApiDataProviderController
     /**
      * Undocumented variable
      *
-     * @var IValidator
+     * @var ValidatorContract
      */
     private $validator;
 
@@ -36,7 +36,7 @@ class ApiDataProviderController
 
 
     public function __construct(
-        IValidator $validator,
+        ValidatorContract $validator,
         IDataProviderControllerActionHandler $actionHandler,
         IActionResponseHandler $actionResponseHandler
     ) {

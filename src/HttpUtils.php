@@ -12,7 +12,7 @@ class HttpUtils
             'namespace' => 'Drewlabs\\Packages\\Http\\Controllers',
             'prefix' => $route_prefix
         ], function ($router) {
-            $router->get('unique', 'IsUniqueValidatorController@get');
+            $router->get('unique', 'UniqueValidatorController@get');
         });
     }
 }

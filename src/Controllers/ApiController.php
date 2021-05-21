@@ -7,6 +7,8 @@ use Illuminate\Contracts\Container\Container as Application;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
+use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
+use Illuminate\Container\Container;
 
 abstract class ApiController
 {
@@ -25,14 +27,22 @@ abstract class ApiController
     protected $responseHandler;
 
     /**
+     * Injected instance of drewlabs validator class
+     *
+     * @var ValidatorContract
+     */
+    protected $validator;
+
+    /**
      * Base controller object initialiser
      *
      * @param Application $app
      */
     public function __construct()
     {
-        $this->app = app();
-        $this->responseHandler = $this->app->get(IActionResponseHandler::class);
+        $this->app = Container::getInstance();
+        $this->responseHandler = $this->app->make(IActionResponseHandler::class);
+        $this->validator = $this->app->make(ValidatorContract::class);
     }
 
     /**

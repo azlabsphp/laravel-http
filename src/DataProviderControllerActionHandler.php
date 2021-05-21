@@ -5,6 +5,7 @@ namespace Drewlabs\Packages\Http;
 use Drewlabs\Contracts\Data\IDataProvider;
 use Drewlabs\Core\Validator\Contracts\IValidator;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
+use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**
  * @package Drewlabs\Packages\Http
@@ -92,7 +93,7 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
     /**
      * {@inheritDoc}
      */
-    public function applyValidationHandler($callback, $request, IValidator $validator, $params = [])
+    public function applyValidationHandler($callback, $request, ValidatorContract $validator, $params = [])
     {
         if (is_null($callback)) {
             return [];

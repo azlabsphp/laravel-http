@@ -31,7 +31,7 @@ abstract class ApiController
      *
      * @var ValidatorContract
      */
-    protected $validator;
+    protected $viewModelValidator;
 
     /**
      * Base controller object initialiser
@@ -42,7 +42,7 @@ abstract class ApiController
     {
         $this->app = Container::getInstance();
         $this->responseHandler = $this->app->make(IActionResponseHandler::class);
-        $this->validator = $this->app->make(ValidatorContract::class);
+        $this->viewModelValidator = $this->app->make(ValidatorContract::class);
     }
 
     /**

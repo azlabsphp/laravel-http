@@ -7,6 +7,7 @@ trait ActionResponseHandler
 
     /**
      * Controllers Http response formatter
+     * 
      * @param mixed $data
      * @param int $response_code
      * @param array $headers

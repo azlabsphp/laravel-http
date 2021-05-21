@@ -34,7 +34,6 @@ class ApiDataProviderController
      */
     private $actionResponseHandler;
 
-
     public function __construct(
         ValidatorContract $validator,
         IDataProviderControllerActionHandler $actionHandler,

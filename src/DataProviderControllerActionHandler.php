@@ -2,8 +2,7 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Contracts\Data\IDataProvider;
-use Drewlabs\Core\Validator\Contracts\IValidator;
+use Drewlabs\Contracts\Data\DataProviderInterface;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
@@ -15,7 +14,7 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
     /**
      * Data provider instance
      *
-     * @var \Drewlabs\Contracts\Data\IDataProvider
+     * @var DataProviderInterface
      */
     private $provider;
 
@@ -30,9 +29,8 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_null($this->provider)) {
             throw new \Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException($request);
         }
-        // Checks if the provider is an instance of \Drewlabs\Contracts\Data\IDataProvider
-        if (!($this->provider instanceof \Drewlabs\Contracts\Data\IDataProvider)) {
-            throw new \Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException($request, "Constructed provider is not an instance of \Drewlabs\Contracts\Data\IDataProvider");
+        if (!($this->provider instanceof DataProviderInterface)) {
+            throw new \Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException($request, "Constructed provider is not an instance of " . DataProviderInterface::class);
         }
         return $this;
     }
@@ -62,7 +60,7 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
     /**
      * {@inheritDoc}
      */
-    public function applyGatePolicyHandler($callback, $request, IDataProvider $provider, $params = [])
+    public function applyGatePolicyHandler($callback, $request, DataProviderInterface $provider, $params = [])
     {
         if (is_null($callback)) {
             return true;

@@ -41,11 +41,6 @@ class HttpServiceProvider extends ServiceProvider
         $this->app->bind(ValidatorContract::class, function ($app) {
             return new InputsValidator($app['validator']);
         });
-        // $this->app->when(\Drewlabs\Packages\Http\Controllers\ApiDataProviderController::class)
-        //     ->needs(\Drewlabs\Core\Validator\Contracts\IValidator::class)
-        //     ->give(function ($app) {
-        //         return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
-        //     });
         $this->app->when(\Drewlabs\Packages\Http\Controllers\ApiDataProviderController::class)
             ->needs(\Drewlabs\Packages\Http\Contracts\IActionResponseHandler::class)
             ->give(function () {

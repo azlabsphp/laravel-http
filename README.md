@@ -102,8 +102,6 @@ Response handler provider provide and unified way to return JSON response to the
 
 ```php
 
-// ExampleController.php
-
 namespace Drewlabs\Packages\Http\Controllers;
 
 use Drewlabs\Core\Validator\Contracts\IValidator;

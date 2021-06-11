@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http\Contracts;
 
-use Drewlabs\Contracts\Data\IDataProvider;
+use Drewlabs\Contracts\Data\DataProviderInterface;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**
@@ -44,7 +44,7 @@ interface IDataProviderControllerActionHandler
      * @param array|null $params
      * @return bool
      */
-    public function applyGatePolicyHandler($callback, $request, IDataProvider $provider, $params = []);
+    public function applyGatePolicyHandler($callback, $request, DataProviderInterface $provider, $params = []);
 
     /**
      * Undocumented function

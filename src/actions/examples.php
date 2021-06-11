@@ -1,5 +1,7 @@
 <?php //
 
+use Drewlabs\Contracts\Data\DataProviderInterface;
+
 const ExampleProvider = "\\Drewlabs\\Packages\\Http\\Servvices\\Contracts\\ExampleDataProvider";
 const ExampleClass = "\\Drewlabs\\Packages\\Http\\Models\\Example";
 
@@ -31,7 +33,7 @@ return [
              * }
              * </code>
              */
-            "gatePolicy" => function (\Drewlabs\Contracts\Data\IDataProvider $provider, \Illuminate\Http\Request $request) {
+            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
@@ -68,7 +70,7 @@ return [
              * }
              * </code>
              */
-            "gatePolicy" => function (\Drewlabs\Contracts\Data\IDataProvider $provider, \Illuminate\Http\Request $request, $id) {
+            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request, $id) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
@@ -116,7 +118,7 @@ return [
              * }
              * </code>
              */
-            "gatePolicy" => function (\Drewlabs\Contracts\Data\IDataProvider $provider, \Illuminate\Http\Request $request) {
+            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
@@ -130,7 +132,7 @@ return [
              */
             "validateRequestBody" => function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
                 // Form request, this method return the validatable model
-                $validator = $validator->validate(app(ForumTypeClazz), $request->all());
+                $validator = $validator->validate(app(ExampleClass), $request->all());
                 return $validator->errors();
             },
             /**
@@ -223,7 +225,7 @@ return [
              */
             "validateRequestBody" => function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request, $id) {
                 // Form request, this method return the validatable model
-                $validator = $validator->setUpdate(true)->validate(app(ForumTypeClazz), array_merge($request->all(), array('id' => $id)));
+                $validator = $validator->setUpdate(true)->validate(app(ExampleClass), array_merge($request->all(), array('id' => $id)));
                 return $validator->errors();
             },
             /**
@@ -294,6 +296,6 @@ return [
             "transformResponseBody" => null
         ]
     ],
-    "provider" => ForumTypesProvider,
-    "class" => ForumTypeClazz
+    "provider" => ExampleProvider,
+    "class" => ExampleClass
 ];

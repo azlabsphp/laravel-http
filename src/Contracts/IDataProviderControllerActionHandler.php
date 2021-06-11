@@ -23,7 +23,7 @@ interface IDataProviderControllerActionHandler
     /**
      * Returns the data provider bindable to the controller
      *
-     * @return \Drewlabs\Contracts\Data\IDataProvider
+     * @return DataProviderInterface
      */
     public function getProvider();
     /**

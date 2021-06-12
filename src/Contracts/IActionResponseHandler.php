@@ -38,6 +38,49 @@ interface IActionResponseHandler
     public function respondBadRequest(array $errors);
 
     /**
+     * Return an HTTP JSON response with status >=200 AND <=204
+     *
+     * @param mixed $data
+     * @param array|null $errors
+     * @param bool $success
+     * @return Response
+     */
+    public function ok($data, array $errors = null, $success = true);
+
+    /**
+     * Return a Server Error HTTP response  with status 500
+     *
+     * @param \Exception $e
+     * @param array|null $errors
+     * @return Response
+     */
+    public function error(\Exception $e, array $errors = null);
+
+    /**
+     * Return an HTTP Bad Request response  with status >=400 or <=403
+     *
+     * @param array $errors
+     * @return Response
+     */
+    public function badRequest(array $errors);
+
+    /**
+     * Add status code to the HTTP response
+     *
+     * @param integer $code
+     * @return static
+     */
+    public function withStatus(int $code);    
+    
+    /**
+    * Add headers to the HTTP response
+    *
+    * @param array $headers
+    * @return static
+    */
+   public function withHeaders(array $headers);
+
+    /**
      * Convert an authorization exception into a response.
      *
      * @param  Request  $request

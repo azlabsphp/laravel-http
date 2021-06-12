@@ -5,7 +5,9 @@ namespace Drewlabs\Packages\Http\Traits;
 use BadMethodCallException;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use Closure as BaseClosure;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 
 trait LaravelOrLumenFrameworksApiController
@@ -31,6 +33,16 @@ trait LaravelOrLumenFrameworksApiController
      * @var array
      */
     protected $middleware = [];
+
+    /**
+     * Checks if the current connected user has acces to admin ressources
+     *
+     * @return boolean
+     */
+    protected function hasAdminAcess()
+    {
+        return Container::getInstance()->make(GateContract::class)->allows('is-admin');
+    }
 
     /**
      * Register middleware on the controller.

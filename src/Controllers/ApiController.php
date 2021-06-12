@@ -4,7 +4,6 @@ namespace Drewlabs\Packages\Http\Controllers;
 
 use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Contracts\Container\Container as Application;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
@@ -43,16 +42,6 @@ abstract class ApiController
         $this->app = Container::getInstance();
         $this->responseHandler = $this->app->make(IActionResponseHandler::class);
         $this->viewModelValidator = $this->app->make(ValidatorContract::class);
-    }
-
-    /**
-     * Checks if the current connected user has acces to admin ressources
-     *
-     * @return boolean
-     */
-    protected function hasAdminAcess()
-    {
-        return app(GateContract::class)->allows('is-admin');
     }
 
     /**

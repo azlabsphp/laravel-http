@@ -71,9 +71,9 @@ interface IActionResponseHandler
      * method that may be used to display a file, such as an image or PDF, directly in the user's browser
      * instead of initiating a download.
      *
-     * @param string $pathToFile
+     * @param string $path
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function loadFile($pathToFile, $headers = array());
+    public function file($path, $headers = array());
 }

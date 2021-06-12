@@ -61,6 +61,7 @@ abstract class ApiController
      * @param int $response_code
      * @param array $headers
      * @return Response
+     * 
      */
     protected function respond($data, $status, $headers = array())
     {
@@ -73,6 +74,7 @@ abstract class ApiController
      * @param array|null $errors
      * @param bool $success
      * @return Response
+     * 
      */
     protected function respondOk($data, array $errors = null, $success = true)
     {
@@ -84,6 +86,7 @@ abstract class ApiController
      * @param \Exception $e
      * @param array|null $errors
      * @return Response
+     * 
      */
     protected function respondError(\Exception $e, array $errors = null)
     {
@@ -94,6 +97,7 @@ abstract class ApiController
      *
      * @param array $errors
      * @return Response
+     * 
      */
     protected function respondBadRequest(array $errors)
     {
@@ -106,14 +110,11 @@ abstract class ApiController
      * @param  Request  $request
      * @param  \Exception|null  $exception
      * @return Response
+     * 
      */
     protected function unauthorized($request, \Exception $exception = null)
     {
-        if (function_exists('response')) {
-            $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . (isset($exception) ? ' [ERROR] : ' . $exception->getMessage() : '');
-            return call_user_func_array('response', array($message, 401));
-        }
-        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
+        return $this->responseHandler->unauthorized($request, $exception);
     }
 
     // Provides functionnalities for managing file download
@@ -121,18 +122,16 @@ abstract class ApiController
     /**
      * A wrapper method arround illuminate response()->download(...params) method
      *
-     * @param string $pathToFile
-     * @param string $downloadedFileName
+     * @param string $path
+     * @param string $name
      * @param array $headers
+     * @param bool $deleteAfterSend
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 
      */
-    protected function download($pathToFile, $downloadedFileName = null, $headers = array(), $deleteAfterSend = false)
+    protected function download($path, $name = null, $headers = array(), $deleteAfterSend = false)
     {
-        if (function_exists('response')) {
-            $result = call_user_func('response')->download($pathToFile, $downloadedFileName, $headers);
-            return $result->deleteFileAfterSend($deleteAfterSend);
-        }
-        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
+        return $this->responseHandler->download($path, $name, $headers, $deleteAfterSend);
     }
 
     /**
@@ -141,28 +140,24 @@ abstract class ApiController
      * @param [type] $filename
      * @param \Closure $callback
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     * 
      */
     protected function streamDownload($filename, \Closure $callback)
     {
-        if (function_exists('response')) {
-            return call_user_func('response')->streamDownload($callback, $filename);
-        }
-        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
+        return $this->responseHandler->streamDownload($filename, $callback);
     }
     /**
      * This method is a wrapper arround of the [\Illuminate\Contracts\Routing\ResponseFactory::class] [[file]]
      * method that may be used to display a file, such as an image or PDF, directly in the user's browser
      * instead of initiating a download.
      *
-     * @param string $pathToFile
+     * @param string $path
      * @param array $headers
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 
      */
-    protected function loadFile($pathToFile, $headers = array())
+    protected function loadFile($path, $headers = array())
     {
-        if (function_exists('response')) {
-            return call_user_func('response')->file($pathToFile, $headers);
-        }
-        throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);
+        return $this->responseHandler->file($path, $headers);
     }
 }

@@ -72,3 +72,43 @@ if (!function_exists('is_lumen')) {
         return (get_class($callback) === "Laravel\Lumen\Application") && preg_match('/(5\.[5-8]\..*)|(6\..*)|(7\..*)|(8\..*)/', $callback->version());
     }
 }
+
+if (!function_exists('drewlabs_create_ps7_request'))
+{
+    /**
+     * Creates a psr7 server request from php globals or from a symfony request
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Psr\Http\Message\ServerRequestInterface
+     * @deprecated v3.1
+     */
+    function drewlabs_create_ps7_request(\Symfony\Component\HttpFoundation\Request $request = null)
+    {
+        return drewlabs_create_psr7_request($request);
+    }
+}
+
+if (!function_exists('drewlabs_create_psr7_request'))
+{
+    /**
+     * Creates a psr7 server request from php globals or from a symfony request
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    function drewlabs_create_psr7_request(\Symfony\Component\HttpFoundation\Request $request = null)
+    {
+        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        if ($request) {
+            $psrHttpFactory = new \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+            return $psrHttpFactory->createRequest($request);
+        }
+        $psrHttpFactory = new \Nyholm\Psr7Server\ServerRequestCreator(
+            $psr17Factory, // ServerRequestFactory
+            $psr17Factory, // UriFactory
+            $psr17Factory, // UploadedFileFactory
+            $psr17Factory  // StreamFactory
+        );
+        return $psrHttpFactory->fromGlobals();
+    }
+}

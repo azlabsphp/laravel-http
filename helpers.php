@@ -59,3 +59,16 @@ if (!function_exists('drewlabs_http_handlers_configs')) {
         return \config($key, $default);
     }
 }
+
+if (!function_exists('is_lumen')) {
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  \stdClass  $value
+     * @return mixed
+     */
+    function is_lumen($callback)
+    {
+        return (get_class($callback) === "Laravel\Lumen\Application") && preg_match('/(5\.[5-8]\..*)|(6\..*)|(7\..*)|(8\..*)/', $callback->version());
+    }
+}

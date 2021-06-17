@@ -16,7 +16,7 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/' => config_path(),
+            __DIR__.'/config/' => $this->app->basePath('config'),
         ], 'drewlabs-cors');
     }
 

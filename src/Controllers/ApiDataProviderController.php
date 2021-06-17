@@ -58,7 +58,7 @@ class ApiDataProviderController
      */
     public function index(Request $request, $collection, ...$parameters)
     {
-        $fn_params = \array_filter(func_get_args(), \filter_fn_params($collection));
+        $fn_params = \array_filter(func_get_args(), \drewlabs_core_filter_fn_params($collection));
         try {
             $provider = $this->actionHandler
                 ->bindProvider(
@@ -118,7 +118,7 @@ class ApiDataProviderController
      */
     public function store(Request $request, $collection)
     {
-        $fn_params = \array_filter(func_get_args(), \filter_fn_params($collection));
+        $fn_params = \array_filter(func_get_args(), \drewlabs_core_filter_fn_params($collection));
         try {
             $provider = $this->actionHandler
                 ->bindProvider(
@@ -172,7 +172,7 @@ class ApiDataProviderController
      */
     public function show(Request $request, $collection, ...$param)
     {
-        $fn_params = \array_filter(func_get_args(), \filter_fn_params($collection));
+        $fn_params = \array_filter(func_get_args(), \drewlabs_core_filter_fn_params($collection));
         try {
             $provider = $this->actionHandler
                 ->bindProvider(
@@ -217,7 +217,7 @@ class ApiDataProviderController
      */
     public function update(Request $request, $collection, ...$param)
     {
-        $fn_params = \array_filter(func_get_args(), \filter_fn_params($collection));
+        $fn_params = \array_filter(func_get_args(), \drewlabs_core_filter_fn_params($collection));
         try {
             $provider = $this->actionHandler
                 ->bindProvider(
@@ -277,7 +277,7 @@ class ApiDataProviderController
      */
     public function destroy(Request $request, $collection, ...$param)
     {
-        $fn_params = \array_filter(func_get_args(), \filter_fn_params($collection));
+        $fn_params = \array_filter(func_get_args(), \drewlabs_core_filter_fn_params($collection));
         try {
             $provider = $this->actionHandler
                 ->bindProvider(

@@ -37,10 +37,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:liksoft/drewlabs-php-core-helpers.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:liksoft/drewlabs-helpers.git"
         }
     ],
     "extra": {

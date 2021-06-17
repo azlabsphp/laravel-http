@@ -112,3 +112,13 @@ if (!function_exists('drewlabs_create_psr7_request'))
         return $psrHttpFactory->fromGlobals();
     }
 }
+
+if (!function_exists('get_illuminate_request_ip')) {
+    function get_illuminate_request_ip($request)
+    {
+        // Tries getting request from the X-Real-IP header provided by Nginx
+        $request_ip = $request->headers->get('X-Real-IP');
+        // Call / return the request ip from LARAVEL illuminate ip() method
+        return isset($request_ip) ? $request_ip : $request->ip();
+    }
+}

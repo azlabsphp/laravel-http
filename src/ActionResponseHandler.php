@@ -91,12 +91,12 @@ class ActionResponseHandler implements IActionResponseHandler
     {
         $response_message = $e->getMessage();
         // Check to see if the error is not log by laravel
-        Container::getInstance()->make('log')->error(sprintf('%s : %s', config('app.env', 'local'), $response_message));
+        Container::getInstance()->make('log')->error(sprintf('%s : %s', ConfigurationManager::getInstance()->get('app.env', 'local'), $response_message));
         // Checks if running in production or dev for error message to be send
         return $this->respond(
             [
                 'success' => false,
-                'error_message' => filter_var(config('app.debug'), FILTER_VALIDATE_BOOLEAN) === false ? 'Server Error' : $response_message,
+                'error_message' => filter_var(ConfigurationManager::getInstance()->get('app.debug', true), FILTER_VALIDATE_BOOLEAN) === false ? 'Server Error' : $response_message,
                 'response_data' => null,
                 'errors' => $errors,
                 'code' => $this->status_code ?? 500,

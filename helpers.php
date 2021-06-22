@@ -22,30 +22,6 @@ if (! function_exists('app')) {
     }
 }
 
-// if (! function_exists('config')) {
-//     /**
-//      * Get / set the specified configuration value.
-//      *
-//      * If an array is passed as the key, we will assume you want to set an array of values.
-//      *
-//      * @param  array|string|null  $key
-//      * @param  mixed  $default
-//      * @return mixed
-//      */
-//     function config($key = null, $default = null)
-//     {
-//         if (is_null($key)) {
-//             return \app()->make('config');
-//         }
-
-//         if (is_array($key)) {
-//             return \app()->make('config')->set($key);
-//         }
-
-//         return \app()->make('config')->make($key, $default);
-//     }
-// }
-
 if (!function_exists('drewlabs_http_handlers_configs')) {
     /**
      * Get configuration values from the drewlabs_http_handlers.php configuration file
@@ -56,7 +32,7 @@ if (!function_exists('drewlabs_http_handlers_configs')) {
      */
     function drewlabs_http_handlers_configs($key, $default = null)
     {
-        ConfigurationManager::getInstance($key, $default);
+        return ConfigurationManager::getInstance()->get($key, $default);
     }
 }
 

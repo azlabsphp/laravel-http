@@ -194,19 +194,31 @@ class CorsServices implements CorsServicesInterface
 
     private function setRequiredProperties(array $config)
     {
-        $fillables = ['allowed_hosts', 'max_age', 'allowed_headers', 'allowed_headers', 'allowed_credentials', 'exposed_headers'];
+        $fillables = [
+            'allowed_hosts',
+            'max_age',
+            'allowed_headers',
+            'allowed_credentials',
+            'exposed_headers'
+        ];
         foreach ($fillables as $value) {
             # code...
             if (array_key_exists($value, $config) && !\is_null($config[$value])) {
-                if ($value === 'allowed_hosts' && is_array($config[$value])) {
-                    $config[$value] = array_map(function ($origin) {
+                if (is_array($this->{$value}) && is_array($config[$value])) {
+                    $configs_ = drewlabs_core_array_unique(array_merge($config[$value], ($this->{$value} ?? [])));
+                } else {
+                    $configs_ = $config[$value];
+                }
+
+                if ($value === 'allowed_hosts' && is_array($configs_)) {
+                    $configs_ = array_map(function ($origin) {
                         if (strpos($origin, '*') !== false) {
                             return $this->convertWildcardToPattern($origin);
                         }
                         return $origin;
-                    }, $config[$value]);
+                    }, $configs_);
                 }
-                $this->{$value} = $config[$value];
+                $this->{$value} = $configs_;
             }
         }
     }

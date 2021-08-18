@@ -44,8 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Drewlabs\\Packages\\Http\\HttpServiceProvider",
-                "Drewlabs\\Packages\\Http\\Middleware\\Cors\\ServiceProvider"
+                "Drewlabs\\Packages\\Http\\ServiceProvider"
             ],
             "aliases": {}
         }

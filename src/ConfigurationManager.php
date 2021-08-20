@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Core\Support\Traits\ImmutableConfigurationManager;
+use Drewlabs\Support\Traits\ImmutableConfigurationManager;
 
 class ConfigurationManager
 {

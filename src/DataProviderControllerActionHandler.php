@@ -5,6 +5,12 @@ namespace Drewlabs\Packages\Http;
 use Drewlabs\Contracts\Data\DataProviderInterface;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
+use Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException;
+use Drewlabs\Packages\Http\Exceptions\PolicyHandlerException;
+use Drewlabs\Packages\Http\Exceptions\QueryBuilderHandlerException;
+use Drewlabs\Packages\Http\Exceptions\RequestValidationException;
+use Drewlabs\Packages\Http\Exceptions\TransformRequestBodyException;
+use Closure;
 
 /**
  * @package Drewlabs\Packages\Http
@@ -27,10 +33,10 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         $this->provider = \build_data_provider($callback, $params);
         // Checks if the provider instance has been set
         if (is_null($this->provider)) {
-            throw new \Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException($request);
+            throw new BadProviderDeclarationException($request);
         }
         if (!($this->provider instanceof DataProviderInterface)) {
-            throw new \Drewlabs\Packages\Http\Exceptions\BadProviderDeclarationException($request, "Constructed provider is not an instance of " . DataProviderInterface::class);
+            throw new BadProviderDeclarationException($request, "Constructed provider is not an instance of " . DataProviderInterface::class);
         }
         return $this;
     }
@@ -51,10 +57,10 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_array($callback)) {
             return $callback;
         }
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             return $callback(...$params);
         }
-        throw new \Drewlabs\Packages\Http\Exceptions\QueryBuilderHandlerException($request);
+        throw new QueryBuilderHandlerException($request);
     }
 
     /**
@@ -65,13 +71,13 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_null($callback)) {
             return true;
         }
-        if (!($callback instanceof \Closure) && is_bool($callback)) {
+        if (!($callback instanceof Closure) && is_bool($callback)) {
             return filter_var($callback, FILTER_VALIDATE_BOOLEAN);
         }
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             return $callback($provider, ...$params);
         }
-        throw new \Drewlabs\Packages\Http\Exceptions\PolicyHandlerException($request);
+        throw new PolicyHandlerException($request);
     }
 
     /**
@@ -82,10 +88,10 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_null($callback)) {
             return $request->all();
         }
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             return $callback(...$params);
         } //
-        throw new \Drewlabs\Packages\Http\Exceptions\TransformRequestBodyException($request);
+        throw new TransformRequestBodyException($request);
     }
 
     /**
@@ -96,10 +102,10 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_null($callback)) {
             return [];
         }
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             return $callback($validator, ...$params);
         }
-        throw new \Drewlabs\Packages\Http\Exceptions\RequestValidationException($request);
+        throw new RequestValidationException($request);
     }
 
 
@@ -111,7 +117,7 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
         if (is_null($callback)) {
             return [];
         }
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             $result = $callback($values, $request);
             return is_null($result) ? [] : $result;
         }
@@ -121,14 +127,14 @@ class DataProviderControllerActionHandler implements IDataProviderControllerActi
     /**
      * Apply data transformation callback to the data provider query result
      *
-     * @param \Closure|callable|null $callback
+     * @param Closure|callable|null $callback
      * @param array|mixed $body
      * @param array $params
      * @return array|mixed
      */
     public function applyTransformResponseBody($callback, $body, $params = [])
     {
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             $result = $callback($body, ...$params);
             return $result;
         }

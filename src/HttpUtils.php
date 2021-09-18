@@ -6,13 +6,18 @@ use Illuminate\Contracts\Container\Container;
 
 class HttpUtils
 {
-    public static function routes(Container $app, $route_prefix = '')
-    {
-        $app->{'router'}->group([
-            'namespace' => 'Drewlabs\\Packages\\Http\\Controllers',
-            'prefix' => $route_prefix
-        ], function ($router) {
-            $router->get('unique', 'UniqueValidatorController@get');
-        });
+    public static function routes(
+        Container $app,
+        $route_prefix = null
+    ) {
+        $app->router->group(
+            [
+                'namespace' => 'Drewlabs\\Packages\\Http\\Controllers',
+                'prefix' => $route_prefix
+            ],
+            function ($router) {
+                $router->get('unique', 'TableColumnUniqueRuleController');
+            }
+        );
     }
 }

@@ -17,7 +17,10 @@ class ConfigurationManager
      */
     public static function configure(array $config)
     {
-        $self = drewlabs_core_create_attribute_setter('config', $config ?? [])(new static);
+        $self = drewlabs_core_create_attribute_setter(
+            'config',
+            $config ?? []
+        )(new static);
         static::$instance = $self;
         return $self;
     }

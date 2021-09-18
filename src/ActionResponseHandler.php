@@ -3,11 +3,12 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
+use Drewlabs\Packages\Http\Traits\ActionResponseHandler as TraitsActionResponseHandler;
 use Illuminate\Container\Container;
 
 class ActionResponseHandler implements IActionResponseHandler
 {
-    use \Drewlabs\Packages\Http\Traits\ActionResponseHandler;
+    use TraitsActionResponseHandler;
 
     /**
      * HTTP Status code

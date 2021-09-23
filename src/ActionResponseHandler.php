@@ -11,20 +11,6 @@ class ActionResponseHandler implements IActionResponseHandler
     use TraitsActionResponseHandler;
 
     /**
-     * HTTP Status code
-     *
-     * @var int
-     */
-    private $status_code;
-
-    /**
-     * HTTP Headers
-     *
-     * @var array
-     */
-    private $headers;
-
-    /**
      * Method for converting thrown exceptions into http response
      *
      * @param mixed $data
@@ -124,29 +110,5 @@ class ActionResponseHandler implements IActionResponseHandler
             ],
             $this->status_code ?? 400
         );
-    }
-
-    /**
-     * Add status code to the HTTP response
-     *
-     * @param integer $code
-     * @return static
-     */
-    public function withStatus(int $code = 200)
-    {
-        $this->status_code = $code;
-        return $this;
-    }
-
-    /**
-     * Add headers to the HTTP response
-     *
-     * @param array $headers
-     * @return static
-     */
-    public function withHeaders(array $headers)
-    {
-        $this->headers = $headers;
-        return $this;
     }
 }

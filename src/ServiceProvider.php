@@ -9,8 +9,11 @@ use Drewlabs\Core\Validator\InputsValidator;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
+use Drewlabs\Packages\Http\Guards\AnonymousGuard;
 use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
 use Drewlabs\Packages\Http\Middleware\Cors\CorsServices;
+use Illuminate\Auth\RequestGuard;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -58,5 +61,36 @@ class ServiceProvider extends BaseServiceProvider
             ->give(function () {
                 return new ActionResponseHandler();
             });
+
+        // Register an anonymous guard, that allow to run application without 
+        // worrying about any undefined application guard issues
+        $this->registerAnonymousGuard();
+    }
+
+    private function registerAnonymousGuard()
+    {
+        Auth::resolved(function ($auth) {
+            $auth->extend('anonymous', function ($app, $name, array $config) use ($auth) {
+                return tap($this->createAnonymousGuard($auth, $config), function ($guard) {
+                    app()->refresh('request', $guard, 'setRequest');
+                });
+            });
+        });
+    }
+
+    /**
+     * Register the guard.
+     *
+     * @param \Illuminate\Contracts\Auth\Factory  $auth
+     * @param array $config
+     * @return RequestGuard
+     */
+    private function createAnonymousGuard($auth, $config)
+    {
+        return new RequestGuard(
+            new AnonymousGuard(),
+            request(),
+            null
+        );
     }
 }

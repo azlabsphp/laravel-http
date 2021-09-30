@@ -2,6 +2,8 @@
 
 namespace Drewlabs\Packages\Http;
 
+use Drewlabs\Contracts\Http\BinaryResponseHandler;
+use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 use Drewlabs\Core\Validator\Contracts\IValidator as Validator;
@@ -65,6 +67,9 @@ class ServiceProvider extends BaseServiceProvider
         // Register an anonymous guard, that allow to run application without 
         // worrying about any undefined application guard issues
         $this->registerAnonymousGuard();
+
+        // Register response handlers types
+        $this->registerResponseHandlers();
     }
 
     private function registerAnonymousGuard()
@@ -76,6 +81,13 @@ class ServiceProvider extends BaseServiceProvider
                 });
             });
         });
+    }
+
+
+    private function registerResponseHandlers()
+    {
+        $this->app->bind(BinaryResponseHandler::class, BinaryFileResponse::class);
+        $this->app->bind(UnAuthorizedResponseHandler::class, UnAuthorizedResponse::class);
     }
 
     /**

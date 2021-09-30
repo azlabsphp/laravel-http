@@ -3,13 +3,17 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Drewlabs\Packages\Http\Traits\ActionResponseHandler as TraitsActionResponseHandler;
 use Exception;
+use Drewlabs\Packages\Http\Traits\ResponseHandler;
+use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
+use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
+
 
 class V1ActionResponseHandler implements IActionResponseHandler
 {
-
-    use TraitsActionResponseHandler;
+    use ResponseHandler;
+    use BinaryResponseHandler;
+    use UnAuthorizedResponseHandler;
 
     public function ok($data, ?array $errors = null, $success = true)
     {
@@ -38,7 +42,7 @@ class V1ActionResponseHandler implements IActionResponseHandler
                     'success' => false,
                     'body' => array(
                         'error_message' => filter_var(
-                            config('app.debug'),
+                            drewlabs_http_handlers_configs('app.debug'),
                             FILTER_VALIDATE_BOOLEAN
                         ) === false ?
                             'Server Error' : $e->getMessage(),

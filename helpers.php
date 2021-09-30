@@ -3,9 +3,12 @@
 use Drewlabs\Packages\Http\ConfigurationManager;
 use Illuminate\Container\Container;
 use Psr\Container\ContainerInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Nyholm\Psr7Server\ServerRequestCreator;
 
-
-if (! function_exists('app')) {
+if (!function_exists('app')) {
     /**
      * Get the available container instance.
      *
@@ -49,37 +52,40 @@ if (!function_exists('is_lumen')) {
     }
 }
 
-if (!function_exists('drewlabs_create_ps7_request'))
-{
+if (!function_exists('drewlabs_create_ps7_request')) {
     /**
      * Creates a psr7 server request from php globals or from a symfony request
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      * @return \Psr\Http\Message\ServerRequestInterface
      * @deprecated v3.1
      */
-    function drewlabs_create_ps7_request(\Symfony\Component\HttpFoundation\Request $request = null)
+    function drewlabs_create_ps7_request(Request $request = null)
     {
         return drewlabs_create_psr7_request($request);
     }
 }
 
-if (!function_exists('drewlabs_create_psr7_request'))
-{
+if (!function_exists('drewlabs_create_psr7_request')) {
     /**
      * Creates a psr7 server request from php globals or from a symfony request
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    function drewlabs_create_psr7_request(\Symfony\Component\HttpFoundation\Request $request = null)
+    function drewlabs_create_psr7_request(Request $request = null)
     {
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $psr17Factory = new Psr17Factory();
         if ($request) {
-            $psrHttpFactory = new \Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+            $psrHttpFactory = new PsrHttpFactory(
+                $psr17Factory,
+                $psr17Factory,
+                $psr17Factory,
+                $psr17Factory
+            );
             return $psrHttpFactory->createRequest($request);
         }
-        $psrHttpFactory = new \Nyholm\Psr7Server\ServerRequestCreator(
+        $psrHttpFactory = new ServerRequestCreator(
             $psr17Factory, // ServerRequestFactory
             $psr17Factory, // UriFactory
             $psr17Factory, // UploadedFileFactory

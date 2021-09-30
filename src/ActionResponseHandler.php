@@ -3,12 +3,16 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Drewlabs\Packages\Http\Traits\ActionResponseHandler as TraitsActionResponseHandler;
+use Drewlabs\Packages\Http\Traits\ResponseHandler;
+use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
+use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 use Illuminate\Container\Container;
 
 class ActionResponseHandler implements IActionResponseHandler
 {
-    use TraitsActionResponseHandler;
+    use ResponseHandler;
+    use BinaryResponseHandler;
+    use UnAuthorizedResponseHandler;
 
     /**
      * Method for converting thrown exceptions into http response

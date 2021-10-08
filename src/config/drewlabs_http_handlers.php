@@ -13,5 +13,6 @@ return [
     "requests" => [],
     "auth_middleware" => env('AUTH_MIDDLEWARE', 'auth'),
     'policy_middleware' => getenv('POLICY_MIDDLEWARE', 'policy'),
-    "apply_middleware_policies" => env('APPLY_POLICIES', false)
+    "apply_middleware_policies" => env('APPLY_POLICIES', false),
+    "route_prefix" => 'api/v1'
 ];

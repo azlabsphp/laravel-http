@@ -3,7 +3,10 @@
 namespace Drewlabs\Packages\Http;
 
 use Illuminate\Contracts\Container\Container;
-
+/**
+ * @deprecated v1.0.3 The bindinds are provided in the ServiceProvider
+ * @package Drewlabs\Packages\Http
+ */
 class HttpUtils
 {
     public static function routes(

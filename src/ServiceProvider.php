@@ -70,6 +70,9 @@ class ServiceProvider extends BaseServiceProvider
 
         // Register response handlers types
         $this->registerResponseHandlers();
+
+        // Routes bindings
+        $this->forRoutes($this->app, drewlabs_http_handlers_configs('route_prefix', 'api/v1'));
     }
 
     private function registerAnonymousGuard()
@@ -104,5 +107,20 @@ class ServiceProvider extends BaseServiceProvider
             request(),
             null
         );
+    }
+
+    private function forRoutes($app, $prefix = null)
+    {
+        if ($router = $app['router'] ?? null) {
+            $router->group(
+                [
+                    'namespace' => 'Drewlabs\\Packages\\Http\\Controllers',
+                    'prefix' => $prefix
+                ],
+                function ($router) {
+                    $router->get('unique', 'TableColumnUniqueRuleController');
+                }
+            );
+        }
     }
 }

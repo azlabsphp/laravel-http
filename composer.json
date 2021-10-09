@@ -48,5 +48,8 @@
             ],
             "aliases": {}
         }
+    },
+    "suggest": {
+        "nyholm/psr7": "Required to create psr7 requests using drewlabs_create_psr7_request() global function"
     }
 }

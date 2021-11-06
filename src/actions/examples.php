@@ -1,6 +1,7 @@
 <?php //
 
-use Drewlabs\Contracts\Data\DataProviderInterface;
+use Drewlabs\Contracts\Validator\Validator;
+use Illuminate\Http\Request;
 
 const ExampleProvider = "\\Drewlabs\\Packages\\Http\\Servvices\\Contracts\\ExampleDataProvider";
 const ExampleClass = "\\Drewlabs\\Packages\\Http\\Models\\Example";
@@ -17,35 +18,35 @@ return [
             /**
              * Closure for parsing request and preparing data provider query. Note this can be declare as simple array
              * <code>
-             * function(\Illuminate\Http\Request $request) {
+             * function(Request $request) {
              *  return array(); // Returns a new array for applying no query parameter
              * }
              * </code>
              */
-            "queryBuilder" => function (\Illuminate\Http\Request $request) {
+            "queryBuilder" => function (Request $request) {
                 return [];
             },
             /**
              * Closure applying policies to the request action. Note: Closure must return a boolean value indicating authorization process result. This can be a boolean value.
              * <code>
-             * function(\Illuminate\Http\Request $request) {
+             * function(Request $request) {
              *  return true;
              * }
              * </code>
              */
-            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request) {
+            "gatePolicy" => function ($provider, Request $request) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
             /**
              * Request validation handler. If this key is set to null | to a handler that returns null, no v alidation is applied
              * <code>
-             * function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
+             * function (Validator $validator, Request $request) {
              *  return null;
              * }
              * </code>
              */
-            "validateRequestBody" => function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
+            "validateRequestBody" => function (Validator $validator, Request $request) {
                 // Form request, this method return the validatable model
                 return null;
             },
@@ -65,19 +66,19 @@ return [
             /**
              * Closure applying policies to the request action. Note: Closure must return a boolean value indicating authorization process result. This can be a boolean value.
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return true;
              * }
              * </code>
              */
-            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request, $id) {
+            "gatePolicy" => function ($provider, Request $request, $id) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
             /**
              * Closure for parsing request and preparing data provider query. Note: This can return array of queries| or model identifier to be applied to the model
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return $id;
              * }
              * </code>
@@ -101,44 +102,44 @@ return [
              * Request body transformation handler closure
              * A simple request body transformation closure
              * <code>
-             * function (\Illuminate\Http\Request $request) {
+             * function (Request $request) {
              *   return $request->all();
              * }
              * </code>
              */
-            "transformRequestBody" => function (\Illuminate\Http\Request $request) {
+            "transformRequestBody" => function (Request $request) {
                 // Apply request transformation logic in this function
                 return $request->all();
             },
             /**
              * Closure applying policies to the request action. Note: Closure must return a boolean value indicating authorization process result. This can be a boolean value.
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return true;
              * }
              * </code>
              */
-            "gatePolicy" => function (DataProviderInterface $provider, \Illuminate\Http\Request $request) {
+            "gatePolicy" => function ($provider, Request $request) {
                 // Apply gate polcicy on the current routing action
                 return true;
             },
             /**
              * Request validation handler. If this key is set to null | to a handler that returns null, no v alidation is applied
              * <code>
-             * function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
+             * function (Validator $validator, Request $request) {
              *  return null;
              * }
              * </code>
              */
-            "validateRequestBody" => function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
+            "validateRequestBody" => function (Validator $validator, Request $request) {
                 // Form request, this method return the validatable model
-                $validator = $validator->validate(app(ExampleClass), $request->all());
+                $validator = $validator->validate(ExampleClass::class, $request->all());
                 return $validator->errors();
             },
             /**
              * Closure for parsing request and preparing data provider query. Note: This can return array of queries| or model identifier to be applied to the model
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return $id;
              * }
              * </code>
@@ -185,19 +186,19 @@ return [
              * Request body transformation handler closure
              * A simple request body transformation closure
              * <code>
-             * function (\Illuminate\Http\Request $request) {
+             * function (Request $request) {
              *   return $request->all();
              * }
              * </code>
              */
-            "transformRequestBody" => function (\Illuminate\Http\Request $request) {
+            "transformRequestBody" => function (Request $request) {
                 // Apply request transformation logic in this function
                 return $request->all();
             },
             /**
              * Closure for parsing request and preparing data provider query. Note: This can return array of queries| or model identifier to be applied to the model
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return $id;
              * }
              * </code>
@@ -209,7 +210,7 @@ return [
             /**
              * Closure applying policies to the request action. Note: Closure must return a boolean value indicating authorization process result. This can be a boolean value.
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return true;
              * }
              * </code>
@@ -218,14 +219,14 @@ return [
             /**
              * Request validation handler. If this key is set to null | to a handler that returns null, no v alidation is applied
              * <code>
-             * function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request) {
+             * function (Validator $validator, Request $request) {
              *  return null;
              * }
              * </code>
              */
-            "validateRequestBody" => function (\Drewlabs\Core\Validator\Contracts\IValidator $validator, \Illuminate\Http\Request $request, $id) {
+            "validateRequestBody" => function (Validator $validator, Request $request, $id) {
                 // Form request, this method return the validatable model
-                $validator = $validator->setUpdate(true)->validate(app(ExampleClass), array_merge($request->all(), array('id' => $id)));
+                $validator = $validator->setUpdate(true)->validate(ExampleClass::class, array_merge($request->all(), array('id' => $id)));
                 return $validator->errors();
             },
             /**
@@ -265,7 +266,7 @@ return [
             /**
              * Closure for parsing request and preparing data provider query. Note: This can return array of queries| or model identifier to be applied to the model
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return $id;
              * }
              * </code>
@@ -277,7 +278,7 @@ return [
             /**
              * Closure applying policies to the request action. Note: Closure must return a boolean value indicating authorization process result. This can be a boolean value.
              * <code>
-             * function(\Illuminate\Http\Request $request, $id) {
+             * function(Request $request, $id) {
              *  return true;
              * }
              * </code>

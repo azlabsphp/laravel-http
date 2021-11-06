@@ -67,7 +67,7 @@ abstract class ApiController
      */
     protected function respondOk($data, array $errors = null, $success = true)
     {
-        return $this->responseHandler->respondOk($data, $errors, $success);
+        return $this->responseHandler->ok($data, $errors, $success);
     }
     /**
      * Method for converting thrown exceptions into http response
@@ -79,7 +79,7 @@ abstract class ApiController
      */
     protected function respondError(\Exception $e, array $errors = null)
     {
-        return $this->responseHandler->respondError($e, $errors);
+        return $this->responseHandler->error($e, $errors);
     }
     /**
      * Method for converting bad request to a json formatted response
@@ -90,7 +90,7 @@ abstract class ApiController
      */
     protected function respondBadRequest(array $errors)
     {
-        return $this->responseHandler->respondBadRequest($errors);
+        return $this->responseHandler->badRequest($errors);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class ApiController
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * 
      */
-    protected function download($path, $name = null, $headers = array(), $deleteAfterSend = false)
+    protected function download($path, $name = null, $headers = [], $deleteAfterSend = false)
     {
         return $this->responseHandler->download($path, $name, $headers, $deleteAfterSend);
     }
@@ -133,7 +133,7 @@ abstract class ApiController
      */
     protected function streamDownload($filename, \Closure $callback)
     {
-        return $this->responseHandler->streamDownload($filename, $callback);
+        return $this->responseHandler->stream($filename, $callback);
     }
     /**
      * This method is a wrapper arround of the [\Illuminate\Contracts\Routing\ResponseFactory::class] [[file]]
@@ -145,7 +145,7 @@ abstract class ApiController
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * 
      */
-    protected function loadFile($path, $headers = array())
+    protected function loadFile($path, $headers = [])
     {
         return $this->responseHandler->file($path, $headers);
     }

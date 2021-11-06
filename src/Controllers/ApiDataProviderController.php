@@ -33,17 +33,17 @@ class ApiDataProviderController
      *
      * @var IActionResponseHandler
      */
-    private $actionResponseHandler;
+    private $response;
 
     public function __construct(
         ValidatorContract $validator,
         IDataProviderControllerActionHandler $actionHandler,
-        IActionResponseHandler $actionResponseHandler
+        IActionResponseHandler $response
     ) {
         $this->middleware(ConfigurationManager::getInstance()->get("auth_middleware", 'auth'));
         $this->validator = $validator;
         $this->actionHandler = $actionHandler;
-        $this->actionResponseHandler = $actionResponseHandler;
+        $this->response = $response;
     }
 
     /**
@@ -71,12 +71,12 @@ class ApiDataProviderController
             $errors = $this->actionHandler
                 ->applyValidationHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.index.validateRequestBody"), $request, $this->validator, $fn_params);
             if (!is_null($errors) && count($errors) > 0) {
-                return $this->actionResponseHandler->respondBadRequest($errors);
+                return $this->response->badRequest($errors);
             }
             // Apply gate policy on the request actions
             if (!$this->actionHandler
                 ->applyGatePolicyHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.index.gatePolicy"), $request, $provider, $fn_params)) {
-                return $this->actionResponseHandler->unauthorized($request);
+                return $this->response->unauthorized($request);
             }
             // Apply filters rules
             $filters = array(
@@ -94,7 +94,7 @@ class ApiDataProviderController
                 $request->has('page'),
                 $request->get('per_page')
             );
-            return $this->actionResponseHandler->respondOk(
+            return $this->response->ok(
                 $this->actionHandler->applyTransformResponseBody(
                     ConfigurationManager::getInstance()->get("requests.$collection.actions.index.transformResponseBody"),
                     $result,
@@ -103,7 +103,7 @@ class ApiDataProviderController
             );
         } catch (\Exception $e) {
             // Return failure response to request client
-            return $this->actionResponseHandler->respondError($e);
+            return $this->response->error($e);
         }
     }
 
@@ -135,17 +135,17 @@ class ApiDataProviderController
             $errors = $this->actionHandler
                 ->applyValidationHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.store.validateRequestBody"), $request, $this->validator, $fn_params);
             if (!is_null($errors) && count($errors) > 0) {
-                return $this->actionResponseHandler->respondBadRequest($errors);
+                return $this->response->badRequest($errors);
             }
             // Apply gate policy on the request actions
             if (!$this->actionHandler
                 ->applyGatePolicyHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.store.gatePolicy"), $request, $provider, $fn_params)) {
-                return $this->actionResponseHandler->unauthorized($request);
+                return $this->response->unauthorized($request);
             }
             $handlerParams = $this->actionHandler
                 ->applyBuildProviderHandlerParams(ConfigurationManager::getInstance()->get("requests.$collection.actions.store.providerHandlerParam"), $data, $request);
             $result =  $provider->create($data, $handlerParams);
-            return $this->actionResponseHandler->respondOk(
+            return $this->response->ok(
                 array(
                     'data' => $this->actionHandler->applyTransformResponseBody(
                         ConfigurationManager::getInstance()->get("requests.$collection.actions.store.transformResponseBody"),
@@ -156,7 +156,7 @@ class ApiDataProviderController
             );
         } catch (\Exception $e) {
             // Return failure response to request client
-            return $this->actionResponseHandler->respondError($e);
+            return $this->response->error($e);
         }
     }
 
@@ -184,12 +184,12 @@ class ApiDataProviderController
             // Apply gate policy on the request actions
             if (!$this->actionHandler
                 ->applyGatePolicyHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.show.gatePolicy"), $request, $provider, $fn_params)) {
-                return $this->actionResponseHandler->unauthorized($request);
+                return $this->response->unauthorized($request);
             }
             $query = $this->actionHandler
                 ->applyQueryBuilder(ConfigurationManager::getInstance()->get("requests.$collection.actions.show.queryBuilder"), $request, $fn_params);
             $result =  $provider->get($query);
-            return $this->actionResponseHandler->respondOk(
+            return $this->response->ok(
                 array(
                     'data' => $this->actionHandler->applyTransformResponseBody(
                         ConfigurationManager::getInstance()->get("requests.$collection.actions.show.transformResponseBody"),
@@ -200,7 +200,7 @@ class ApiDataProviderController
             );
         } catch (\Exception $e) {
             // Return failure response to request client
-            return $this->actionResponseHandler->respondError($e);
+            return $this->response->error($e);
         }
     }
 
@@ -233,12 +233,12 @@ class ApiDataProviderController
             $errors = $this->actionHandler
                 ->applyValidationHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.update.validateRequestBody"), $request, $this->validator, $fn_params);
             if (!is_null($errors) && count($errors) > 0) {
-                return $this->actionResponseHandler->respondBadRequest($errors);
+                return $this->response->badRequest($errors);
             }
             // Apply gate policy on the request actions
             if (!$this->actionHandler
                 ->applyGatePolicyHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.update.gatePolicy"), $request, $provider, $fn_params)) {
-                return $this->actionResponseHandler->unauthorized($request);
+                return $this->response->unauthorized($request);
             }
             // Return success response to user
             $query = $this->actionHandler
@@ -250,7 +250,7 @@ class ApiDataProviderController
             $handlerParams = $this->actionHandler
                 ->applyBuildProviderHandlerParams(ConfigurationManager::getInstance()->get("requests.$collection.actions.update.providerHandlerParam"), $data, $request);
             $result =  $provider->modify($query, $data, $handlerParams);
-            return $this->actionResponseHandler->respondOk(
+            return $this->response->ok(
                 array(
                     'data' => $this->actionHandler->applyTransformResponseBody(
                         ConfigurationManager::getInstance()->get("requests.$collection.actions.update.transformResponseBody"),
@@ -261,7 +261,7 @@ class ApiDataProviderController
             );
         } catch (\Exception $e) {
             // Return failure response to request client
-            return $this->actionResponseHandler->respondError($e);
+            return $this->response->error($e);
         }
     }
 
@@ -289,12 +289,12 @@ class ApiDataProviderController
             // Apply gate policy on the request actions
             if (!$this->actionHandler
                 ->applyGatePolicyHandler(ConfigurationManager::getInstance()->get("requests.$collection.actions.destroy.gatePolicy"), $request, $provider, $fn_params)) {
-                return $this->actionResponseHandler->unauthorized($request);
+                return $this->response->unauthorized($request);
             }
             $query = $this->actionHandler
                 ->applyQueryBuilder(ConfigurationManager::getInstance()->get("requests.$collection.actions.destroy.queryBuilder"), $request, $fn_params);
             $result =  $provider->delete($query, ConfigurationManager::getInstance()->get("requests.$collection.actions.destroy.massDelete"));
-            return $this->actionResponseHandler->respondOk(
+            return $this->response->ok(
                 array(
                     'data' => $this->actionHandler->applyTransformResponseBody(
                         ConfigurationManager::getInstance()->get("requests.$collection.actions.destroy.transformResponseBody"),
@@ -304,7 +304,7 @@ class ApiDataProviderController
                 )
             );
         } catch (\Exception $e) {
-            return $this->actionResponseHandler->respondError($e);
+            return $this->response->error($e);
         }
     }
 }

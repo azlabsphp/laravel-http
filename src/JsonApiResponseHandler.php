@@ -90,6 +90,6 @@ class JsonApiResponseHandler implements IActionResponseHandler
      */
     public function badRequest(array $errors)
     {
-        return $this->respond($errors, $this->status_code ?? 422);
+        return $this->respond($errors, $this->status_code ?? 400);
     }
 }

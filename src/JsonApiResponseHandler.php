@@ -83,13 +83,13 @@ class JsonApiResponseHandler implements IActionResponseHandler
     }
 
     /**
-     * Return an HTTP Bad Request response  with status >=400 or <=403
+     * Return an HTTP Bad Request response  with status >=400 or <=403 or 422
      *
      * @param array $errors
      * @return Response
      */
     public function badRequest(array $errors)
     {
-        return $this->respond($errors, $this->status_code ?? 400);
+        return $this->respond($errors, $this->status_code ?? 422);
     }
 }

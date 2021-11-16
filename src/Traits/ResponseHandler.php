@@ -4,8 +4,6 @@ namespace Drewlabs\Packages\Http\Traits;
 
 trait ResponseHandler
 {
-
-
     /**
      * HTTP Status code
      *

@@ -8,12 +8,7 @@ use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 use Illuminate\Container\Container;
 
-/**
- * @deprecated v1.0.4 Use the drop in replacement {@see JsonApiResponseHandler} implementation which
- * returs a simpler json response containing only the data return by the api
- * @package Drewlabs\Packages\Http
- */
-class ActionResponseHandler implements IActionResponseHandler
+class JsonApiResponseHandler implements IActionResponseHandler
 {
     use ResponseHandler;
     use BinaryResponseHandler;
@@ -64,16 +59,7 @@ class ActionResponseHandler implements IActionResponseHandler
      */
     public function ok($data, array $errors = null, $success = true)
     {
-        return $this->respond(
-            [
-                'success' => $success,
-                'error_message' => null,
-                'response_data' => $data,
-                'errors' => $errors,
-                'code' => $this->status_code ?? 200,
-            ],
-            $this->status_code ?? 200
-        );
+        return $this->respond($data, $this->status_code ?? 200);
     }
 
     /**
@@ -90,13 +76,8 @@ class ActionResponseHandler implements IActionResponseHandler
         Container::getInstance()->make('log')->error(sprintf('%s : %s', ConfigurationManager::getInstance()->get('app.env', 'local'), $response_message));
         // Checks if running in production or dev for error message to be send
         return $this->respond(
-            [
-                'success' => false,
-                'error_message' => filter_var(ConfigurationManager::getInstance()->get('app.debug', true), FILTER_VALIDATE_BOOLEAN) === false ? 'Server Error' : $response_message,
-                'response_data' => null,
-                'errors' => $errors,
-                'code' => $this->status_code ?? 500,
-            ],
+            filter_var(ConfigurationManager::getInstance()->get('app.debug', true), FILTER_VALIDATE_BOOLEAN) === false ?
+                'Server Error' : $response_message,
             $this->status_code ?? 500
         );
     }
@@ -109,15 +90,6 @@ class ActionResponseHandler implements IActionResponseHandler
      */
     public function badRequest(array $errors)
     {
-        return $this->respond(
-            [
-                'success' => false,
-                'error_message' => 'Bad request... Invalid request inputs',
-                'response_data' => null,
-                'errors' => $errors,
-                'code' => $this->status_code ?? 400,
-            ],
-            $this->status_code ?? 400
-        );
+        return $this->respond($errors, $this->status_code ?? 422);
     }
 }

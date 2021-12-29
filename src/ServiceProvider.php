@@ -69,8 +69,8 @@ class ServiceProvider extends BaseServiceProvider
     {
         Auth::resolved(function ($auth) {
             $auth->extend('anonymous', function ($app, $name, array $config) use ($auth) {
-                return tap($this->createAnonymousGuard($auth, $config), function ($guard) {
-                    app()->refresh('request', $guard, 'setRequest');
+                return tap($this->createAnonymousGuard($auth, $config), function ($guard) use ($app) {
+                    $app->refresh('request', $guard, 'setRequest');
                 });
             });
         });

@@ -53,7 +53,7 @@ trait LaravelOrLumenFrameworksApiController
      */
     public function middleware($middleware, array $options = [])
     {
-        if (is_lumen(app())) {
+        if (is_lumen(self::createResolver()())) {
             return $this->middleware[$middleware] = $options;
         }
         return $this->createLaravelMiddleware($middleware, $options);

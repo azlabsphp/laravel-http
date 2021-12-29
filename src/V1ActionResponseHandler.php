@@ -6,6 +6,7 @@ use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Exception;
 use Drewlabs\Packages\Http\Traits\ResponseHandler;
 use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
+use Drewlabs\Packages\Http\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
 
@@ -14,6 +15,7 @@ class V1ActionResponseHandler implements IActionResponseHandler
     use ResponseHandler;
     use BinaryResponseHandler;
     use UnAuthorizedResponseHandler;
+    use HasIocContainer;
 
     public function ok($data, ?array $errors = null, $success = true)
     {
@@ -35,7 +37,7 @@ class V1ActionResponseHandler implements IActionResponseHandler
 
     public function error(Exception $e, ?array $errors = null)
     {
-        app()['log']->error('HTTP ERROR : ' . $e->getMessage());
+        self::createResolver('log')()->error('HTTP ERROR : ' . $e->getMessage());
         return $this->respond(
             array(
                 "data" => array(

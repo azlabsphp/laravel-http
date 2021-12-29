@@ -171,7 +171,7 @@ trait LaravelOrLumenFrameworksApiController
     {
         [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
 
-        return app(Gate::class)->authorize($ability, $arguments);
+        return self::createResolver(Gate::class)()->authorize($ability, $arguments);
     }
 
     /**
@@ -188,7 +188,7 @@ trait LaravelOrLumenFrameworksApiController
     {
         [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
 
-        return app(Gate::class)->forUser($user)->authorize($ability, $arguments);
+        return self::createResolver(Gate::class)()->forUser($user)->authorize($ability, $arguments);
     }
 
     /**

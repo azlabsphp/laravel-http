@@ -6,6 +6,7 @@ use Drewlabs\Contracts\Data\DataProviderInterface;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**
+ * @deprecated 1.0.x
  * @package Drewlabs\Packages\Http
  */
 interface IDataProviderControllerActionHandler

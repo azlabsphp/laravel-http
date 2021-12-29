@@ -2,10 +2,10 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
+use Closure;
 use BadMethodCallException;
+use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Illuminate\Routing\ControllerMiddlewareOptions;
-use Closure as BaseClosure;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 trait LaravelOrLumenFrameworksApiController
 {
 
+    use HasIocContainer;
     /**
      * The response builder callback.
      *
@@ -41,7 +42,7 @@ trait LaravelOrLumenFrameworksApiController
      */
     protected function hasAdminAcess()
     {
-        return Container::getInstance()->make(GateContract::class)->allows('is-admin');
+        return $this->createResolver(GateContract::class)()->allows('is-admin');
     }
 
     /**
@@ -139,7 +140,7 @@ trait LaravelOrLumenFrameworksApiController
      * @param  \Closure  $callback
      * @return void
      */
-    public static function buildResponseUsing(BaseClosure $callback)
+    public static function buildResponseUsing(Closure $callback)
     {
         static::$responseBuilder = $callback;
     }
@@ -150,7 +151,7 @@ trait LaravelOrLumenFrameworksApiController
      * @param  \Closure  $callback
      * @return void
      */
-    public static function formatErrorsUsing(BaseClosure $callback)
+    public static function formatErrorsUsing(Closure $callback)
     {
         static::$errorFormatter = $callback;
     }

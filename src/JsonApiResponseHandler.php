@@ -2,17 +2,18 @@
 
 namespace Drewlabs\Packages\Http;
 
+use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\ResponseHandler;
 use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
-use Illuminate\Container\Container;
 
 class JsonApiResponseHandler implements IActionResponseHandler
 {
     use ResponseHandler;
     use BinaryResponseHandler;
     use UnAuthorizedResponseHandler;
+    use HasIocContainer;
 
     /**
      * Method for converting thrown exceptions into http response
@@ -73,7 +74,13 @@ class JsonApiResponseHandler implements IActionResponseHandler
     {
         $response_message = $e->getMessage();
         // Check to see if the error is not log by laravel
-        Container::getInstance()->make('log')->error(sprintf('%s : %s', ConfigurationManager::getInstance()->get('app.env', 'local'), $response_message));
+        $this->createResolver('log')()->error(
+            sprintf(
+                '%s : %s',
+                ConfigurationManager::getInstance()->get('app.env', 'local'),
+                $response_message
+            )
+        );
         // Checks if running in production or dev for error message to be send
         return $this->respond(
             filter_var(ConfigurationManager::getInstance()->get('app.debug', true), FILTER_VALIDATE_BOOLEAN) === false ?

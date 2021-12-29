@@ -5,10 +5,8 @@ namespace Drewlabs\Packages\Http;
 use Drewlabs\Contracts\Http\BinaryResponseHandler;
 use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
-use Drewlabs\Core\Validator\Contracts\IValidator as Validator;
+use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Core\Validator\InputsValidator;
-use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
@@ -50,18 +48,10 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->bind(Validator::class, function ($app) {
             return new InputsValidator($app['validator']);
         });
-        $this->app->bind(ValidatorContract::class, function ($app) {
-            return new InputsValidator($app['validator']);
-        });
         $this->app->when(ApiDataProviderController::class)
             ->needs(IDataProviderControllerActionHandler::class)
             ->give(function () {
                 return new DataProviderControllerActionHandler();
-            });
-        $this->app->when(ApiDataProviderController::class)
-            ->needs(IActionResponseHandler::class)
-            ->give(function () {
-                return new ActionResponseHandler();
             });
 
         // Register an anonymous guard, that allow to run application without 
@@ -72,7 +62,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerResponseHandlers();
 
         // Routes bindings
-        $this->forRoutes($this->app, drewlabs_http_handlers_configs('route_prefix', 'api/v1'));
+        $this->forRoutes($this->app, drewlabs_http_handlers_configs('route_prefix', 'api/v2'));
     }
 
     private function registerAnonymousGuard()

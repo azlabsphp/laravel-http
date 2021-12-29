@@ -2,14 +2,15 @@
 
 namespace Drewlabs\Packages\Http\Controllers;
 
+use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\DatabaseManager;
 
 class TableColumnUniqueRuleController
 {
+    use HasIocContainer;
     /**
      * 
      * @var IActionResponseHandler
@@ -25,7 +26,7 @@ class TableColumnUniqueRuleController
     public function __construct(IActionResponseHandler $response)
     {
         $this->response = $response;
-        $this->db = Container::getInstance()->make('db');
+        $this->db = $this->createResolver('db')();
     }
 
     /**

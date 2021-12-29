@@ -38,7 +38,7 @@ abstract class ApiController
      */
     public function __construct()
     {
-        $this->app = $this->createResolver()();
+        $this->app = self::createResolver()();
         $this->responseHandler = $this->app->make(IActionResponseHandler::class);
         $this->viewModelValidator = $this->app->make(ValidatorContract::class);
     }

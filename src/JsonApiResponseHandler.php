@@ -74,7 +74,7 @@ class JsonApiResponseHandler implements IActionResponseHandler
     {
         $response_message = $e->getMessage();
         // Check to see if the error is not log by laravel
-        $this->createResolver('log')()->error(
+        self::createResolver('log')()->error(
             sprintf(
                 '%s : %s',
                 ConfigurationManager::getInstance()->get('app.env', 'local'),

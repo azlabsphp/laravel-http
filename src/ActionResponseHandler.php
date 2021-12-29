@@ -88,7 +88,7 @@ class ActionResponseHandler implements IActionResponseHandler
     {
         $response_message = $e->getMessage();
         // Check to see if the error is not log by laravel
-        $this->createResolver('log')()->error(
+        static::createResolver('log')()->error(
             sprintf(
                 '%s : %s',
                 ConfigurationManager::getInstance()->get('app.env', 'local'),

@@ -41,7 +41,7 @@ trait LaravelOrLumenFrameworksApiController
      */
     protected function hasAdminAcess()
     {
-        return $this->createResolver(GateContract::class)()->allows('is-admin');
+        return self::createResolver(GateContract::class)()->allows('is-admin');
     }
 
     /**

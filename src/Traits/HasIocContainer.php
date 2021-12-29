@@ -24,7 +24,7 @@ trait HasIocContainer
      * @param mixed $abstract 
      * @return Closure 
      */
-    public function createResolver($abstract = null)
+    protected static function createResolver($abstract = null)
     {
         /**
          * @return ContainerInterface|Container|mixed

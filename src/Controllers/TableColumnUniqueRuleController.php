@@ -26,7 +26,7 @@ class TableColumnUniqueRuleController
     public function __construct(IActionResponseHandler $response)
     {
         $this->response = $response;
-        $this->db = $this->createResolver('db')();
+        $this->db = self::createResolver('db')();
     }
 
     /**

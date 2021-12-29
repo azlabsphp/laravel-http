@@ -2,8 +2,8 @@
 
 namespace Drewlabs\Packages\Http\Controllers;
 
-use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
+use Drewlabs\Packages\Http\Traits\HasIocContainer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\DatabaseManager;

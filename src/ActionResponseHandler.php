@@ -2,10 +2,10 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\ResponseHandler;
 use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
+use Drewlabs\Packages\Http\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
 /**

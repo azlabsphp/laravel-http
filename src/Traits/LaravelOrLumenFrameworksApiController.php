@@ -4,7 +4,6 @@ namespace Drewlabs\Packages\Http\Traits;
 
 use Closure;
 use BadMethodCallException;
-use Drewlabs\Packages\Database\Traits\HasIocContainer;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;

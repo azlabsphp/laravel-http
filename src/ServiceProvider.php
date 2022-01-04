@@ -94,7 +94,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         return new RequestGuard(
             new AnonymousGuard(),
-            request(),
+            $this->app->make('request'),
             null
         );
     }

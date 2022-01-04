@@ -14,7 +14,7 @@ trait UnAuthorizedResponseHandler
     public function unauthorized($request, \Exception $exception = null)
     {
         if (function_exists('response')) {
-            $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . (isset($exception) ? ' [ERROR] : ' . $exception->getMessage() : '');
+            $message = $request->method() . ' ' . $request->path() . '  Unauthorized access.' . ($exception ? ' [ERROR] : ' . $exception->getMessage() : '');
             return call_user_func_array('response', array($message, 401));
         }
         throw new \RuntimeException("Error Processing Request - Lumen or Laravel framework is required to work with the this class", 500);

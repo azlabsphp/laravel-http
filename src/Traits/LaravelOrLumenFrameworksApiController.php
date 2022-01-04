@@ -8,10 +8,11 @@ use Illuminate\Routing\ControllerMiddlewareOptions;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
-
+/**
+ * @deprecated v2.0.x
+ */
 trait LaravelOrLumenFrameworksApiController
 {
-
     use HasIocContainer;
     /**
      * The response builder callback.

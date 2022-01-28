@@ -20,9 +20,9 @@ use Psr\Container\ContainerInterface;
 trait HasIocContainer
 {
     /**
-     * 
-     * @param mixed $abstract 
-     * @return Closure 
+     *
+     * @param mixed $abstract
+     * @return Closure
      */
     protected static function createResolver($abstract = null)
     {
@@ -36,14 +36,14 @@ trait HasIocContainer
             if (null === $abstract) {
                 return $container;
             }
-            if ($container instanceof ContainerInterface) {
-                return $container->get($abstract);
-            }
             if ($container instanceof \ArrayAccess) {
                 return $container[$abstract];
             }
             if ($container instanceof Container) {
                 return $container->make($abstract);
+            }
+            if ($container instanceof ContainerInterface) {
+                return $container->get($abstract);
             }
             throw new \InvalidArgumentException(\get_class($container).' is not a '.ContainerInterface::class.' nor '.Container::class.' and is not array accessible');
         };

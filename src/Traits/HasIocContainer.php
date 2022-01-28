@@ -39,7 +39,7 @@ trait HasIocContainer
             if ($container instanceof \ArrayAccess) {
                 return $container[$abstract];
             }
-            if ($container instanceof Container) {
+            if (class_exists(Container::class) && ($container instanceof Container)) {
                 return $container->make($abstract);
             }
             if ($container instanceof ContainerInterface) {

@@ -9,7 +9,10 @@ use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
 use Drewlabs\Packages\Http\Traits\HasIocContainer;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
-
+/**
+ * @deprecated v2.0.x
+ * @package Drewlabs\Packages\Http
+ */
 class V1ActionResponseHandler implements IActionResponseHandler
 {
     use ResponseHandler;

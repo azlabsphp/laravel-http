@@ -11,6 +11,7 @@ use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 /**
  * @deprecated v1.0.4 Use the drop in replacement {@see JsonApiResponseHandler} implementation which
  * returs a simpler json response containing only the data return by the api
+ * 
  * @package Drewlabs\Packages\Http
  */
 class ActionResponseHandler implements IActionResponseHandler

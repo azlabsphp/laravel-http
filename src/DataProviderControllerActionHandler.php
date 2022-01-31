@@ -13,6 +13,7 @@ use Drewlabs\Packages\Http\Exceptions\TransformRequestBodyException;
 use Closure;
 
 /**
+ * @deprecated v2.0.x
  * @package Drewlabs\Packages\Http
  */
 class DataProviderControllerActionHandler implements IDataProviderControllerActionHandler

@@ -1,0 +1,6 @@
+# Changelog
+
+## v202203072111
+
+- Add a ViewResponseHandler class binding that resolve a view instance from container
+- Added ContainerAware trait as Dropin replacement of HasIocContainer

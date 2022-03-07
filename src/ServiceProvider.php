@@ -4,6 +4,7 @@ namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Contracts\Http\BinaryResponseHandler;
 use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
+use Drewlabs\Contracts\Http\ViewResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Core\Validator\InputsValidator;
@@ -12,6 +13,7 @@ use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
 use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
 use Drewlabs\Packages\Http\Middleware\Cors\CorsServices;
+use Drewlabs\Packages\Http\ViewResponseHandler as HttpViewResponseHandler;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Auth;
 
@@ -81,6 +83,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->app->bind(BinaryResponseHandler::class, BinaryFileResponse::class);
         $this->app->bind(UnAuthorizedResponseHandler::class, UnAuthorizedResponse::class);
+        $this->app->bind(ViewResponseHandler::class, HttpViewResponseHandler::class);
     }
 
     /**

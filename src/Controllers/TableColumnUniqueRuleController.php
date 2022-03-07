@@ -3,14 +3,14 @@
 namespace Drewlabs\Packages\Http\Controllers;
 
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Drewlabs\Packages\Http\Traits\HasIocContainer;
+use Drewlabs\Packages\Http\Traits\ContainerAware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\DatabaseManager;
 
 class TableColumnUniqueRuleController
 {
-    use HasIocContainer;
+    use ContainerAware;
     /**
      * 
      * @var IActionResponseHandler

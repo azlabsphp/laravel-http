@@ -13,7 +13,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
  */
 trait LaravelOrLumenFrameworksApiController
 {
-    use HasIocContainer;
+    use ContainerAware;
     /**
      * The response builder callback.
      *

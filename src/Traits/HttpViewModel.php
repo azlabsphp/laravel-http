@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 trait HttpViewModel
 {
     use ViewModel;
-    use HasIocContainer;
+    use ContainerAware;
 
     /**
      * 

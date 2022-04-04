@@ -13,10 +13,10 @@ trait HttpViewModel
 
     /**
      * 
-     * @param ServerRequestInterface|Request|mixed $request 
+     * @param ServerRequestInterface|Request|mixed|null $request 
      * @return self 
      */
-    public function __construct($request)
+    public function __construct($request = null)
     {
         if ($request instanceof ServerRequestInterface) {
             $this->fromPsrServerRequest($request);

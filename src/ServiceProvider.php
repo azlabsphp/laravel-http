@@ -46,7 +46,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->bind(CorsServicesInterface::class, function () {
             return new CorsServices(ConfigurationManager::getInstance()->get('cors', null));
         });
-        if (class_exists(Drewlabs\Core\Validator\InputsValidator::class)) {
+        if (class_exists(\Drewlabs\Core\Validator\InputsValidator::class)) {
             // Register ViewModel validator providers
             $this->app->bind(Validator::class, function ($app) {
                 return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);

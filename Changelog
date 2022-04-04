@@ -1,0 +1,5 @@
+# Changelogs
+
+## [2.0.0] 2022-04-04
+
+- Removes dependencies to unnecessary packages and added core package as suggestion instead of requirement

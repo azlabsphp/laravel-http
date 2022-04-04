@@ -5,7 +5,7 @@ namespace Drewlabs\Packages\Http;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\ResponseHandler;
 use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
-use Drewlabs\Packages\Http\Traits\HasIocContainer;
+use Drewlabs\Packages\Http\Traits\ContainerAware;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
 class JsonApiResponseHandler implements IActionResponseHandler
@@ -13,7 +13,7 @@ class JsonApiResponseHandler implements IActionResponseHandler
     use ResponseHandler;
     use BinaryResponseHandler;
     use UnAuthorizedResponseHandler;
-    use HasIocContainer;
+    use ContainerAware;
 
     /**
      * Method for converting thrown exceptions into http response

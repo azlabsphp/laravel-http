@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 trait HttpViewModel
 {
     use \Drewlabs\Core\Validator\Traits\ViewModel;
-    use HasIocContainer;
+    use ContainerAware;
 
     /**
      * 

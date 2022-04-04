@@ -1,5 +1,10 @@
 # Changelogs
 
+## [2.1.11] 2022-03-07
+
+- Add a ViewResponseHandler class binding that resolve a view instance from container
+- Added ContainerAware trait as Dropin replacement of HasIocContainer
+
 ## [2.0.0] 2022-04-04
 
 - Removes dependencies to unnecessary packages and added core package as suggestion instead of requirement

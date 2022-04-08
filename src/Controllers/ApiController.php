@@ -8,6 +8,11 @@ use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
+/**
+ * @deprecated v2.x
+ * 
+ * @package Drewlabs\Packages\Http\Controllers
+ */
 abstract class ApiController
 {
     use LaravelOrLumenFrameworksApiController;

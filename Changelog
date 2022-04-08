@@ -16,3 +16,9 @@
 ## [2.1.15] 2022-04-04
 
 - Makes HttpViewModel constructor parameter to be nullable
+
+## [2.2.0] 2022-04-08
+
+- Fixed issues with Cors middleware not supporting * by reviewing CorsService implementation
+- Added Response and ServerRequest classes for wrapping Symfony or Psr7 Request
+- Write test for CorsService implementations

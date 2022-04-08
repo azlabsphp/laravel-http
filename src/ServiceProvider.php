@@ -11,8 +11,8 @@ use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
-use Drewlabs\Packages\Http\Middleware\Cors\CorsServices;
+use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
+use Drewlabs\Packages\Http\Middleware\Cors\CorsService;
 use Drewlabs\Packages\Http\ViewResponseHandler as HttpViewResponseHandler;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Auth;
@@ -43,8 +43,8 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
 
-        $this->app->bind(CorsServicesInterface::class, function () {
-            return new CorsServices(ConfigurationManager::getInstance()->get('cors', null));
+        $this->app->bind(CorsServiceInterface::class, function () {
+            return new CorsService(ConfigurationManager::getInstance()->get('cors', null));
         });
         if (class_exists(\Drewlabs\Core\Validator\InputsValidator::class)) {
             // Register ViewModel validator providers

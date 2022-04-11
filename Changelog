@@ -22,3 +22,7 @@
 - Fixed issues with Cors middleware not supporting * by reviewing CorsService implementation
 - Added Response and ServerRequest classes for wrapping Symfony or Psr7 Request
 - Write test for CorsService implementations
+
+## [2.2.1] 2022-04-11
+
+- Deprecated IPWhitelist middleware

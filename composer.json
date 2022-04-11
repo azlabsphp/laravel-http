@@ -9,18 +9,13 @@
     }],
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.2|^7.3|^7.4|^8.0|^8.1",
-        "illuminate/routing": "^6.0|^7.0|^8.0",
-        "illuminate/http": "^6.0|^7.0|^8.0",
-        "illuminate/support": "^6.0|^7.0|^8.0",
-        "illuminate/contracts": "^6.0|^7.0|^8.0",
-        "drewlabs/core": "^2.0",
+        "php": "^7.3|^7.4|^8.0|^8.1",
+        "illuminate/routing": "^7.0|^8.0|^9.0",
+        "illuminate/http": "^7.0|^8.0|^9.0",
+        "illuminate/support": "^7.0|^8.0|^9.0",
+        "illuminate/contracts": "^7.0|^8.0|^9.0",
         "drewlabs/core-helpers": "^2.0",
-        "drewlabs/contracts": "^2.0.20",
-        "drewlabs/support": "^2.0",
-        "symfony/psr-http-message-bridge": "^2.1",
-        "nyholm/psr7-server": ">=1.0",
-        "nyholm/psr7": "^1.0.1"
+        "drewlabs/contracts": "^2.0.20"
     },
     "autoload": {
         "psr-4": {
@@ -30,22 +25,13 @@
             "helpers.php"
         ]
     },
-    "repositories": [
-        {
+    "repositories": [{
             "type": "vcs",
             "url": "git@github.com:liksoft/drewlabs-php-contracts.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:liksoft/drewlabs-php-core.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@github.com:liksoft/drewlabs-php-core-helpers.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:liksoft/drewlabs-php-support.git"
         }
     ],
     "extra": {
@@ -57,6 +43,14 @@
         }
     },
     "suggest": {
-        "nyholm/psr7": "Required to create psr7 requests using drewlabs_create_psr7_request() global function"
+        "nyholm/psr7": "Required to create psr7 requests using drewlabs_create_psr7_request() global function",
+        "nyholm/psr7-server": "Required to create psr7 requests using drewlabs_create_psr7_request() global function",
+        "symfony/psr-http-message-bridge": "Symfony Psr7 request bridge for transforming symfony request into psr7 ^2.1",
+        "drewlabs/core": "Required to use validator and view model traits (^2.0)"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "nyholm/psr7": "^1.5",
+        "nyholm/psr7-server": "^1.0"
     }
 }

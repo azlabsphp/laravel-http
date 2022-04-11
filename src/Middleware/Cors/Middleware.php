@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http\Middleware\Cors;
 
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
+use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
 use Closure;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,7 +10,7 @@ class Middleware
 {
 
     /**
-  * @var CorsServicesInterface
+  * @var CorsServiceInterface
   */
     private $service;
 
@@ -19,7 +19,7 @@ class Middleware
      *
      * @param CorsService $service
      */
-    public function __construct(CorsServicesInterface $service)
+    public function __construct(CorsServiceInterface $service)
     {
         $this->service = $service;
     }

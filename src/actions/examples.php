@@ -150,8 +150,6 @@ return [
             },
             /**
              * Data provider DataProviderCreateHandlerParams definitions.
-             * Note: It can be an array, an instance of [[\Drewlabs\Core\Data\DataProviderCreateHandlerParams]] class or a null value, or a closure returning
-             * on of the preceding
              * <code>
              * array(
              *      'method' => 'insert__relationMethod1_relationMethod2' // insert // insertMany -> Default: insert,
@@ -160,11 +158,11 @@ return [
              * )
              *
              * function (array $attributes) {
-             *     return new \Drewlabs\Core\Data\DataProviderCreateHandlerParams([
-             *         'method' => 'insert',
+             *     return [
+             *          'method' => 'insert',
              *         'upsert' => false,
              *         'upsert_conditions' => []
-             *     ]);
+             * ]
              * }
              * </code>
              */
@@ -231,8 +229,7 @@ return [
             },
             /**
              * Data provider DataProviderUpdateHandlerParams definitions.
-             * Note: It can be an array, an instance of [[\Drewlabs\Core\Data\DataProviderUpdateHandlerParams]] class or a null value, or a closure returning
-             * on of the preceding
+             * 
              * <code>
              * array(
              *      'method' => 'update__relationMethod1_relationMethod2' // update // -> Default: updateById,
@@ -241,11 +238,11 @@ return [
              * )
              *
              * function (array $attributes) {
-             *     return new \Drewlabs\Core\Data\DataProviderUpdateHandlerParams([
+             *     return [
              *         'method' => 'update__relationMethod1_relationMethod2' // update // -> Default: updateById,
              *         'upsert' => false,
              *         'should_mass_update' => false
-             *     ]);
+             * ];
              * }
              * </code>
              */

@@ -2,19 +2,18 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
-use Drewlabs\Core\Validator\Traits\ViewModel;
 use Illuminate\Http\Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
 
 trait HttpViewModel
 {
-    use ViewModel;
+    use \Drewlabs\Core\Validator\Traits\ViewModel;
     use ContainerAware;
 
     /**
      * 
-     * @param ServerRequestInterface|Request|mixed $request 
+     * @param ServerRequestInterface|Request|mixed|null $request 
      * @return self 
      */
     public function __construct($request = null)

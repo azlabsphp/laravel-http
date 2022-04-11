@@ -7,12 +7,12 @@ use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
 use Drewlabs\Contracts\Http\ViewResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Drewlabs\Contracts\Validator\Validator;
-use Drewlabs\Core\Validator\InputsValidator;
+use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
 use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServicesInterface;
-use Drewlabs\Packages\Http\Middleware\Cors\CorsServices;
+use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
+use Drewlabs\Packages\Http\Middleware\Cors\CorsService;
 use Drewlabs\Packages\Http\ViewResponseHandler as HttpViewResponseHandler;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Auth;
@@ -43,13 +43,15 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
 
-        $this->app->bind(CorsServicesInterface::class, function () {
-            return new CorsServices(ConfigurationManager::getInstance()->get('cors', null));
+        $this->app->bind(CorsServiceInterface::class, function () {
+            return new CorsService(ConfigurationManager::getInstance()->get('cors', null));
         });
-        // Register ViewModel validator providers
-        $this->app->bind(Validator::class, function ($app) {
-            return new InputsValidator($app['validator']);
-        });
+        if (class_exists(\Drewlabs\Core\Validator\InputsValidator::class)) {
+            // Register ViewModel validator providers
+            $this->app->bind(Validator::class, function ($app) {
+                return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
+            });
+        }
         $this->app->when(ApiDataProviderController::class)
             ->needs(IDataProviderControllerActionHandler::class)
             ->give(function () {
@@ -63,8 +65,11 @@ class ServiceProvider extends BaseServiceProvider
         // Register response handlers types
         $this->registerResponseHandlers();
 
-        // Routes bindings
-        $this->forRoutes($this->app, drewlabs_http_handlers_configs('route_prefix', 'api/v2'));
+        // By default try to bind the {@see IActionResponseHandler::class} if it has not
+        // been bounded by developpers in project root AppServiceProvider class
+        if (!$this->app->bound(IActionResponseHandler::class)) {
+            $this->app->bind(IActionResponseHandler::class, JsonApiResponseHandler::class);
+        }
     }
 
     private function registerAnonymousGuard()
@@ -100,20 +105,5 @@ class ServiceProvider extends BaseServiceProvider
             $this->app->make('request'),
             null
         );
-    }
-
-    private function forRoutes($app, $prefix = null)
-    {
-        if ($router = $app['router'] ?? null) {
-            $router->group(
-                [
-                    'namespace' => 'Drewlabs\\Packages\\Http\\Controllers',
-                    'prefix' => $prefix
-                ],
-                function ($router) {
-                    $router->get('unique', 'TableColumnUniqueRuleController');
-                }
-            );
-        }
     }
 }

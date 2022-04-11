@@ -14,5 +14,13 @@ return [
     "auth_middleware" => env('AUTH_MIDDLEWARE', 'auth'),
     'policy_middleware' => getenv('POLICY_MIDDLEWARE', 'policy'),
     "apply_middleware_policies" => env('APPLY_POLICIES', false),
-    "route_prefix" => 'api/v1'
+    "route_prefix" => 'api/v1',
+    'cors' => [
+        'allowed_hosts' => [
+            '*'
+        ],
+        'allowed_headers' => [],
+        "allowed_credentials" => [],
+        "exposed_headers" => []
+    ]
 ];

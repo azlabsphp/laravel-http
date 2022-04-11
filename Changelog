@@ -1,6 +1,24 @@
-# Changelog
+# Changelogs
 
-## v202203072111
+## [2.1.11] 2022-03-07
 
 - Add a ViewResponseHandler class binding that resolve a view instance from container
 - Added ContainerAware trait as Dropin replacement of HasIocContainer
+
+## [2.1.12] 2022-04-04
+
+- Removes dependencies to unnecessary packages and added core package as suggestion instead of requirement
+
+## [2.1.14] 2022-04-04
+
+- Bug fix for Drewlabs\Core\Validator\InputsValidator::class binding
+
+## [2.1.15] 2022-04-04
+
+- Makes HttpViewModel constructor parameter to be nullable
+
+## [2.2.0] 2022-04-08
+
+- Fixed issues with Cors middleware not supporting * by reviewing CorsService implementation
+- Added Response and ServerRequest classes for wrapping Symfony or Psr7 Request
+- Write test for CorsService implementations

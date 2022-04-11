@@ -12,16 +12,23 @@ trait HttpViewModel
     use ContainerAware;
 
     /**
-     * 
      * @param ServerRequestInterface|Request|mixed|null $request 
+     * @param mixed $request 
      * @return self 
      */
     public function __construct($request = null)
     {
-        if ($request instanceof ServerRequestInterface) {
-            $this->fromPsrServerRequest($request);
-        } else if ($request instanceof Request) {
-            $this->fromLaravelRequest($request);
+        try {
+            // Making the class injectable into controller actions
+            // by resolving the current request from the service container 
+            $request = $request ?? self::createResolver('request')();
+            if ($request instanceof ServerRequestInterface) {
+                $this->fromPsrServerRequest($request);
+            } else if ($request instanceof Request) {
+                $this->fromLaravelRequest($request);
+            }
+        } catch (\Throwable $e) {
+            // We catch the exception for it to not propagate
         }
     }
 

@@ -8,8 +8,6 @@ use Drewlabs\Contracts\Http\ViewResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Drewlabs\Packages\Http\Contracts\IDataProviderControllerActionHandler;
-use Drewlabs\Packages\Http\Controllers\ApiDataProviderController;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
 use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
 use Drewlabs\Packages\Http\Middleware\Cors\CorsService;
@@ -52,11 +50,6 @@ class ServiceProvider extends BaseServiceProvider
                 return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
             });
         }
-        $this->app->when(ApiDataProviderController::class)
-            ->needs(IDataProviderControllerActionHandler::class)
-            ->give(function () {
-                return new DataProviderControllerActionHandler();
-            });
 
         // Register an anonymous guard, that allow to run application without 
         // worrying about any undefined application guard issues

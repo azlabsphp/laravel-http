@@ -2,6 +2,8 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
+use Symfony\Component\HttpFoundation\Response;
+
 trait UnAuthorizedResponseHandler
 {
     /**

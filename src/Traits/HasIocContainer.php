@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Drewlabs\Packages\Http\Traits;
 
+/**
+ * @deprecated v2.1.x Use {@see \Drewlabs\Packages\Http\Traits\ContainerAware} mixin instead
+ */
 trait HasIocContainer
 {
     use ContainerAware;

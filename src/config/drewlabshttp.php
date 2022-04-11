@@ -10,17 +10,17 @@
 |
 */
 return [
-    "requests" => [],
-    "auth_middleware" => env('AUTH_MIDDLEWARE', 'auth'),
+    'requests' => [],
+    'auth_middleware' => env('AUTH_MIDDLEWARE', 'auth'),
     'policy_middleware' => getenv('POLICY_MIDDLEWARE', 'policy'),
-    "apply_middleware_policies" => env('APPLY_POLICIES', false),
-    "route_prefix" => 'api/v1',
+    'apply_middleware_policies' => env('APPLY_POLICIES', false),
     'cors' => [
         'allowed_hosts' => [
             '*'
         ],
         'allowed_headers' => [],
-        "allowed_credentials" => [],
-        "exposed_headers" => []
+        'allowed_credentials' => false,
+        'exposed_headers' => [],
+        'max_age' => 0
     ]
 ];

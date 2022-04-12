@@ -12,6 +12,12 @@ trait HttpViewModel
     use ContainerAware;
 
     /**
+     * 
+     * @var mixed
+     */
+    private $request;
+
+    /**
      * @param ServerRequestInterface|Request|mixed|null $request 
      * @param mixed $request 
      * @return self 
@@ -27,6 +33,7 @@ trait HttpViewModel
             } else if ($request instanceof Request) {
                 $this->fromLaravelRequest($request);
             }
+            $this->request = $request;
         } catch (\Throwable $e) {
             // We catch the exception for it to not propagate
         }
@@ -41,8 +48,7 @@ trait HttpViewModel
      */
     public static function create($request = null, $container = null)
     {
-        $request = $request ?: self::createResolver(Request::class)($container);
-        return new self($request);
+        return new self($request ?? self::createResolver('request')($container));
     }
 
     protected function fromLaravelRequest(Request $request)
@@ -60,5 +66,17 @@ trait HttpViewModel
         );
         return $this->withBody($body)
             ->files($request->getUploadedFiles());
+    }
+
+    /**
+     * 
+     * @return mixed 
+     */
+    public function request($request = null)
+    {
+        if (null !== $request) {
+            $this->request = $request;
+        }
+        return $this->request;
     }
 }

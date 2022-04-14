@@ -26,3 +26,7 @@
 ## [2.2.1] 2022-04-11
 
 - Deprecated IPWhitelist middleware
+
+## [2.2.3] 2022-04-14
+
+- Fixed bug when guard is not defined and viewModel tries to access request user

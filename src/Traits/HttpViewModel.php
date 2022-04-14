@@ -53,19 +53,22 @@ trait HttpViewModel
 
     protected function fromLaravelRequest(Request $request)
     {
-        return $this->setUser($request->user())
-            ->withBody($request->all())
-            ->files($request->allFiles());
+        return $this->withBody($request->all())
+            ->files($request->allFiles())
+            ->setUserResolver($request->getUserResolver() ?? function () {
+                // Returns an empty resolver if the request does not provide one
+                //
+            });
     }
 
     protected function fromPsrServerRequest(ServerRequestInterface $request)
     {
-        $body = array_merge(
-            $request->getQueryParams() ?: [],
-            (array)($request->getParsedBody() ?? [])
-        );
-        return $this->withBody($body)
-            ->files($request->getUploadedFiles());
+        return $this->withBody(
+            array_merge(
+                $request->getQueryParams() ?: [],
+                (array)($request->getParsedBody() ?? [])
+            )
+        )->files($request->getUploadedFiles());
     }
 
     /**

@@ -13,8 +13,9 @@ class CorsServiceTest extends TestCase
                 '*'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
 
         $this->assertInstanceOf(CorsServiceInterface::class, $service);
@@ -28,8 +29,9 @@ class CorsServiceTest extends TestCase
                 '*'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         $request = $request->withMethod('OPTIONS');
@@ -45,8 +47,9 @@ class CorsServiceTest extends TestCase
                 '*'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         $request = $request->withHeader('Origin', 'http://localhost');
@@ -61,8 +64,9 @@ class CorsServiceTest extends TestCase
                 '*'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         $this->assertFalse($service->isCorsRequest($request));
@@ -73,8 +77,9 @@ class CorsServiceTest extends TestCase
         $service = new CorsService([
             'allowed_hosts' => [],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         $request = $request->withHeader('Origin', 'http://localhost');
@@ -93,8 +98,9 @@ class CorsServiceTest extends TestCase
                 'http://localhost'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         $request = $request->withHeader('Origin', 'http://localhost');
@@ -113,8 +119,9 @@ class CorsServiceTest extends TestCase
                 '*'
             ],
             'allowed_headers' => [],
-            "allowed_credentials" => [],
-            "exposed_headers" => []
+            "allowed_credentials" => false,
+            "exposed_headers" => [],
+            "max_age" => 0
         ]);
         $request = drewlabs_create_psr7_request();
         // $request = $request->withHeader('Origin', 'http://localhost');

@@ -213,8 +213,9 @@ final class CorsService implements CorsServiceInterface
                 //**Note*
                 // By default if the allowed_hosts entry is empty we use ['*'] to allow
                 // request from any origin
-                $configs_ = $key === 'allowed_hosts' && is_string($configs_) ?
-                    [$configs_] : (empty($configs_) ? ['*'] : $configs_);
+                if ($key === 'allowed_hosts') {
+                    $configs_ = is_string($configs_) ? [$configs_] : (empty($configs_) ? ['*'] : $configs_);
+                }
                 $this->{$key} = $configs_;
             }
         }

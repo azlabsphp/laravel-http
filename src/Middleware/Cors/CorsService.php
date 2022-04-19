@@ -231,9 +231,17 @@ final class CorsService implements CorsServiceInterface
     {
         $origin = HttpRequest::getHeader($request, 'Origin');
         if (in_array('*', $this->allowed_hosts)) {
-            $response = HttpResponse::setHeader($response, $this->accessControlAllowedOriginHeader, $origin);
+            $response = HttpResponse::setHeader(
+                $response,
+                $this->accessControlAllowedOriginHeader,
+                empty($origin) ? '*' : $origin
+            );
         } else if ($this->matches($this->allowed_hosts, $origin)) {
-            $response = HttpResponse::setHeader($response, $this->accessControlAllowedOriginHeader, $origin);
+            $response = HttpResponse::setHeader(
+                $response,
+                $this->accessControlAllowedOriginHeader,
+                $origin
+            );
         }
         return $response;
     }

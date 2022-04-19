@@ -109,6 +109,7 @@ class CorsServiceTest extends TestCase
          */
         $response = $service->handlePreflightRequest($request, new \Nyholm\Psr7\Response());
         $headers = $response->getHeader('Access-Control-Allow-Origin');
+        var_dump($response->getHeaders());
         $this->assertEquals('http://localhost', array_pop($headers));
     }
 
@@ -130,6 +131,7 @@ class CorsServiceTest extends TestCase
          */
         $response = $service->handleNormalRequest($request, new \Nyholm\Psr7\Response());
         $headers = $response->getHeader('Access-Control-Allow-Origin');
+        var_dump($response->getHeaders());
         $this->assertEquals('*', array_pop($headers));
     }
 }

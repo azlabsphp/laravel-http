@@ -2,7 +2,6 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
-use Closure;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Core\Helpers\Functional;
 use Illuminate\Http\Request;
@@ -117,8 +116,8 @@ trait HttpViewModel
      *  // Persist data to database after validation
      * });
      * ```
-     * 
-     * @param Closure $callback
+     * @param bool|\Closure|null $updating
+     * @param \Closure|null $callback
      * @throws \Drewlabs\Core\Validator\Exceptions\ValidationException
      * @return self 
      */

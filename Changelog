@@ -34,3 +34,6 @@
 ## [2.2.6] 2022-05-07
 
 - Added validated method to HttpViewModel::trait to allow view model to be able to validates request internally when called
+
+- Remove ApiDataProviderController as code generator will provides an easy way to generate controllers
+- Remove \Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController trait

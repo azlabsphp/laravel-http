@@ -2,6 +2,7 @@
 
 namespace Drewlabs\Packages\Http\Controllers;
 
+use AutorizeRequest;
 use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Contracts\Container\Container as Application;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
@@ -15,7 +16,8 @@ use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
  */
 abstract class ApiController
 {
-    use LaravelOrLumenFrameworksApiController;
+
+    use AutorizeRequest;
 
     /**
      *

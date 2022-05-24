@@ -40,3 +40,7 @@
 - Remove ApiDataProviderController as code generator will provides an easy way to generate controllers
 - Remove \Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController trait
 - Removes dependency to illuminate/routing
+
+## [2.3.2] 2022-05-24
+
+- Added ip(), ips(), server() methods to request to respectively returns client ip address, client ip addresses and a server object key

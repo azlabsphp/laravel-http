@@ -54,4 +54,22 @@ class ServerRequestTest extends TestCase
         $symfonyRequest->setMethod('POST');
         $this->assertTrue(HttpRequest::isMethod($symfonyRequest, 'POST'));
     }
+
+    public function test_get_ips()
+    {
+        $ips = HttpRequest::ips(new Request());
+        $this->assertIsArray($ips);
+    }
+
+    public function test_get_ip()
+    {
+        $ip = HttpRequest::ip(new Request([], [], [], [], [], ['REMOTE_ADDR' => '127.0.0.1']));
+        $this->assertEquals('127.0.0.1', $ip);
+    }
+
+    public function test_get_server_value()
+    {
+       $this->assertEquals('127.0.0.1', HttpRequest::server(new Request([], [], [], [], [], ['REMOTE_ADDR' => '127.0.0.1']), 'REMOTE_ADDR'));
+       $this->assertNull(HttpRequest::server(new Request([], [], [], [], [], ['REMOTE_ADDR' => '127.0.0.1']), 'HTTP_X_FORWARDED_FOR'));
+    }
 }

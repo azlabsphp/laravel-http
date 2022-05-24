@@ -12,6 +12,9 @@ use Drewlabs\Packages\Http\ServerRequest;
  * @method static string getMethod(mixed $request)
  * @method static bool isMethod(mixed $request, string $method)
  * @method static bool isSupported($request)
+ * @method static array|string server(string $key = null)
+ * @method static array ips()
+ * @method static string ip()
  * 
  * @package Drewlabs\Packages\Http\Facades
  */

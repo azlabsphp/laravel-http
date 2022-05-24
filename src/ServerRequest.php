@@ -102,10 +102,7 @@ class ServerRequest
      */
     public function getMethod()
     {
-        if ($this->isSupported()) {
-            return $this->internal->getMethod();
-        }
-        throw UnsupportedTypeException::forRequest($this->internal);
+        return $this->internal->getMethod();
     }
 
     /**
@@ -164,9 +161,6 @@ class ServerRequest
      */
     public function ip()
     {
-        if (!$this->isSupported()) {
-            throw UnsupportedTypeException::forRequest($this->internal);
-        }
         return is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
     }
 
@@ -179,9 +173,6 @@ class ServerRequest
      */
     public function ips(): array
     {
-        if (!$this->isSupported()) {
-            throw UnsupportedTypeException::forRequest($this->internal);
-        }
         if ($this->isPsr7()) {
             return $this->getPsr7Ips();
         }
@@ -198,13 +189,150 @@ class ServerRequest
      */
     public function server(string $key = null)
     {
-        if (!$this->isSupported()) {
-            throw UnsupportedTypeException::forRequest($this->internal);
-        }
         if ($this->isPsr7()) {
             return $this->psrServer($key);
         }
         return $key ? $this->internal->server->get($key) : $this->internal->server->all();
+    }
+
+    /**
+     * Gets cookie value from the user provided name
+     * @param string $name 
+     * @return string|array 
+     * @throws InvalidArgumentException 
+     * @throws BadRequestException 
+     */
+    public function cookie(string $name = null)
+    {
+        if ($this->isPsr7()) {
+            return $this->getPsr7Cookie($name);
+        }
+        return is_string($name) ? $this->internal->cookies->get($name) : $this->internal->cookies->all();
+    }
+
+    /**
+     * Returns the value of the request query parameters
+     * 
+     * @param string|null $name 
+     * @return mixed 
+     * @throws SuspiciousOperationException 
+     * @throws ConflictingHeadersException 
+     */
+    public function query(string $name = null)
+    {
+        if ($this->isPsr7()) {
+            return $this->getPsr7Query($name);
+        }
+        return $name ? Arr::get($this->internal->query->all() ?? [], $name) : ($this->internal->query->all() ?? []);
+    }
+
+    /**
+     * Query for value from request parsed body
+     * 
+     * @param string|null $name 
+     * @return mixed 
+     */
+    public function input(string $name = null)
+    {
+        if ($this->isPsr7()) {
+            return $this->getPsr7ParsedBody($name);
+        }
+        $input = $this->getAllSymfonyInputs();
+        return $name ? Arr::get($input, $name) : $input;
+    }
+
+
+    /**
+     * Returns an array containing all request input or user provided keys
+     * 
+     * @param array ...$keys 
+     * @return array 
+     * @throws SuspiciousOperationException 
+     * @throws ConflictingHeadersException 
+     * @throws BadRequestException 
+     */
+    public function all($keys = [])
+    {
+        $input = $this->isPsr7() ? $this->getPsr7AllInputs() : $this->getAllSymfonyInputs();
+        if (empty($keys)) {
+            return $input;
+        }
+        $out = [];
+        foreach (is_array($keys) ? $keys : func_get_args() as $key) {
+            Arr::set($out, $key, Arr::get($input, $key));
+        }
+        return $out;
+    }
+
+    private function getPsr7Cookie(string $name = null)
+    {
+        $cookies = $this->internal->getCookieParams() ?? [];
+        return is_string($name) ? Arr::get($cookies ?? [], $name) : ($cookies ?? []);
+    }
+
+    /**
+     * 
+     * @param string|null $name 
+     * @return string|array 
+     * @throws SuspiciousOperationException 
+     * @throws ConflictingHeadersException 
+     */
+    private function getPsr7Query(string $name = null)
+    {
+        // First we read query parameters from Psr7 request queryParams bag
+        $params = $this->internal->getQueryParams();
+        $components = parse_url($this->internal->getUri()->__toString());
+        // Then we attempt to parse request url make sure query string values
+        // are included in the query parameters
+        if ($components) {
+            $query = [];
+            parse_str(str_replace('?', '&', $components['query'] ?? ''), $query);
+            $params = array_merge(
+                $params,
+                array_filter($query, function ($value) {
+                    return !empty($value);
+                })
+            );
+        }
+        return $name ? Arr::get($params ?? [], $name) : ($params ?? []);
+    }
+
+    /**
+     * 
+     * @param string|null $name 
+     * @return mixed 
+     */
+    private function getPsr7ParsedBody(string $name = null)
+    {
+        $body = $this->internal->getParsedBody();
+        return $name ? Arr::get($body ?? [], $name) : ($body ?? []);
+    }
+
+    /**
+     * 
+     * @return array 
+     * @throws SuspiciousOperationException 
+     * @throws ConflictingHeadersException 
+     */
+    private function getPsr7AllInputs()
+    {
+        return array_merge(
+            $this->getPsr7Query(),
+            $this->getPsr7ParsedBody()
+        );
+    }
+
+    /**
+     * 
+     * @return array 
+     * @throws BadRequestException 
+     */
+    private function getAllSymfonyInputs()
+    {
+        return array_merge(
+            $this->internal->getInputSource()->all() ?? [],
+            $this->internal->query->all() ?? []
+        );
     }
 
     /**

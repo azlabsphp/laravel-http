@@ -12,9 +12,13 @@ use Drewlabs\Packages\Http\ServerRequest;
  * @method static string getMethod(mixed $request)
  * @method static bool isMethod(mixed $request, string $method)
  * @method static bool isSupported($request)
- * @method static array|string server(string $key = null)
- * @method static array ips()
- * @method static string ip()
+ * @method static array|string server($request, string $key = null)
+ * @method static array ips($request)
+ * @method static string ip($request)
+ * @method static string|array cookie($request, string $name = null)
+ * @method static string|array query($request, string $name = null)
+ * @method static string|array input($request, string $name = null)
+ * @method static string|array all($request, $keys = [])
  * 
  * @package Drewlabs\Packages\Http\Facades
  */

@@ -1,10 +1,11 @@
-<?php //
+<?php
 
 namespace Drewlabs\Packages\Http\Exceptions;
 
+use Exception;
 use Illuminate\Http\Request;
 
-class TransformRequestBodyException extends \RuntimeException
+class NotFoundHttpException extends Exception
 {
     /**
      * Creates an instance of {@see TransformRequestBodyException} class
@@ -14,11 +15,11 @@ class TransformRequestBodyException extends \RuntimeException
      * @param int $code 
      * @return self 
      */
-    public function __construct(\Illuminate\Http\Request $request = null, $message = 'Bad transform request configuration error', $code = 500)
+    public function __construct(Request $request = null)
     {
         if (isset($request)) {
-            $message = "Request path : /" . $request->path() . " Error : $message";
+            $message = sprintf("Missing resource, request path: %s", $request->path());
         }
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 }

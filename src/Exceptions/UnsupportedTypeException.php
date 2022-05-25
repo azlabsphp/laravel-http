@@ -4,9 +4,19 @@ namespace Drewlabs\Packages\Http\Exceptions;
 
 use Exception;
 
+/**
+ * 
+ * @package Drewlabs\Packages\Http\Exceptions
+ */
 class UnsupportedTypeException extends Exception
 {
 
+    /**
+     * Create ans instance of {@see UnsupportedTypeException} from a response instance
+     * 
+     * @param mixed $response 
+     * @return UnsupportedTypeException 
+     */
     public static function forResponse($response)
     {
         if (!is_object($response)) {
@@ -16,6 +26,12 @@ class UnsupportedTypeException extends Exception
         }
     }
 
+    /**
+     * Create ans instance of {@see UnsupportedTypeException} from a request instance
+     * 
+     * @param mixed $request 
+     * @return UnsupportedTypeException 
+     */
     public static function forRequest($request)
     {
         if (!is_object($request)) {

@@ -45,3 +45,7 @@
 
 - Added ip(), ips(), server() methods to request to respectively returns client ip address, client ip addresses and a server object key
 - Added cookie(), query(), input(), all() to the HttpServerRequest class
+
+## [2.3.4] 2022-05-25
+
+- Added NotFoundHttpException exception class

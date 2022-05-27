@@ -13,8 +13,6 @@ By default providers are automatically registered when running Laravel applicati
 // ...
 // Register the HttpService provider
 $app->register(Drewlabs\Packages\Http\HttpServiceProvider::class);
-// Rebgister cors handler service provider
-$app->register(Drewlabs\Packages\Http\Middleware\Cors\ServiceProvider::class);
 // ...
 ```
 
@@ -58,13 +56,12 @@ In order to allow any host or method, or headers use the `*` in the matching key
 
 It's a midleware that convert all empty string query parameteres and empty request body entry to null.
 
-* Laravel 
+* Laravel
 
 Note: Laravel already provide implementation for such case. But if you still want to use the current package middleware do it as follow.
 
 ```php
     // app/Http/Kernel.php
-
     // ...
     protected $middleware = [
         // ...

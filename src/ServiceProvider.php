@@ -8,6 +8,7 @@ use Drewlabs\Contracts\Http\ViewResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
+use Drewlabs\Packages\Http\Contracts\ResponseHandler;
 use Drewlabs\Packages\Http\Guards\AnonymousGuard;
 use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
 use Drewlabs\Packages\Http\Middleware\Cors\CorsService;
@@ -60,6 +61,9 @@ class ServiceProvider extends BaseServiceProvider
 
         // By default try to bind the {@see IActionResponseHandler::class} if it has not
         // been bounded by developpers in project root AppServiceProvider class
+        if (!$this->app->bound(ResponseHandler::class)) {
+            $this->app->bind(ResponseHandler::class, JsonApiResponseHandler::class);
+        }
         if (!$this->app->bound(IActionResponseHandler::class)) {
             $this->app->bind(IActionResponseHandler::class, JsonApiResponseHandler::class);
         }

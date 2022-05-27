@@ -3,12 +3,13 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
+use Drewlabs\Packages\Http\Contracts\ResponseHandler as ContractsResponseHandler;
 use Drewlabs\Packages\Http\Traits\ResponseHandler;
 use Drewlabs\Packages\Http\Traits\BinaryResponseHandler;
 use Drewlabs\Packages\Http\Traits\ContainerAware;
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
-class JsonApiResponseHandler implements IActionResponseHandler
+class JsonApiResponseHandler implements IActionResponseHandler, ContractsResponseHandler
 {
     use ResponseHandler;
     use BinaryResponseHandler;

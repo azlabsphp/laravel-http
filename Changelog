@@ -54,3 +54,7 @@
 
 - Deprecated QueryBuilderHandlerException class
 - Deprecated PolicyHandlerException class as of v2.3.x
+
+## [2.3.6] 2022-05-27
+
+- Added ResponseHandler::class dropping replacement for IActionResponseHandler::class

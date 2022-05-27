@@ -1,7 +1,7 @@
 <?php
 
 use Drewlabs\Packages\Http\ConfigurationManager;
-use Illuminate\Container\Container;
+use Drewlabs\Packages\Http\ServerRequest;
 use Psr\Container\ContainerInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,16 +12,16 @@ if (!function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string|null  $make
+     * @param  string|null  $abstract
      * @param  array  $parameters
      * @return mixed|ContainerInterface
      */
-    function app($make = null, array $parameters = [])
+    function app($abstract = null, array $parameters = [])
     {
-        if (is_null($make)) {
-            return Container::getInstance();
+        if (null === $abstract) {
+            return \Illuminate\Container\Container::getInstance();
         }
-        return Container::getInstance()->make($make, $parameters);
+        return \Illuminate\Container\Container::getInstance()->make($abstract, $parameters);
     }
 }
 
@@ -58,7 +58,7 @@ if (!function_exists('drewlabs_create_ps7_request')) {
      *
      * @param Request $request
      * @return \Psr\Http\Message\ServerRequestInterface
-     * @deprecated v3.1
+     * @deprecated v2.3.x
      */
     function drewlabs_create_ps7_request(Request $request = null)
     {
@@ -96,11 +96,14 @@ if (!function_exists('drewlabs_create_psr7_request')) {
 }
 
 if (!function_exists('get_illuminate_request_ip')) {
+    /**
+     * Returns the IP address of the client request
+     * 
+     * @param mixed $request 
+     * @return string|null 
+     */
     function get_illuminate_request_ip($request)
     {
-        // Tries getting request from the X-Real-IP header provided by Nginx
-        $request_ip = $request->headers->get('X-Real-IP');
-        // Call / return the request ip from LARAVEL illuminate ip() method
-        return isset($request_ip) ? $request_ip : $request->ip();
+        return (new ServerRequest($request))->ip();
     }
 }

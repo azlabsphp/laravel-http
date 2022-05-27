@@ -161,7 +161,8 @@ class ServerRequest
      */
     public function ip()
     {
-        return is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
+        $request = is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
+        return empty($request) ? $this->getHeader('X-Real-IP') : $request;
     }
 
     /**

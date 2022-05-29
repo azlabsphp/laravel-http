@@ -58,3 +58,8 @@
 ## [2.3.6] 2022-05-27
 
 - Added ResponseHandler::class dropping replacement for IActionResponseHandler::class
+
+## [2.3.7] 2022-05-29
+
+- Added MissingAuthorizationTokenException exception class
+- Renamed  UnsupportedTypeException exception class to NotSupportedMessageException::class

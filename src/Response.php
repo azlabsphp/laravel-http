@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Packages\Http\Exceptions\UnsupportedTypeException;
+use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 use Drewlabs\Packages\Http\Traits\HttpMessageTrait;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -25,7 +25,7 @@ class Response
     {
         $this->internal = $response instanceof self ? $response->unwrap() : $response;
         if (!$this->isSupported()) {
-            throw UnsupportedTypeException::forResponse($this->internal);
+            throw NotSupportedMessageException::forResponse($this->internal);
         }
     }
 
@@ -39,7 +39,7 @@ class Response
             $this->internal = $this->internal->withHeader($key, $value);
             return $this;
         }
-        throw UnsupportedTypeException::forResponse($this->internal);
+        throw NotSupportedMessageException::forResponse($this->internal);
     }
 
     public function isSupported()
@@ -73,7 +73,7 @@ class Response
         if ($this->isSupported()) {
             return $this->internal->getStatusCode();
         }
-        throw UnsupportedTypeException::forResponse($this->internal);
+        throw NotSupportedMessageException::forResponse($this->internal);
     }
 
     private function isSymfony()

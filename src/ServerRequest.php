@@ -3,7 +3,7 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Core\Helpers\Arr;
-use Drewlabs\Packages\Http\Exceptions\UnsupportedTypeException;
+use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 use Drewlabs\Packages\Http\Traits\HttpMessageTrait;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -44,7 +44,7 @@ class ServerRequest
             $this->setRequest($request);
         }
         if (!$this->isSupported()) {
-            throw UnsupportedTypeException::forRequest($this->internal);
+            throw NotSupportedMessageException::forRequest($this->internal);
         }
     }
 
@@ -54,7 +54,7 @@ class ServerRequest
      * @return string 
      * @throws SuspiciousOperationException 
      * @throws ConflictingHeadersException 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      */
     public function path()
     {
@@ -67,7 +67,7 @@ class ServerRequest
             $pattern = trim($this->internal->getPathInfo(), '/');
             return $pattern === '' ? '/' : $pattern;
         }
-        throw UnsupportedTypeException::forRequest($this->internal);
+        throw NotSupportedMessageException::forRequest($this->internal);
     }
 
     /**
@@ -76,7 +76,7 @@ class ServerRequest
      * @param string $method 
      * @return self 
      * @throws InvalidArgumentException 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      */
     public function setMethod(string $method)
     {
@@ -88,7 +88,7 @@ class ServerRequest
             $this->internal = $this->internal->withMethod('OPTIONS');
             return $this;
         }
-        throw UnsupportedTypeException::forResponse($this->response);
+        throw NotSupportedMessageException::forResponse($this->response);
     }
 
     /**
@@ -98,7 +98,7 @@ class ServerRequest
      * @throws InvalidArgumentException 
      * @throws BadRequestException 
      * @throws SuspiciousOperationException 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      */
     public function getMethod()
     {
@@ -113,7 +113,7 @@ class ServerRequest
      * @throws InvalidArgumentException 
      * @throws BadRequestException 
      * @throws SuspiciousOperationException 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      */
     public function isMethod(string $method)
     {
@@ -156,7 +156,7 @@ class ServerRequest
      * Get the client IP address.
      * 
      * @return mixed 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      * @throws ConflictingHeadersException 
      */
     public function ip()
@@ -169,7 +169,7 @@ class ServerRequest
      * Get the client IP addresses.
      * 
      * @return array 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      * @throws ConflictingHeadersException 
      */
     public function ips(): array
@@ -185,7 +185,7 @@ class ServerRequest
      * 
      * @param string|null $key 
      * @return string|array 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      * @throws BadRequestException 
      */
     public function server(string $key = null)

@@ -2,7 +2,7 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
-use Drewlabs\Packages\Http\Exceptions\UnsupportedTypeException;
+use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 
 trait HttpMessageTrait
 {
@@ -10,7 +10,7 @@ trait HttpMessageTrait
      * 
      * @param string $header 
      * @return bool 
-     * @throws UnsupportedTypeException 
+     * @throws NotSupportedMessageException 
      */
     public function hasHeader(string $header)
     {
@@ -32,7 +32,7 @@ trait HttpMessageTrait
         if ($this->isSymfony()) {
             return $this->internal->headers->get($name, $default);
         }
-        throw UnsupportedTypeException::forRequest($this->internal);
+        throw NotSupportedMessageException::forRequest($this->internal);
     }
 
     public function setHeader(string $header, $value)
@@ -45,6 +45,6 @@ trait HttpMessageTrait
             $this->internal = $this->internal->withHeader($header, $value);
             return $this;
         }
-        throw UnsupportedTypeException::forRequest($this->internal);
+        throw NotSupportedMessageException::forRequest($this->internal);
     }
 }

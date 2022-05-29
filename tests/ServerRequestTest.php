@@ -1,7 +1,7 @@
 <?php
 
 use Drewlabs\Core\Helpers\Str;
-use Drewlabs\Packages\Http\Exceptions\UnsupportedTypeException;
+use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 use Drewlabs\Packages\Http\Facades\HttpRequest;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +29,7 @@ class ServerRequestTest extends TestCase
         // Test for Symfony Request
         $symfonyRequest = new Request();
         $this->assertTrue(HttpRequest::isSupported($symfonyRequest));
-        $this->expectException(UnsupportedTypeException::class);
+        $this->expectException(NotSupportedMessageException::class);
         $this->assertFalse(HttpRequest::isSupported(new \stdClass));
         $this->assertFalse(HttpRequest::isSupported(null));
 

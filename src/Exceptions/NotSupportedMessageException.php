@@ -8,14 +8,14 @@ use Exception;
  * 
  * @package Drewlabs\Packages\Http\Exceptions
  */
-class UnsupportedTypeException extends Exception
+class NotSupportedMessageException extends Exception
 {
 
     /**
      * Create ans instance of {@see UnsupportedTypeException} from a response instance
      * 
      * @param mixed $response 
-     * @return UnsupportedTypeException 
+     * @return NotSupportedMessageException 
      */
     public static function forResponse($response)
     {
@@ -30,7 +30,7 @@ class UnsupportedTypeException extends Exception
      * Create ans instance of {@see UnsupportedTypeException} from a request instance
      * 
      * @param mixed $request 
-     * @return UnsupportedTypeException 
+     * @return NotSupportedMessageException 
      */
     public static function forRequest($request)
     {

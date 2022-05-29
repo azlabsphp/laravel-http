@@ -1,7 +1,12 @@
-<?php //
+<?php
 
 namespace Drewlabs\Packages\Http\Exceptions;
 
+/**
+ * @deprecated v2.3.x
+ * 
+ * @package Drewlabs\Packages\Http\Exceptions
+ */
 class BadProviderDeclarationException extends \RuntimeException
 {
     public function __construct(\Illuminate\Http\Request $request, $message = 'Bad provider configuration definition...', $code = 500)

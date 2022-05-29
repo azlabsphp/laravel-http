@@ -11,8 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Drewlabs\Core\Http\Exceptions;
+namespace Drewlabs\Packages\Http\Exceptions;
 
+/**
+ * 
+ * @package Drewlabs\Packages\Http\Exceptions
+ */
 class MissingAuthorizationTokenException extends \Exception
 {
 }

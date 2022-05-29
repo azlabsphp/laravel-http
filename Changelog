@@ -63,3 +63,7 @@
 
 - Added MissingAuthorizationTokenException exception class
 - Renamed  UnsupportedTypeException exception class to NotSupportedMessageException::class
+
+## [2.3.8] 2022-05-29
+
+- Fixed namespace bug of MissingAuthorizationTokenException class

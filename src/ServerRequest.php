@@ -265,6 +265,11 @@ class ServerRequest
         return $out;
     }
 
+    /**
+     * 
+     * @param string|null $name 
+     * @return mixed 
+     */
     private function getPsr7Cookie(string $name = null)
     {
         $cookies = $this->internal->getCookieParams() ?? [];
@@ -342,16 +347,19 @@ class ServerRequest
      */
     private function getPsr7Ips()
     {
-        $ips = [];
+        $addresses = [];
         foreach (static::TRUSTED_HEADERS as $key) {
             $attribute = is_array($value = $this->psrServer($key)) ? Arr::first($value) : $value;
-            foreach (array_map('trim', explode(',', $attribute)) as $ip) {
-                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
-                    $ips[] = $ip;
+            if (null === $attribute) {
+                continue;
+            }
+            foreach (array_map('trim', explode(',', $attribute)) as $addr) {
+                if (filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+                    $addresses[] = $addr;
                 }
             }
         }
-        return array_unique($ips);
+        return array_unique($addresses);
     }
 
     /**

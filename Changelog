@@ -70,5 +70,5 @@
 
 ## [2.3.10] 2022-06-07
 
-- Added ValidatePostSize exception
+- Added ValidatePostSize middleware class
 - Added an HttpException class

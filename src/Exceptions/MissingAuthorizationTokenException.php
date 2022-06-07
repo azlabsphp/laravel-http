@@ -17,6 +17,16 @@ namespace Drewlabs\Packages\Http\Exceptions;
  * 
  * @package Drewlabs\Packages\Http\Exceptions
  */
-class MissingAuthorizationTokenException extends \Exception
+class MissingAuthorizationTokenException extends HttpException
 {
+
+    /**
+     * Creates an instance of HttpException
+     * 
+     * @return self 
+     */
+    public function __construct()
+    {
+        parent::__construct(401, 'missing authorization token');
+    }
 }

@@ -7,6 +7,7 @@ use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 trait HttpMessageTrait
 {
     /**
+     * Checks if the HTTP message has a given header
      * 
      * @param string $header 
      * @return bool 
@@ -18,6 +19,21 @@ trait HttpMessageTrait
     }
 
     /**
+     * Returns the list of the message headers
+     * 
+     * @return string[]|array 
+     */
+    public function  getHeaders()
+    {
+        if ($this->isPsr7()) {
+            return $this->internal->getHeaders();
+        }
+        return $this->internal->headers->all();
+    }
+
+    /**
+     * Return the HTTP Message header value or $default if
+     * the header is not present
      * 
      * @param string $name 
      * @param mixed $default 
@@ -35,6 +51,14 @@ trait HttpMessageTrait
         throw NotSupportedMessageException::forRequest($this->internal);
     }
 
+    /**
+     * Set the HTTP Message header value
+     * 
+     * @param string $header 
+     * @param mixed $value 
+     * @return $this 
+     * @throws NotSupportedMessageException 
+     */
     public function setHeader(string $header, $value)
     {
         if ($this->isSymfony()) {

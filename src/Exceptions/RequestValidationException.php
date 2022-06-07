@@ -2,13 +2,34 @@
 
 namespace Drewlabs\Packages\Http\Exceptions;
 
-class RequestValidationException extends \RuntimeException
+use Drewlabs\Packages\Http\ServerRequest;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
+
+/**
+ * 
+ * @package Drewlabs\Packages\Http\Exceptions
+ */
+class RequestValidationException extends HttpException
 {
-    public function __construct(\Illuminate\Http\Request $request = null, $message = 'Bad validation configuration error', $code = 500)
+    /**
+     * 
+     * @param mixed $request 
+     * @param string $message 
+     * @param int $code 
+     * @return void 
+     * @throws SuspiciousOperationException 
+     * @throws ConflictingHeadersException 
+     * @throws NotSupportedMessageException 
+     */
+    public function __construct($request = null, $message = 'Bad validation configuration error', $code = 500)
     {
-        if (isset($request)) {
-            $message = "Request path : /" . $request->path() . " Error : $message";
-        }
-        parent::__construct($message, $code);
+        /**
+         * @var ServerRequest
+         */
+        $request = $request ? new ServerRequest($request) : $request;
+        $message = $request ? "Request path : /" . $request->path() . " Error : $message" : $message;
+        $headers = $request ? $request->getHeaders() : [];
+        parent::__construct(422, $message, null, $headers, $code);
     }
 }

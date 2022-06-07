@@ -5,7 +5,11 @@ namespace Drewlabs\Packages\Http\Middleware;
 use Closure;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-abstract class LaravelTransformRequest
+/**
+ * 
+ * @package Drewlabs\Packages\Http\Middleware
+ */
+abstract class TransformRequest
 {
     /**
      * Handle an incoming request.

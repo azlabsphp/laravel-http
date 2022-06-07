@@ -4,21 +4,10 @@ namespace Drewlabs\Packages\Http\Middleware;
 
 use Closure;
 use Drewlabs\Core\Helpers\Arr;
-use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Illuminate\Http\JsonResponse;
+use Drewlabs\Packages\Http\Exceptions\HttpAuthorizationException;
 
 class TrustedIpAddress
 {
-    /**
-     * 
-     * @var IActionResponseHandler
-     */
-    private $response;
-
-    public function __construct(IActionResponseHandler $response = null)
-    {
-        $this->response = $response;
-    }
 
     /**
      * Handle an incoming request.
@@ -33,8 +22,7 @@ class TrustedIpAddress
             Arr::wrap($request->headers->get('X-Real-IP')) :
             $request->ips();
         if (empty(array_intersect($remote_address, $addresses))) {
-            $message = $request->method() . ' ' . $request->path() . '  Unauthorized access. You don\'t have the required privileges to access the ressource.';
-            return $this->response ? $this->response->unauthorized($request) : new JsonResponse($message, 401);
+            throw new HttpAuthorizationException($request);
         }
         return $next($request);
     }

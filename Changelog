@@ -67,3 +67,8 @@
 ## [2.3.8] 2022-05-29
 
 - Fixed namespace bug of MissingAuthorizationTokenException class
+
+## [2.3.10] 2022-06-07
+
+- Added ValidatePostSize exception
+- Added an HttpException class

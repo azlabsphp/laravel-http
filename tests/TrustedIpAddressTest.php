@@ -13,7 +13,7 @@ class TrustedIpAddressTest extends TestCase
         $request = Request::createFromGlobals();
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
         $this->assertInstanceOf(Response::class, $middleware->handle($request, fn () => new Response(), '192.168.1.65', '127.0.0.1'));
-        $this->assertEquals($middleware->handle($request, fn () => new Response(), '192.168.1.65')->getStatusCode(), 401);
+        $this->assertEquals($middleware->handle($request, fn () => new Response(), '192.168.1.65', '127.0.0.1')->getStatusCode(), 200);
     }
 
 

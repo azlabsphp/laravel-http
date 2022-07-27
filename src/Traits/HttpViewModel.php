@@ -3,7 +3,9 @@
 namespace Drewlabs\Packages\Http\Traits;
 
 use Drewlabs\Contracts\Validator\Validator;
+use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Core\Helpers\Functional;
+use Drewlabs\Core\Helpers\Str;
 use Illuminate\Http\Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
@@ -169,4 +171,75 @@ trait HttpViewModel
         return $this;
     }
     //#endregion
+
+
+    /**
+     * Creates a new view model instance from attributes
+     *
+     * @param array $attributes
+     * @return self
+     */
+    public static function new(array $attributes = [])
+    {
+        return (new static)->merge($attributes ?? []);
+    }
+
+    /**
+     * Creates a fluent rules by applying a prefix to rules keys
+     * 
+     * @param string|null $prefix 
+     * @param array $attributes 
+     * @return mixed 
+     */
+    public static function createRules(string $prefix = null, array $attributes = [])
+    {
+        if (null === $prefix) {
+            return static::new($attributes ?? [])->rules();
+        }
+        return static::createRules_(static::new($attributes ?? [])->rules(), $prefix);
+    }
+
+    /**
+     * Creates a fluent update rules by applying a prefix to rules keys
+     * 
+     * @param string|null $prefix 
+     * @param array $attributes 
+     * @return mixed 
+     */
+    public static function createUpdateRules(string $prefix = null, array $attributes = [])
+    {
+        if (null === $prefix) {
+            return static::new($attributes ?? [])->updateRules();
+        }
+        return static::createRules_(static::new($attributes ?? [])->updateRules(), $prefix);
+    }
+
+    /**
+     * 
+     * @param array $rules 
+     * @param string|null $prefix 
+     * @return array 
+     */
+    private static function createRules_(array $rules, string $prefix = null)
+    {
+        return Arr::create((function () use ($prefix, $rules) {
+            foreach ($rules as $key => $value) {
+                $value = array_map(function ($current) use ($prefix) {
+                    if (false !== strpos($current, 'required_without:')) {
+                        return "required_without:$prefix." . Str::after("required_without:", $current);
+                    }
+                    if (false !== strpos($current, 'required_without_all:')) {
+                        $values = array_map(function ($item) use ($prefix) {
+                            return "$prefix.$item";
+                        }, array_filter(explode(',', Str::after("required_without_all:", $current)), function ($item) {
+                            return !empty($item);
+                        }));
+                        return "required_without_all:" . implode(',', $values);
+                    }
+                    return $current;
+                }, is_string($value) ? explode('|', $value) : $value);
+                yield "$prefix.$key" => $value;
+            }
+        })());
+    }
 }

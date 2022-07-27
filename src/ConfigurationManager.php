@@ -2,6 +2,8 @@
 
 namespace Drewlabs\Packages\Http;
 
+use Drewlabs\Core\Helpers\Arr;
+
 class ConfigurationManager
 {
 
@@ -42,7 +44,7 @@ class ConfigurationManager
         if (null === $key) {
             return array_merge($this->config, []);
         }
-        $value = drewlabs_core_array_get($this->config, $key, $default);
+        $value = Arr::get($this->config, $key, $default);
         return null === $value ? ($default instanceof \Closure ? $default() : $default) : $value;
     }
 
@@ -51,7 +53,7 @@ class ConfigurationManager
      */
     public function offsetExists($offset)
     {
-        return null !== drewlabs_core_array_get($offset, null);
+        return null !== Arr::get($offset, null);
     }
 
     /**

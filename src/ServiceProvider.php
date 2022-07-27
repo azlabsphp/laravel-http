@@ -25,13 +25,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-
-        $this->publishes(
-            [
-                __DIR__ . '/config' => $this->app->basePath('config'),
-            ],
-            'drewlabs-http-configs'
-        );
+        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http-configs');
     }
 
     /**

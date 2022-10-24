@@ -40,10 +40,7 @@ trait ContainerAware
             if ($container instanceof \ArrayAccess) {
                 return $container[$abstract];
             }
-            if (
-                class_exists($default) &&
-                $container instanceof \Illuminate\Container\Container
-            ) {
+            if (class_exists($default) && is_a($container, $default, true)) {
                 return $container->make($abstract);
             }
             if ($container instanceof ContainerInterface) {

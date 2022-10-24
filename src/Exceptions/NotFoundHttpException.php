@@ -3,7 +3,6 @@
 namespace Drewlabs\Packages\Http\Exceptions;
 
 use Drewlabs\Packages\Http\ServerRequest;
-use Illuminate\Http\Request;
 
 class NotFoundHttpException extends HttpException
 {
@@ -15,7 +14,7 @@ class NotFoundHttpException extends HttpException
      * @param int $code 
      * @return self 
      */
-    public function __construct(Request $request = null)
+    public function __construct($request = null)
     {
         /**
          * @var ServerRequest

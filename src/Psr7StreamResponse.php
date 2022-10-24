@@ -62,11 +62,21 @@ class Psr7StreamResponse extends Response
      */
     public static function new($path, $status = 200, $headers = [])
     {
-        $path = is_string($path) && is_file($path) ? $path : $path->getPathname();
-        if (null === $path || !is_string($path)) {
+        if ($path instanceof \SplFileInfo) {
+            $path = ($realpath = $path->getRealPath()) === false ? '' : $realpath;
+        }
+        if ((null === $path) || !is_string($path)) {
             throw new InvalidArgumentException('$path argument must be of type string or \SplFileInfo::class');
         }
+        // In case the path is a string but not a valid path, we simply create a stream with
+        // '' string
+        if (!@is_file($path)) {
+            $response = new static((new Psr17Factory)->createStream(''), $status, $headers ?? []);
+            return $response->withContentType('application/octect-stream');
+        }
         $response = new static((new Psr17Factory)->createStreamFromFile($path), $status, $headers ?? []);
+
+        // Merge content type into the response headers
         return $response->withContentType(MimeTypes::getDefault()->guessMimeType($path));
     }
 
@@ -122,6 +132,7 @@ class Psr7StreamResponse extends Response
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function prepare(Request $request): static
     {
         $this->headers->set('Content-Length', $this->stream->getSize());
@@ -196,6 +207,7 @@ class Psr7StreamResponse extends Response
      *
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function sendContent(): static
     {
         if (!$this->isSuccessful()) {
@@ -215,6 +227,7 @@ class Psr7StreamResponse extends Response
      *
      * @throws \LogicException when the content is not null
      */
+    #[\ReturnTypeWillChange]
     public function setContent($content): static
     {
         if (null !== $content) {
@@ -229,6 +242,7 @@ class Psr7StreamResponse extends Response
      *
      * @return false
      */
+    #[\ReturnTypeWillChange]
     public function getContent(): string|false
     {
         return false;

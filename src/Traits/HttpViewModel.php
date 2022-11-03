@@ -18,21 +18,21 @@ trait HttpViewModel
 
 
     /**
-     * 
+     *
      * @var mixed
      */
     private $request;
 
     /**
-     * @param ServerRequestInterface|Request|mixed|null $request 
-     * @param mixed $request 
-     * @return self 
+     * @param ServerRequestInterface|Request|mixed|null $request
+     * @param mixed $request
+     * @return self
      */
     public function __construct($request = null)
     {
         try {
             // Making the class injectable into controller actions
-            // by resolving the current request from the service container 
+            // by resolving the current request from the service container
             $request = $request ?? self::createResolver('request')();
             if ($request instanceof ServerRequestInterface) {
                 $this->fromPsrServerRequest($request);
@@ -47,10 +47,10 @@ trait HttpViewModel
 
     /**
      * Creates an instance of the viewModel class
-     * 
-     * @param ServerRequestInterface|Request|mixed $request 
-     * @param ContainerInterface|\ArrayAccess|null $container 
-     * @return HttpViewModel 
+     *
+     * @param ServerRequestInterface|Request|mixed $request
+     * @param ContainerInterface|\ArrayAccess|null $container
+     * @return HttpViewModel
      */
     public static function create($request = null, $container = null)
     {
@@ -78,8 +78,8 @@ trait HttpViewModel
     }
 
     /**
-     * 
-     * @return mixed 
+     *
+     * @return mixed
      */
     public function request($request = null)
     {
@@ -92,26 +92,26 @@ trait HttpViewModel
     //#region Miscellanous
     /**
      * Validates the view model object using the bounded validator {@see Validator} instance.
-     * 
+     *
      * if the view model provides updateRules(), passing $updating=true will load the update
      * rules
-     * 
+     *
      * ```php
      * <?php
      * $viewmodel = new ViewModelClass($request);
-     * 
+     *
      * // Validating
      * $viewmodel = $viewmodel->validated();
-     * 
+     *
      * // To execute a method after validating the model
      * $viewmodel->validated(function() use ($viewmodel) {
      *  // Persist data to database after validation
      * });
-     * 
+     *
      * // In order to use update rules
      * // This will throw an exception if the validation fails
      * $viewmodel->validated(true);
-     * 
+     *
      * // In order to use the update rules and pass a callback
      * // which runs when validation passes
      * $viewmodel->validated(true, function() use ($viewmodel) {
@@ -121,7 +121,7 @@ trait HttpViewModel
      * @param bool|\Closure|null $updating
      * @param \Closure|null $callback
      * @throws \Drewlabs\Core\Validator\Exceptions\ValidationException
-     * @return self 
+     * @return self
      */
     public function validated(...$args)
     {
@@ -138,7 +138,7 @@ trait HttpViewModel
     }
 
     /**
-     * @return Validator 
+     * @return Validator
      */
     private function createValidator(bool $updating = false)
     {
@@ -186,10 +186,10 @@ trait HttpViewModel
 
     /**
      * Creates a fluent rules by applying a prefix to rules keys
-     * 
-     * @param string|null $prefix 
-     * @param array $attributes 
-     * @return mixed 
+     *
+     * @param string|null $prefix
+     * @param array $attributes
+     * @return mixed
      */
     public static function createRules(string $prefix = null, array $attributes = [])
     {
@@ -201,10 +201,10 @@ trait HttpViewModel
 
     /**
      * Creates a fluent update rules by applying a prefix to rules keys
-     * 
-     * @param string|null $prefix 
-     * @param array $attributes 
-     * @return mixed 
+     *
+     * @param string|null $prefix
+     * @param array $attributes
+     * @return mixed
      */
     public static function createUpdateRules(string $prefix = null, array $attributes = [])
     {
@@ -215,10 +215,10 @@ trait HttpViewModel
     }
 
     /**
-     * 
-     * @param array $rules 
-     * @param string|null $prefix 
-     * @return array 
+     *
+     * @param array $rules
+     * @param string|null $prefix
+     * @return array
      */
     private static function createRules_(array $rules, string $prefix = null)
     {
@@ -226,20 +226,31 @@ trait HttpViewModel
             foreach ($rules as $key => $value) {
                 $value = array_map(function ($current) use ($prefix) {
                     if (false !== strpos($current, 'required_without:')) {
-                        return "required_without:$prefix." . Str::after("required_without:", $current);
+                        return static::reconstructRequiredRules('required_without', $current, $prefix);
                     }
                     if (false !== strpos($current, 'required_without_all:')) {
-                        $values = array_map(function ($item) use ($prefix) {
-                            return "$prefix.$item";
-                        }, array_filter(explode(',', Str::after("required_without_all:", $current)), function ($item) {
-                            return !empty($item);
-                        }));
-                        return "required_without_all:" . implode(',', $values);
+                        return static::reconstructRequiredRules('required_without_all', $current, $prefix);
+                    }
+                    if (false !== strpos($current, 'required_with:')) {
+                        return static::reconstructRequiredRules('required_with', $current, $prefix);
+                    }
+                    if (false !== strpos($current, 'required_with_all:')) {
+                        return static::reconstructRequiredRules('required_with_all', $current, $prefix);
                     }
                     return $current;
                 }, is_string($value) ? explode('|', $value) : $value);
                 yield "$prefix.$key" => $value;
             }
         })());
+    }
+
+    private static function reconstructRequiredRules($key, $value, string $prefix)
+    {
+        $values = array_map(function ($item) use ($prefix) {
+            return "$prefix.$item";
+        }, array_filter(explode(',', Str::after("$key:", $value)), function ($item) {
+            return !empty($item);
+        }));
+        return "$key:" . implode(',', $values);
     }
 }

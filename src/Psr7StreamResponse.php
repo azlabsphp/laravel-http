@@ -7,11 +7,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\MimeTypes;
 
-/**
- * @package App\Helpers
- */
 class Psr7StreamResponse extends Response
 {
     /**
@@ -68,16 +64,24 @@ class Psr7StreamResponse extends Response
         if ((null === $path) || !is_string($path)) {
             throw new InvalidArgumentException('$path argument must be of type string or \SplFileInfo::class');
         }
-        // In case the path is a string but not a valid path, we simply create a stream with
-        // '' string
         if (!@is_file($path)) {
             $response = new static((new Psr17Factory)->createStream(''), $status, $headers ?? []);
             return $response->withContentType('application/octect-stream');
         }
+        $contentType = MimeTypes::extToMime(pathinfo($path, PATHINFO_EXTENSION));
+        if (!empty($contentType) && array_key_exists('Content-Type', $headers)) {
+            $headers['Content-Type'] = $contentType;
+        }
+        if (!empty($contentType) && array_key_exists('content-type', $headers)) {
+            $headers['content-type'] = $contentType;
+        }
         $response = new static((new Psr17Factory)->createStreamFromFile($path), $status, $headers ?? []);
-
-        // Merge content type into the response headers
-        return $response->withContentType(MimeTypes::getDefault()->guessMimeType($path));
+        if (null === $contentType) {
+            $contentType = class_exists(\Symfony\Component\Mime\MimeTypes::class) ?
+                forward_static_call([\Symfony\Component\Mime\MimeTypes::class, 'getDefault'])->guessMimeType($path) :
+                'application/octect-stream';
+        }
+        return $response->withContentType($contentType);
     }
 
     /**

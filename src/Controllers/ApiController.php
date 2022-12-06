@@ -6,7 +6,6 @@ use AutorizeRequest;
 use Illuminate\Http\JsonResponse as Response;
 use Illuminate\Contracts\Container\Container as Application;
 use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
-use Drewlabs\Packages\Http\Traits\LaravelOrLumenFrameworksApiController;
 use Drewlabs\Contracts\Validator\Validator as ValidatorContract;
 
 /**

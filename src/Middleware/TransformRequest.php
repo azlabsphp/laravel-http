@@ -6,7 +6,6 @@ use Closure;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * 
  * @package Drewlabs\Packages\Http\Middleware
  */
 abstract class TransformRequest

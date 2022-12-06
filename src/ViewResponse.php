@@ -5,7 +5,6 @@ namespace Drewlabs\Packages\Http;
 use Drewlabs\Contracts\Http\ViewResponseHandler as HttpViewResponseHandler;
 use Drewlabs\Packages\Http\Traits\ContainerAware;
 
-/** @package Drewlabs\Packages\Http */
 class ViewResponse implements HttpViewResponseHandler
 {
     use ContainerAware;

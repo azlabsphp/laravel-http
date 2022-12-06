@@ -5,6 +5,11 @@ namespace Drewlabs\Packages\Http\Contracts;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Contracts\Data\EnumerableQueryResult;
 
+/**
+ * @deprecated v2.4.x
+ * 
+ * @package Drewlabs\Packages\Http\Contracts
+ */
 interface ControllerActionHandler
 {
 

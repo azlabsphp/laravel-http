@@ -4,6 +4,11 @@ namespace Drewlabs\Packages\Http\Exceptions;
 
 use Illuminate\Http\Request;
 
+/**
+ * @deprecated v2.0.x
+ * 
+ * @package Drewlabs\Packages\Http\Exceptions
+ */
 class TransformRequestBodyException extends \RuntimeException
 {
     /**
@@ -14,11 +19,9 @@ class TransformRequestBodyException extends \RuntimeException
      * @param int $code 
      * @return self 
      */
-    public function __construct(\Illuminate\Http\Request $request = null, $message = 'Bad transform request configuration error', $code = 500)
+    public function __construct($request = null, $message = 'Bad transform request configuration error', $code = 500)
     {
-        if (isset($request)) {
-            $message = "Request path : /" . $request->path() . " Error : $message";
-        }
+        $message = "Request path : /" . ($request ? $request->path() : '') . " Error : $message";
         parent::__construct($message, $code);
     }
 }

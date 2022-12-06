@@ -6,7 +6,6 @@ use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler as UnAuthorizedResponseH
 use Drewlabs\Packages\Http\Traits\UnAuthorizedResponseHandler;
 
 /**
- * 
  * @package Drewlabs\Packages\Http
  */
 class UnAuthorizedResponse implements UnAuthorizedResponseHandlerInterface

@@ -23,6 +23,7 @@ class Middleware
     {
         $this->service = $service;
     }
+
     /**
      * Passerelle d'écriture des en-têtes HTTP pour les accès CORS
      *

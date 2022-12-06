@@ -3,6 +3,7 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Contracts\Http\BinaryResponseHandler;
+use Drewlabs\Contracts\Http\ResponseHandler as HttpResponseHandler;
 use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
 use Drewlabs\Contracts\Http\ViewResponseHandler;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -37,7 +38,7 @@ class ServiceProvider extends BaseServiceProvider
     {
 
         $this->app->bind(CorsServiceInterface::class, function () {
-            return new CorsService(ConfigurationManager::getInstance()->get('cors', null));
+            return new CorsService(ConfigurationManager::getInstance()->get('cors', []));
         });
         if (class_exists(\Drewlabs\Core\Validator\InputsValidator::class)) {
             // Register ViewModel validator providers
@@ -52,15 +53,6 @@ class ServiceProvider extends BaseServiceProvider
 
         // Register response handlers types
         $this->registerResponseHandlers();
-
-        // By default try to bind the {@see IActionResponseHandler::class} if it has not
-        // been bounded by developpers in project root AppServiceProvider class
-        if (!$this->app->bound(ResponseHandler::class)) {
-            $this->app->bind(ResponseHandler::class, JsonApiResponseHandler::class);
-        }
-        if (!$this->app->bound(IActionResponseHandler::class)) {
-            $this->app->bind(IActionResponseHandler::class, JsonApiResponseHandler::class);
-        }
     }
 
     private function registerAnonymousGuard()
@@ -80,6 +72,18 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->bind(BinaryResponseHandler::class, BinaryFileResponse::class);
         $this->app->bind(UnAuthorizedResponseHandler::class, UnAuthorizedResponse::class);
         $this->app->bind(ViewResponseHandler::class, ViewResponse::class);
+
+        // By default try to bind the {@see IActionResponseHandler::class} if it has not
+        // been bounded by developpers in project root AppServiceProvider class
+        if (!$this->app->bound(ResponseHandler::class)) {
+            $this->app->bind(ResponseHandler::class, JsonApiResponseHandler::class);
+        }
+        if (!$this->app->bound(HttpResponseHandler::class)) {
+            $this->app->bind(HttpResponseHandler::class, JsonApiResponseHandler::class);
+        }
+        if (!$this->app->bound(IActionResponseHandler::class)) {
+            $this->app->bind(IActionResponseHandler::class, JsonApiResponseHandler::class);
+        }
     }
 
     /**

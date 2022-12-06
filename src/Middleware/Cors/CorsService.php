@@ -15,7 +15,7 @@ final class CorsService implements CorsServiceInterface
      *
      * @var array
      */
-    private $allowed_hosts = [];
+    private $allowed_hosts = ['*'];
 
     /**
      * Access control max age header value

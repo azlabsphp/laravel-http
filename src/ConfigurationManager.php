@@ -28,6 +28,9 @@ class ConfigurationManager
     {
     }
 
+    /**
+     * @return static 
+     */
     public static function getInstance()
     {
         if (null === static::$instance) {
@@ -42,7 +45,7 @@ class ConfigurationManager
     public function get($key = null, $default = null)
     {
         if (null === $key) {
-            return array_merge($this->config, []);
+            return array_merge($this->config ?? [], []);
         }
         $value = Arr::get($this->config, $key, $default);
         return null === $value ? ($default instanceof \Closure ? $default() : $default) : $value;

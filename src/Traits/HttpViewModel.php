@@ -2,93 +2,20 @@
 
 namespace Drewlabs\Packages\Http\Traits;
 
+use Closure;
 use Drewlabs\Contracts\Validator\Validator;
 use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Core\Helpers\Functional;
 use Drewlabs\Core\Helpers\Str;
-use Illuminate\Http\Request;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Container\ContainerInterface;
+use Generator;
+use HasServerRequest;
 use RuntimeException;
 
 trait HttpViewModel
 {
     use \Drewlabs\Core\Validator\Traits\ViewModel;
     use ContainerAware;
-
-
-    /**
-     *
-     * @var mixed
-     */
-    private $request;
-
-    /**
-     * @param ServerRequestInterface|Request|mixed|null $request
-     * @param mixed $request
-     * @return self
-     */
-    public function __construct($request = null)
-    {
-        try {
-            // Making the class injectable into controller actions
-            // by resolving the current request from the service container
-            $request = $request ?? self::createResolver('request')();
-            if ($request instanceof ServerRequestInterface) {
-                $this->fromPsrServerRequest($request);
-            } else if ($request instanceof Request) {
-                $this->fromLaravelRequest($request);
-            }
-            $this->request = $request;
-        } catch (\Throwable $e) {
-            // We catch the exception for it to not propagate
-        }
-    }
-
-    /**
-     * Creates an instance of the viewModel class
-     *
-     * @param ServerRequestInterface|Request|mixed $request
-     * @param ContainerInterface|\ArrayAccess|null $container
-     * @return HttpViewModel
-     */
-    public static function create($request = null, $container = null)
-    {
-        return new self($request ?? self::createResolver('request')($container));
-    }
-
-    protected function fromLaravelRequest(Request $request)
-    {
-        return $this->withBody($request->all())
-            ->files($request->allFiles())
-            ->setUserResolver($request->getUserResolver() ?? function () {
-                // Returns an empty resolver if the request does not provide one
-                //
-            });
-    }
-
-    protected function fromPsrServerRequest(ServerRequestInterface $request)
-    {
-        return $this->withBody(
-            array_merge(
-                $request->getQueryParams() ?: [],
-                (array)($request->getParsedBody() ?? [])
-            )
-        )->files($request->getUploadedFiles());
-    }
-
-    /**
-     *
-     * @return mixed
-     */
-    public function request($request = null)
-    {
-        if (null !== $request) {
-            $this->request = $request;
-        }
-        return $this->request;
-    }
-
+    use HasServerRequest;
     //#region Miscellanous
     /**
      * Validates the view model object using the bounded validator {@see Validator} instance.
@@ -138,6 +65,8 @@ trait HttpViewModel
     }
 
     /**
+     * Internaly creates validator instance
+     * 
      * @return Validator
      */
     private function createValidator(bool $updating = false)
@@ -149,11 +78,27 @@ trait HttpViewModel
         return $updating ? $validator->updating() : $validator;
     }
 
+    /**
+     * Validates the current instance with a callback function
+     * 
+     * @param Validator $validator 
+     * @param Closure $callback 
+     * @return Validator 
+     */
     private function validateWithCallback(Validator $validator, \Closure $callback)
     {
         return $validator->validate($this, $callback);
     }
 
+    /**
+     * Validates the current instance and throws exception if the validation fails
+     * 
+     * @param Validator $validator 
+     * @return self 
+     * 
+     * @throws RuntimeException
+     * @throws \Drewlabs\Validator\Exceptions\ValidationException|\Drewlabs\Core\Validator\Exceptions\ValidationException
+     */
     private function validate(Validator $validator)
     {
         $validator = $validator->validate($this);
@@ -193,10 +138,9 @@ trait HttpViewModel
      */
     public static function createRules(string $prefix = null, array $attributes = [])
     {
-        if (null === $prefix) {
-            return static::new($attributes ?? [])->rules();
-        }
-        return static::createRules_(static::new($attributes ?? [])->rules(), $prefix);
+        return  null === $prefix ?
+            static::new($attributes ?? [])->rules() :
+            static::createRules_(static::new($attributes ?? [])->rules(), $prefix);
     }
 
     /**
@@ -208,13 +152,14 @@ trait HttpViewModel
      */
     public static function createUpdateRules(string $prefix = null, array $attributes = [])
     {
-        if (null === $prefix) {
-            return static::new($attributes ?? [])->updateRules();
-        }
-        return static::createRules_(static::new($attributes ?? [])->updateRules(), $prefix);
+
+        return null === $prefix ?
+            static::new($attributes ?? [])->updateRules() :
+            static::createRules_(static::new($attributes ?? [])->updateRules(), $prefix);
     }
 
     /**
+     * Internal method for creating rules using the provided prefix
      *
      * @param array $rules
      * @param string|null $prefix
@@ -222,28 +167,16 @@ trait HttpViewModel
      */
     private static function createRules_(array $rules, string $prefix = null)
     {
-        return Arr::create((function () use ($prefix, $rules) {
-            foreach ($rules as $key => $value) {
-                $value = array_map(function ($current) use ($prefix) {
-                    if (false !== strpos($current, 'required_without:')) {
-                        return static::reconstructRequiredRules('required_without', $current, $prefix);
-                    }
-                    if (false !== strpos($current, 'required_without_all:')) {
-                        return static::reconstructRequiredRules('required_without_all', $current, $prefix);
-                    }
-                    if (false !== strpos($current, 'required_with:')) {
-                        return static::reconstructRequiredRules('required_with', $current, $prefix);
-                    }
-                    if (false !== strpos($current, 'required_with_all:')) {
-                        return static::reconstructRequiredRules('required_with_all', $current, $prefix);
-                    }
-                    return $current;
-                }, is_string($value) ? explode('|', $value) : $value);
-                yield "$prefix.$key" => $value;
-            }
-        })());
+        return Arr::create(static::prefixRules($rules, $prefix));
     }
 
+    /**
+     * 
+     * @param mixed $key 
+     * @param mixed $value 
+     * @param string $prefix 
+     * @return string 
+     */
     private static function reconstructRequiredRules($key, $value, string $prefix)
     {
         $values = array_map(function ($item) use ($prefix) {
@@ -252,5 +185,37 @@ trait HttpViewModel
             return !empty($item);
         }));
         return "$key:" . implode(',', $values);
+    }
+
+    /**
+     * Produces an iterable of prefixed rules
+     * 
+     * @param array $rules 
+     * @param string|null $prefix 
+     * @return Generator<string, mixed, mixed, void> 
+     */
+    private static function prefixRules(array $rules, string $prefix = null)
+    {
+        foreach ($rules as $key => $value) {
+            $value = array_map(function ($current) use ($prefix) {
+                if (!is_string($current)) {
+                    return $current;
+                }
+                if (false !== strpos($current, 'required_without:')) {
+                    return static::reconstructRequiredRules('required_without', $current, $prefix);
+                }
+                if (false !== strpos($current, 'required_without_all:')) {
+                    return static::reconstructRequiredRules('required_without_all', $current, $prefix);
+                }
+                if (false !== strpos($current, 'required_with:')) {
+                    return static::reconstructRequiredRules('required_with', $current, $prefix);
+                }
+                if (false !== strpos($current, 'required_with_all:')) {
+                    return static::reconstructRequiredRules('required_with_all', $current, $prefix);
+                }
+                return $current;
+            }, is_string($value) ? explode('|', $value) : $value);
+            yield "$prefix.$key" => $value;
+        }
     }
 }

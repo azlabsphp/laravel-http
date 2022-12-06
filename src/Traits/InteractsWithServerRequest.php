@@ -1,10 +1,12 @@
 <?php
 
+namespace Drewlabs\Packages\Http\Traits;
+
 use Drewlabs\Core\Helpers\Str;
 use Drewlabs\Packages\Http\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
 
-trait HasServerRequest
+trait InteractsWithServerRequest
 {
 
     /**

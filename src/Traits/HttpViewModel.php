@@ -8,14 +8,13 @@ use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Core\Helpers\Functional;
 use Drewlabs\Core\Helpers\Str;
 use Generator;
-use HasServerRequest;
 use RuntimeException;
 
 trait HttpViewModel
 {
     use \Drewlabs\Core\Validator\Traits\ViewModel;
     use ContainerAware;
-    use HasServerRequest;
+    use InteractsWithServerRequest;
     //#region Miscellanous
     /**
      * Validates the view model object using the bounded validator {@see Validator} instance.

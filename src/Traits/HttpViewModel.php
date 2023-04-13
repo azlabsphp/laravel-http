@@ -133,13 +133,12 @@ trait HttpViewModel
      *
      * @param string|null $prefix
      * @param array $attributes
+     * @param array $excepts
      * @return mixed
      */
-    public static function createRules(string $prefix = null, array $attributes = [])
+    public static function createRules(string $prefix = null, array $attributes = [], array $excepts = [])
     {
-        return  null === $prefix ?
-            static::new($attributes ?? [])->rules() :
-            static::createRules_(static::new($attributes ?? [])->rules(), $prefix);
+        return static::createRules_(static::new($attributes ?? [])->rules(), $prefix, $excepts);
     }
 
     /**
@@ -147,14 +146,13 @@ trait HttpViewModel
      *
      * @param string|null $prefix
      * @param array $attributes
+     * @param array $excepts
      * @return mixed
      */
-    public static function createUpdateRules(string $prefix = null, array $attributes = [])
+    public static function createUpdateRules(string $prefix = null, array $attributes = [], array $excepts = [])
     {
 
-        return null === $prefix ?
-            static::new($attributes ?? [])->updateRules() :
-            static::createRules_(static::new($attributes ?? [])->updateRules(), $prefix);
+        return static::createRules_(static::new($attributes ?? [])->updateRules(), $prefix, $excepts);
     }
 
     /**
@@ -162,11 +160,24 @@ trait HttpViewModel
      *
      * @param array $rules
      * @param string|null $prefix
+     * @param array $excepts
      * @return array
      */
-    private static function createRules_(array $rules, string $prefix = null)
+    private static function createRules_(array $rules, string $prefix = null, array $excepts = [])
     {
-        return Arr::create(static::prefixRules($rules, $prefix));
+        $rules = iterator_to_array((function() use ($rules, $excepts) {
+            foreach ($rules as $key => $value) {
+                if (false !== array_search($key, $excepts)) {
+                    $current =  array_filter(is_array($value) ? $value : [$value], function($item) {
+                        return false === strpos($item, 'required');
+                    });
+                    yield $key => ['sometimes', ...$current];
+                    continue;
+                }
+                yield $key => $value;
+            }
+        })());
+        return null === $prefix ? $rules : Arr::create(static::prefixRules($rules, $prefix));
     }
 
     /**

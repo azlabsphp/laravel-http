@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use RuntimeException;
 use Throwable;
 
-class JsonResponse implements ResponseHandler
+class JsonResponseHandler implements ResponseHandler
 {
     use ContainerAware;
 

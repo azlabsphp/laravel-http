@@ -26,36 +26,29 @@ class LaravelHttp
      * 
      * @return void 
      */
-    public static function provideJsonFactories(Container $app)
+    public static function provideJsonServices(Container $app)
     {
-        $app->bind(AuthorizationErrorResponseFactoryInterface::class, function () {
-            return new AuthorizationErrorResponseFactory(function ($data = null, $status = 200, $headers = []) {
-                return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            });
+        $jsonFactory = function ($data = null, $status = 200, $headers = []) {
+            return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        };
+        $app->bind(AuthorizationErrorResponseFactoryInterface::class, function () use ($jsonFactory) {
+            return new AuthorizationErrorResponseFactory($jsonFactory);
         });
 
-        $app->bind(BadRequestResponseFactoryInterface::class, function () {
-            return new BadRequestResponseFactory(function ($data = null, $status = 200, $headers = []) {
-                return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            });
+        $app->bind(BadRequestResponseFactoryInterface::class, function () use ($jsonFactory) {
+            return new BadRequestResponseFactory($jsonFactory);
         });
 
-        $app->bind(OkResponseFactoryInterface::class, function () {
-            return new OkResponseFactory(function ($data = null, $status = 200, $headers = []) {
-                return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            });
+        $app->bind(OkResponseFactoryInterface::class, function () use ($jsonFactory) {
+            return new OkResponseFactory($jsonFactory);
         });
 
-        $app->bind(ServerErrorResponseFactoryInterface::class, function () {
-            return new ServerErrorResponseFactory(function ($data = null, $status = 200, $headers = []) {
-                return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            });
+        $app->bind(ServerErrorResponseFactoryInterface::class, function () use ($jsonFactory) {
+            return new ServerErrorResponseFactory($jsonFactory);
         });
 
-        $app->bind(ResponseFactoryInterface::class, function () {
-            return new LaravelResponseFactory(function ($data = null, $status = 200, $headers = []) {
-                return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            });
+        $app->bind(ResponseFactoryInterface::class, function () use ($jsonFactory) {
+            return new LaravelResponseFactory($jsonFactory);
         });
 
         $app->bind(ResponseHandler::class, function ($app) {
@@ -70,6 +63,6 @@ class LaravelHttp
 
     private function createJsonResponseHandler($app)
     {
-        return new JsonResponse($app->environment('debug'));
+        return new JsonResponseHandler($app->environment('debug'));
     }
 }

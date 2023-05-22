@@ -40,12 +40,12 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         // Register request factory interface
-        $this->app->bind(RequestFactoryInterface::class, function() {
+        $this->app->bind(RequestFactoryInterface::class, function () {
             return new LaravelRequestFactory();
         });
 
         // Register view response factory
-        $this->app->bind(ViewResponseFactoryInterface::class, function() {
+        $this->app->bind(ViewResponseFactoryInterface::class, function () {
             return new ViewResponseFactory();
         });
 
@@ -60,8 +60,8 @@ class ServiceProvider extends BaseServiceProvider
     private function registerGuessGuard()
     {
         Auth::resolved(function ($auth) {
-            $auth->extend('anonymous', function ($app, $name, array $config) use ($auth) {
-                return tap($this->createGuessGuard($auth, $config), function ($guard) use ($app) {
+            $auth->extend('anonymous', function ($app) {
+                return tap($this->createGuessGuard(), function ($guard) use ($app) {
                     $app->refresh('request', $guard, 'setRequest');
                 });
             });
@@ -80,13 +80,25 @@ class ServiceProvider extends BaseServiceProvider
 
     /**
      * Register guess the guard.
-     *
-     * @param \Illuminate\Contracts\Auth\Factory  $auth
-     * @param array $config
+     * 
      * @return RequestGuard
      */
-    private function createGuessGuard($auth, $config)
+    private function createGuessGuard()
     {
-        return new RequestGuard(new GuessGuard(), $this->app->make('request'), null);
+        return $this->createRequestGuard(RequestGuard::class, new GuessGuard(), $this->app->make('request'), null);
+    }
+
+
+    /**
+     * @template T
+     * 
+     * @param class-string<T> $blueprint
+     * @param mixed ...$parameters
+     * 
+     * @return T 
+     */
+    private function createRequestGuard(string $blueprint, ...$parameters)
+    {
+        return new $blueprint(...$parameters);
     }
 }

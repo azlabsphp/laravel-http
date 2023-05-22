@@ -59,8 +59,6 @@ trait InteractsWithServerRequest
      */
     protected function fromLaravelRequest($request)
     {
-        // TODO : Interact with symfony request in future release instead of
-        // laravel request
         $resolver = $request->getUserResolver() ?? function () {
         };
         return $this->withBody($request->all())

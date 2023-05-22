@@ -15,6 +15,7 @@ trait HttpViewModel
     use \Drewlabs\Core\Validator\Traits\ViewModel;
     use ContainerAware;
     use InteractsWithServerRequest;
+    use HasAuthenticatable;
     //#region Miscellanous
     /**
      * Validates the view model object using the bounded validator {@see Validator} instance.
@@ -54,13 +55,14 @@ trait HttpViewModel
         $argCount = count($args);
         if ($argCount === 1 && Functional::isCallable($args[0])) {
             return $this->validateWithCallback($this->createValidator(), $args[0]);
-        } else if ($argCount === 1 && boolval($args[0]) === true) {
-            return $this->validate($this->createValidator(true));
-        } else if ($argCount > 1) {
-            return $this->validate($this->createValidator(true), $args[1]);
-        } else {
-            return $this->validate($this->createValidator());
         }
+        if ($argCount === 1 && boolval($args[0]) === true) {
+            return $this->validate($this->createValidator(true));
+        }
+        if ($argCount > 1) {
+            return $this->validate($this->createValidator(true), $args[1]);
+        }
+        return $this->validate($this->createValidator());
     }
 
     /**
@@ -106,11 +108,11 @@ trait HttpViewModel
             $exception = \Drewlabs\Validator\Exceptions\ValidationException::class;
             if (class_exists($deprecatedException)) {
                 throw new $deprecatedException($validator->errors());
-            } else if (class_exists($exception)) {
-                throw new $exception($validator->errors());
-            } else {
-                throw new RuntimeException('Failed validating view model instance');
             }
+            if (class_exists($exception)) {
+                throw new $exception($validator->errors());
+            }
+            throw new RuntimeException('Failed validating view model instance');
         }
         return $this;
     }
@@ -165,10 +167,10 @@ trait HttpViewModel
      */
     private static function createRules_(array $rules, string $prefix = null, array $excepts = [])
     {
-        $rules = iterator_to_array((function() use ($rules, $excepts) {
+        $rules = iterator_to_array((function () use ($rules, $excepts) {
             foreach ($rules as $key => $value) {
                 if (false !== array_search($key, $excepts)) {
-                    $current =  array_filter(is_array($value) ? $value : [$value], function($item) {
+                    $current =  array_filter(is_array($value) ? $value : [$value], function ($item) {
                         return false === strpos($item, 'required');
                     });
                     yield $key => ['sometimes', ...$current];

@@ -3,10 +3,10 @@
 namespace Drewlabs\Packages\Http;
 
 use Drewlabs\Core\Helpers\Arr;
+use Drewlabs\Core\Helpers\Reflector;
 
 class ConfigurationManager
 {
-
     /**
      * Static class instance.
      *
@@ -35,7 +35,7 @@ class ConfigurationManager
     {
         if (null === static::$instance) {
             $self = new static();
-            $self = drewlabs_core_create_attribute_setter('config', $self->config ?? [])($self);
+            $self = Reflector::propertySetter('config', $self->config ?? [])($self);
             static::$instance = $self;
         }
 
@@ -91,10 +91,7 @@ class ConfigurationManager
      */
     public static function configure(array $config)
     {
-        $self = drewlabs_core_create_attribute_setter(
-            'config',
-            $config ?? []
-        )(new static);
+        $self = Reflector::propertySetter('config', $config ?? [])(new static);
         static::$instance = $self;
         return $self;
     }

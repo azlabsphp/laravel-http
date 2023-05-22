@@ -4,7 +4,7 @@ namespace Drewlabs\Packages\Http\Middleware;
 
 use Closure;
 use Drewlabs\Core\Helpers\Arr;
-use Drewlabs\Packages\Http\Exceptions\HttpAuthorizationException;
+use Drewlabs\Http\Exceptions\HttpException;
 
 class TrustedIpAddress
 {
@@ -18,11 +18,9 @@ class TrustedIpAddress
      */
     public function handle($request, Closure $next, ...$addresses)
     {
-        $remote_address = null !== $request->headers->get('X-Real-IP') ?
-            Arr::wrap($request->headers->get('X-Real-IP')) :
-            $request->ips();
-        if (empty(array_intersect($remote_address, $addresses))) {
-            throw new HttpAuthorizationException($request);
+        $addresses = null !== $request->headers->get('X-Real-IP') ? Arr::wrap($request->headers->get('X-Real-IP')) : $request->ips();
+        if (empty(array_intersect($addresses, $addresses))) {
+            throw HttpException::Unauthorized($request);
         }
         return $next($request);
     }

@@ -3,81 +3,43 @@
 namespace Drewlabs\Packages\Http\Traits;
 
 use Drewlabs\Core\Helpers\Str;
-use Drewlabs\Packages\Http\ServerRequest;
-use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+use Psr\Container\ContainerInterface;
 
+/**
+ * @mixin \Drewlabs\Packages\Http\Traits\HasAuthenticatable
+ * @mixin \Drewlabs\Packages\Http\Traits\ContainerAware
+ */
 trait InteractsWithServerRequest
 {
-
     /**
-     *
-     * @var ServerRequestInterface|\Illuminate\Http\Request|mixed
+     * @var Request|HttpFoundationRequest
      */
     private $request;
 
     /**
-     * Creates a view model instance
+     * Set model attributes from framework request
      * 
-     * @param ServerRequestInterface|Request|mixed|null $request
-     * @param mixed $request
-     */
-    public function __construct($request = null)
-    {
-        try {
-            // Making the class injectable into controller actions
-            // by resolving the current request from the service container
-            $request = $request ?? self::createResolver('request')();
-            if ($request instanceof ServerRequestInterface) {
-                $this->fromPsrServerRequest($request);
-            } else if ($request instanceof \Illuminate\Http\Request) {
-                $this->fromLaravelRequest($request);
-            }
-            $this->request = $request;
-        } catch (\Throwable $e) {
-            // We catch the exception for it to not propagate
-        }
-    }
-
-    /**
-     * Creates an instance of the viewModel class
-     *
-     * @param ServerRequestInterface|Request|mixed $request
-     * @param ContainerInterface|\ArrayAccess|null $container
-     * @return HttpViewModel
-     */
-    public static function create($request = null, $container = null)
-    {
-        return new self($request ?? self::createResolver('request')($container));
-    }
-
-    /**
-     * Set view model attributes from Laravel request
+     * @param Request|HttpFoundationRequest|null $request
+     * @param ContainerInterface|null $context
      * 
-     * @param \Illuminate\Http\Request $request
-     * 
-     * @return mixed 
+     * @return self
      */
-    protected function fromLaravelRequest($request)
+    protected function fromContextRequest($request = null, $context = null)
     {
+        $request = $request ?? self::createResolver('request')($context);
         $resolver = $request->getUserResolver() ?? function () {
         };
-        return $this->withBody($request->all())
-            ->files($request->allFiles())
-            ->setUserResolver($resolver);
+        return $this->withBody($request->all())->files($request->allFiles())->setUserResolver($resolver);
     }
-
-    protected function fromPsrServerRequest(ServerRequestInterface $request)
-    {
-        return $this->withBody(array_merge(
-            $request->getQueryParams() ?: [],
-            (array)($request->getParsedBody() ?? [])
-        ))->files($request->getUploadedFiles());
-    }
-
+    
     /**
-     * Return the request object 
-     *
-     * @return ServerRequestInterface|\Illuminate\Http\Request|mixed
+     * Context request setter and getter
+     * 
+     * @param Request|HttpFoundationRequest|null $request 
+     * 
+     * @return Request|HttpFoundationRequest 
      */
     public function request($request = null)
     {
@@ -87,23 +49,17 @@ trait InteractsWithServerRequest
         return $this->request;
     }
 
-
-
     /**
-     * Returns the bearer token string for the current request
+     * Query `bearer token` header value from context request
      * 
      * @return null|string 
-     * @throws NotSupportedMessageException 
-     * @throws NotSupportedMessageException 
      */
     public function bearerToken()
     {
         if (null === $this->request) {
             return null;
         }
-        $request = new ServerRequest($this->request);
-        $header = $request->getHeader('authorization');
-        if (null === $header) {
+        if (null === ($header = $this->request->headers->get('authorization'))) {
             return null;
         }
         if (!Str::startsWith(strtolower($header), 'bearer')) {
@@ -113,19 +69,18 @@ trait InteractsWithServerRequest
     }
 
     /**
+     * Query `basic auth` header value from context request instance.
      * 
-     * @return array 
-     * @throws NotSupportedMessageException 
-     * @throws NotSupportedMessageException 
+     * It returns a tuple consisting of [$username, $password]
+     * 
+     * @return array<string>
      */
     public function basicAuth()
     {
         if (null === $this->request) {
             return [];
         }
-        $request = new ServerRequest($this->request);
-        $header = $request->getHeader('authorization');
-        if (null === $header) {
+        if (null === ($header = $this->request->headers->get('authorization'))) {
             return [];
         }
         if (!Str::startsWith(strtolower($header), 'basic')) {

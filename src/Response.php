@@ -2,56 +2,42 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
 use Drewlabs\Packages\Http\Traits\HttpMessageTrait;
-use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Illuminate\Http\Response as HttpResponse;
+use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
-/**
- * @package Drewlabs\Packages\Http
- */
 class Response
 {
     use HttpMessageTrait;
 
     /**
-     *
-     * @var ResponseInterface|SymfonyResponse
+     * @var HttpResponse|HttpFoundationResponse
      */
     private $internal;
 
+    /**
+     * Creates new class instance
+     * 
+     * @param HttpResponse|HttpFoundationResponse|self $response 
+     */
     public function __construct($response)
     {
         $this->internal = $response instanceof self ? $response->unwrap() : $response;
-        if (!$this->isSupported()) {
-            throw NotSupportedMessageException::forResponse($this->internal);
-        }
+        $this->throwIfNotExpected();
     }
 
     public function setHeader(string $key, $value)
     {
-        if ($this->isSymfony()) {
-            $this->internal->headers->set($key, $value, true);
-            return $this;
-        }
-        if ($this->isPsr7()) {
-            $this->internal = $this->internal->withHeader($key, $value);
-            return $this;
-        }
-        throw NotSupportedMessageException::forResponse($this->internal);
-    }
-
-    public function isSupported()
-    {
-        return $this->isSymfony() || $this->isPsr7();
+        $this->internal->headers->set($key, $value, true);
+        return $this;
     }
 
     /**
+     * Wrap http foundation response into the current response
      * 
      * @param mixed $response 
-     * @return self 
-     * @throws InvalidArgumentException 
+     * @return Response 
      */
     public static function wrap($response)
     {
@@ -61,7 +47,7 @@ class Response
     /**
      * Return the wrapped response object
      * 
-     * @return ResponseInterface|HttpResponse|SymfonyResponse 
+     * @return HttpResponse|HttpFoundationResponse 
      */
     public function unwrap()
     {
@@ -70,19 +56,13 @@ class Response
 
     public function getStatusCode()
     {
-        if ($this->isSupported()) {
-            return $this->internal->getStatusCode();
+        return $this->internal->getStatusCode();
+    }
+
+    private function throwIfNotExpected()
+    {
+        if (!($this->internal instanceof HttpResponse || $this->internal instanceof HttpFoundationResponse)) {
+            throw new InvalidArgumentException('Not supported response instance');
         }
-        throw NotSupportedMessageException::forResponse($this->internal);
-    }
-
-    private function isSymfony()
-    {
-        return $this->internal instanceof HttpResponse || $this->internal instanceof SymfonyResponse;
-    }
-
-    private function isPsr7()
-    {
-        return $this->internal instanceof ResponseInterface;
     }
 }

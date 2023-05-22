@@ -14,14 +14,12 @@ class ResponseTest extends TestCase
         ]));
 
         $this->assertInstanceOf(Response::class, $response);
-
         $this->assertEquals('http://localhost', $response->getHeader('Access-Control-Allow-Origin'));
     }
 
     public function test_get_status_code()
     {
         $response = Response::wrap(new HttpResponse('', 422));
-
         $this->assertNotEquals(200, $response->getStatusCode());
         $this->assertEquals(422, $response->getStatusCode());
     }

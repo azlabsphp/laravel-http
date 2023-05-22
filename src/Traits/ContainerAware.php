@@ -14,49 +14,29 @@ declare(strict_types=1);
 namespace Drewlabs\Packages\Http\Traits;
 
 use Closure;
+use Illuminate\Container\Container;
 use Psr\Container\ContainerInterface;
-
 
 trait ContainerAware
 {
     /**
+     * Create an abstract implementation from framework context
      *
      * @param mixed $abstract
+     * 
      * @return Closure
      */
     protected static function createResolver($abstract = null)
     {
         /**
+         * @param ContainerInterface|null $context
          * @return mixed
          */
-        return static function ($container = null) use ($abstract) {
-            $default = \Illuminate\Container\Container::class;
-            if (null === $container && class_exists($default)) {
-                $container = forward_static_call([$default, 'getInstance']);
+        return static function ($context = null) use ($abstract) {
+            if ($context) {
+                return null === $abstract ? $context : $context->get($abstract);
             }
-            if (null === $abstract) {
-                return $container;
-            }
-            if ($container instanceof \ArrayAccess) {
-                return $container[$abstract];
-            }
-            if (class_exists($default) && is_a($container, $default, true)) {
-                return $container->make($abstract);
-            }
-            if ($container instanceof ContainerInterface) {
-                return $container->get($abstract);
-            }
-            if (!is_object($container)) {
-                throw new \Exception('A container instance is required to create a resolver');
-            }
-            throw new \InvalidArgumentException(
-                \get_class($container) .
-                    ' is not a ' .
-                    ContainerInterface::class .
-                    ' nor ' .
-                    $default .
-                    ' and is not array accessible'
-            );
+            return null === $abstract ? Container::getInstance() : Container::getInstance()->make($abstract);
         };
     }
 }

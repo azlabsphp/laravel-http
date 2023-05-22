@@ -2,20 +2,17 @@
 
 namespace Drewlabs\Packages\Http;
 
-use Drewlabs\Contracts\Http\BinaryResponseHandler;
-use Drewlabs\Contracts\Http\ResponseHandler as HttpResponseHandler;
-use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
-use Drewlabs\Contracts\Http\ViewResponseHandler;
+use Drewlabs\Cors\ConfigurationBuilder;
+use Drewlabs\Cors\Cors;
+use Drewlabs\Cors\CorsInterface;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Drewlabs\Contracts\Validator\Validator;
-use Drewlabs\Packages\Http\Contracts\IActionResponseHandler;
 use Drewlabs\Packages\Http\Contracts\ResponseHandler;
-use Drewlabs\Packages\Http\Guards\AnonymousGuard;
-use Drewlabs\Packages\Http\Middleware\Cors\Contracts\CorsServiceInterface;
-use Drewlabs\Packages\Http\Middleware\Cors\CorsService;
-use Drewlabs\Packages\Http\ViewResponse;
+use Drewlabs\Packages\Http\Factory\LaravelRequestFactory;
+use Drewlabs\Packages\Http\Guards\GuessGuard;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Auth;
+use Drewlabs\Http\ResponseHandler as HttpResponseHandler;
+use Drewlabs\Packages\Http\Factory\ViewResponseFactory;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -26,7 +23,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http-configs');
+        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http');
     }
 
     /**
@@ -36,69 +33,60 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-
-        $this->app->bind(CorsServiceInterface::class, function () {
-            return new CorsService(ConfigurationManager::getInstance()->get('cors', []));
+        // Register cors interface
+        $this->app->bind(CorsInterface::class, function ($app) {
+            $config = $app['config'];
+            return new Cors(ConfigurationManager::getInstance()->get('cors', $config->get('http.cors')) ?? ConfigurationBuilder::new()->toArray());
         });
-        if (class_exists(\Drewlabs\Core\Validator\InputsValidator::class)) {
-            // Register ViewModel validator providers
-            $this->app->bind(Validator::class, function ($app) {
-                return new \Drewlabs\Core\Validator\InputsValidator($app['validator']);
-            });
-        }
+
+        // Register request factory interface
+        $this->app->bind(RequestFactoryInterface::class, function() {
+            return new LaravelRequestFactory();
+        });
+
+        // Register view response factory
+        $this->app->bind(ViewResponseFactoryInterface::class, function() {
+            return new ViewResponseFactory();
+        });
 
         // Register an anonymous guard, that allow to run application without 
         // worrying about any undefined application guard issues
-        $this->registerAnonymousGuard();
+        $this->registerGuessGuard();
 
         // Register response handlers types
         $this->registerResponseHandlers();
     }
 
-    private function registerAnonymousGuard()
+    private function registerGuessGuard()
     {
         Auth::resolved(function ($auth) {
             $auth->extend('anonymous', function ($app, $name, array $config) use ($auth) {
-                return tap($this->createAnonymousGuard($auth, $config), function ($guard) use ($app) {
+                return tap($this->createGuessGuard($auth, $config), function ($guard) use ($app) {
                     $app->refresh('request', $guard, 'setRequest');
                 });
             });
         });
     }
 
-
     private function registerResponseHandlers()
     {
-        $this->app->bind(BinaryResponseHandler::class, BinaryFileResponse::class);
-        $this->app->bind(UnAuthorizedResponseHandler::class, UnAuthorizedResponse::class);
-        $this->app->bind(ViewResponseHandler::class, ViewResponse::class);
-
-        // By default try to bind the {@see IActionResponseHandler::class} if it has not
-        // been bounded by developpers in project root AppServiceProvider class
         if (!$this->app->bound(ResponseHandler::class)) {
-            $this->app->bind(ResponseHandler::class, JsonApiResponseHandler::class);
+            $this->app->bind(ResponseHandler::class, JsonResponse::class);
         }
         if (!$this->app->bound(HttpResponseHandler::class)) {
-            $this->app->bind(HttpResponseHandler::class, JsonApiResponseHandler::class);
-        }
-        if (!$this->app->bound(IActionResponseHandler::class)) {
-            $this->app->bind(IActionResponseHandler::class, JsonApiResponseHandler::class);
+            $this->app->bind(HttpResponseHandler::class, JsonResponse::class);
         }
     }
 
     /**
-     * Register the guard.
+     * Register guess the guard.
      *
      * @param \Illuminate\Contracts\Auth\Factory  $auth
      * @param array $config
      * @return RequestGuard
      */
-    private function createAnonymousGuard($auth, $config)
+    private function createGuessGuard($auth, $config)
     {
-        return new RequestGuard(
-            new AnonymousGuard(),
-            $this->app->make('request'),
-            null
-        );
+        return new RequestGuard(new GuessGuard(), $this->app->make('request'), null);
     }
 }

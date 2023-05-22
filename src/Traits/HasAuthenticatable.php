@@ -23,7 +23,11 @@ trait HasAuthenticatable
     private $userResolver;
 
     /**
-     * @return self
+     * Set authenticatable instance
+     * 
+     * @param Authenticatable|null $user 
+     * 
+     * @return self 
      */
     public function setUser(Authenticatable $user = null)
     {
@@ -66,7 +70,8 @@ trait HasAuthenticatable
     /**
      * Add / Set value of the provided key to equals the id if the currently connected user.
      * 
-     * @param string $key 
+     * @param string $key
+     * 
      * @return self 
      */
     public function setAuthUserInput(string $key)

@@ -11,12 +11,11 @@
 */
 return [
     'cors' => [
-        'allowed_hosts' => [
-            '*'
-        ],
-        'allowed_headers' => [],
+        'allowed_hosts' => ['*'],
+        'allowed_headers' => ['*'],
+        'exposed_headers' => ['*'],
+        'allowed_methods' => ['*'],
         'allowed_credentials' => false,
-        'exposed_headers' => [],
         'max_age' => 0
     ]
 ];

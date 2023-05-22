@@ -15,7 +15,6 @@ use Drewlabs\Packages\Http\Response;
  */
 class HttpResponse
 {
-
     public static function __callStatic($name, $arguments)
     {
         if (empty($arguments)) {

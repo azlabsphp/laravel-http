@@ -2,14 +2,8 @@
 
 namespace Drewlabs\Packages\Http\Contracts;
 
-use Drewlabs\Contracts\Http\ResponseHandler as BaseResponseHandler;
-use Drewlabs\Contracts\Http\UnAuthorizedResponseHandler;
-use Drewlabs\Contracts\Http\BinaryResponseHandler;
+use Drewlabs\Http\ResponseHandler as BaseResponseHandler;
 
-
-interface ResponseHandler extends
-    BinaryResponseHandler,
-    BaseResponseHandler,
-    UnAuthorizedResponseHandler
+interface ResponseHandler extends BaseResponseHandler
 {
 }

@@ -1,12 +1,12 @@
 <?php
 
 use Drewlabs\Packages\Http\ConfigurationManager;
+use Drewlabs\Packages\Http\Factory\PsrRequestFactory;
 use Drewlabs\Packages\Http\ServerRequest;
 use Psr\Container\ContainerInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Nyholm\Psr7Server\ServerRequestCreator;
+use Illuminate\Container\Container;
 
 if (!function_exists('app')) {
     /**
@@ -18,10 +18,7 @@ if (!function_exists('app')) {
      */
     function app($abstract = null, array $parameters = [])
     {
-        if (null === $abstract) {
-            return \Illuminate\Container\Container::getInstance();
-        }
-        return \Illuminate\Container\Container::getInstance()->make($abstract, $parameters);
+        return null === $abstract ? Container::getInstance() : Container::getInstance()->make($abstract, $parameters);
     }
 }
 
@@ -52,20 +49,6 @@ if (!function_exists('is_lumen')) {
     }
 }
 
-if (!function_exists('drewlabs_create_ps7_request')) {
-    /**
-     * Creates a psr7 server request from php globals or from a symfony request
-     *
-     * @param Request $request
-     * @return \Psr\Http\Message\ServerRequestInterface
-     * @deprecated v2.3.x
-     */
-    function drewlabs_create_ps7_request(Request $request = null)
-    {
-        return drewlabs_create_psr7_request($request);
-    }
-}
-
 if (!function_exists('drewlabs_create_psr7_request')) {
     /**
      * Creates a psr7 server request from php globals or from a symfony request
@@ -75,23 +58,14 @@ if (!function_exists('drewlabs_create_psr7_request')) {
      */
     function drewlabs_create_psr7_request(Request $request = null)
     {
+        $request = $request ?? Request::createFromGlobals();
         $psr17Factory = new Psr17Factory();
-        if ($request) {
-            $psrHttpFactory = new PsrHttpFactory(
-                $psr17Factory,
-                $psr17Factory,
-                $psr17Factory,
-                $psr17Factory
-            );
-            return $psrHttpFactory->createRequest($request);
-        }
-        $psrHttpFactory = new ServerRequestCreator(
-            $psr17Factory, // ServerRequestFactory
-            $psr17Factory, // UriFactory
-            $psr17Factory, // UploadedFileFactory
-            $psr17Factory  // StreamFactory
+        $psrHttpFactory = new PsrRequestFactory(
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory
         );
-        return $psrHttpFactory->fromGlobals();
+        return $psrHttpFactory->create($request);
     }
 }
 

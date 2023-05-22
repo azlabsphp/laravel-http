@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * @package Drewlabs\Packages\Http\Middleware
  */
-abstract class TransformRequest
+abstract class Transform
 {
     /**
      * Handle an incoming request.

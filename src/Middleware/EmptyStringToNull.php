@@ -3,10 +3,9 @@
 namespace Drewlabs\Packages\Http\Middleware;
 
 /**
- * 
  * @package Drewlabs\Packages\Http\Middleware
  */
-class EmptyStringToNull extends TransformRequest
+class EmptyStringToNull extends Transform
 {
     protected function transform($key, $value)
     {

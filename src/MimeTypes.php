@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Drewlabs\Packages\Http;
 
-/**
- * @internal
- * 
- */
 final class MimeTypes
 {
     const MIME_TYPES = [
@@ -1220,22 +1216,25 @@ final class MimeTypes
     ];
 
     /**
-     * Maps a file extensions to a mimetype.
-     *
-     * @link https://raw.githubusercontent.com/jshttp/mime-db/master/db.json
+     * Resolve mime type from extension string
+     * 
+     * @param string $extension
+     * 
+     * @return string|null 
      */
-    public static function extToMime(string $extension)
+    public static function get(string $extension)
     {
         return self::MIME_TYPES[strtolower($extension)] ?? null;
     }
 
     /**
-     * Map a mime to a file extension
+     * Resolve extension from provided mime type
      * 
-     * @param string $mime 
-     * @return int|string|null 
+     * @param string $mime
+     * 
+     * @return string|null 
      */
-    public static function mimeToExt(string $mime)
+    public static function getExtension(string $mime)
     {
         return array_flip(self::MIME_TYPES)[strtolower($mime)] ?? null;
     }

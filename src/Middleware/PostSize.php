@@ -6,24 +6,26 @@ use Closure;
 use Drewlabs\Packages\Http\Exceptions\HttpException;
 
 /**
- * 
  * @package Drewlabs\Packages\Http\Middleware
  */
-final class ValidatePostSize
+final class PostSize
 {
     /**
      * Handle an incoming request.
+     * 
+     * @template TResponse
      *
      * @param  mixed  $request
      * @param  \Closure  $next
-     * @return mixed
+     * @param int $size
+     * 
+     * @return TResponse
      *
      * @throws HttpException
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, int $size = null)
     {
-        $max = $this->getPostMaxSize();
-        if ($max > 0 && $request->server('CONTENT_LENGTH') > $max) {
+        if (($max = $size ?? $this->getPostMaxSize()) > 0 && $request->server('CONTENT_LENGTH') > $max) {
             throw new HttpException(413);
         }
         return $next($request);

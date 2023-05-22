@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Psr7StreamResponse extends Response
+class StreamResponse extends Response
 {
     /**
      * @var StreamInterface
@@ -16,19 +16,16 @@ class Psr7StreamResponse extends Response
     protected $stream;
 
     /**
-     * 
      * @var int
      */
     protected $offset;
 
     /**
-     * 
      * @var int
      */
     protected $maxLength;
 
     /**
-     * 
      * @var string
      */
     private $mimeType;
@@ -68,7 +65,7 @@ class Psr7StreamResponse extends Response
             $response = new static((new Psr17Factory)->createStream(''), $status, $headers ?? []);
             return $response->withContentType('application/octect-stream');
         }
-        $contentType = MimeTypes::extToMime(pathinfo($path, PATHINFO_EXTENSION));
+        $contentType = MimeTypes::get(pathinfo($path, PATHINFO_EXTENSION));
         if (!empty($contentType) && array_key_exists('Content-Type', $headers)) {
             $headers['Content-Type'] = $contentType;
         }

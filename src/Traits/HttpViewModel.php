@@ -4,23 +4,22 @@ namespace Drewlabs\Packages\Http\Traits;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 trait HttpViewModel
 {
     use InteractsWithServerRequest;
     use ContainerAware;
-    use AutorizeRequest;
+    use AuthorizeRequest;
     use HasAuthenticatable;
 
     /**
      * Set curren instance attributes from framework request attributes
      * 
-     * @param HttpFoundationRequest|Request $request
+     * @param Request $request
      * 
      * @return void 
      */
-    private function buildInstanceFromRequestAttibutes(HttpFoundationRequest $request = null)
+    private function buildInstanceFromRequestAttibutes($request = null)
     {
         try {
             // Making the class injectable into controller actions
@@ -28,7 +27,7 @@ trait HttpViewModel
             $this->request = $request ?? Container::getInstance()->make('request');
 
             // We set the current body, query and files attributes from the request context
-            $this->fromContextRequest($this->request);
+            $this->update($request->all())->files($request->allFiles());
 
             // We set the current instance user resolver property
             $this->setUserResolver($this->request instanceof Request ? $this->request->getUserResolver() : function() {

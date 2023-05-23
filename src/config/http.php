@@ -15,7 +15,7 @@ return [
         'allowed_headers' => ['*'],
         'exposed_headers' => ['*'],
         'allowed_methods' => ['*'],
-        'allowed_credentials' => false,
+        'allowed_credentials' => true,
         'max_age' => 0
     ]
 ];

@@ -3,6 +3,8 @@
 namespace Drewlabs\Packages\Http\Factory;
 
 use Drewlabs\Http\Factory\BadRequestResponseFactoryInterface;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class BadRequestResponseFactory implements BadRequestResponseFactoryInterface
 {
@@ -15,9 +17,15 @@ class BadRequestResponseFactory implements BadRequestResponseFactoryInterface
      */
     public function __construct($factory = null)
     {
-        $this->responseFactory = $factory ?? self::useDefault();
+        $this->responseFactory = $factory ?? self::useDefaultFactory();
     }
 
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @return Response|HttpFoundationResponse
+     */
     public function create(array $errors, array $headers = [])
     {
         return $this->createResponse($errors, 422, $headers ?? []);

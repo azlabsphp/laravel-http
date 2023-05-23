@@ -5,7 +5,7 @@ namespace Drewlabs\Packages\Http\Traits;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
 
-trait AutorizeRequest
+trait AuthorizeRequest
 {
     /**
      * Authorize a given action against a set of arguments.

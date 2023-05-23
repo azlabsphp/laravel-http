@@ -9,7 +9,8 @@
             "email": "asmyns.platonnas29@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.2",
         "illuminate/http": "^7.0|^8.0|^9.0",
@@ -19,7 +20,7 @@
         "drewlabs/contracts": "^0.2",
         "drewlabs/cors": "^0.2.0",
         "drewlabs/overloadable": "^0.1.10",
-        "illuminate/container": "^9.0"
+        "illuminate/container": "^7.0|^8.0|^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -29,6 +30,11 @@
             "helpers.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Drewlabs\\Packages\\Http\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -37,13 +43,15 @@
         }
     },
     "suggest": {
-        "nyholm/psr7": "Required to create psr7 requests using drewlabs_create_psr7_request() global function",
-        "nyholm/psr7-server": "Required to create psr7 requests using drewlabs_create_psr7_request() global function",
-        "symfony/psr-http-message-bridge": "Symfony Psr7 request bridge for transforming symfony request into psr7 ^2.1"
+        "nyholm/psr7": "Required to create psr7 requests using drewlabs_create_psr7_request() global function"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "nyholm/psr7": "^1.5",
-        "nyholm/psr7-server": "^1.0"
+        "drewlabs/psr7": "^0.1.3",
+        "drewlabs/validation": "^0.2.3"
+    },
+    "config": {
+        "optimize-autoloader": true
     }
 }

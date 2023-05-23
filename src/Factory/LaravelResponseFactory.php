@@ -2,17 +2,21 @@
 
 namespace Drewlabs\Packages\Http\Factory;
 
+use BadMethodCallException;
 use Drewlabs\Http\Factory\ResponseFactoryInterface;
+use Drewlabs\Overloadable\MethodCallExpection;
 use Drewlabs\Overloadable\Overloadable;
 use Drewlabs\Packages\Http\StreamResponse;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+
 /**
- * 
- * @method TResponse create($data, int $status = 200, array $headers = [], string $protocol = '1.1')
- * @method TResponse create(\Psr\Http\Message\ResponseInterface $response, bool $streamed)
+ * @method Response|HttpFoundationResponse create($data, int $status = 200, array $headers = [], string $protocol = '1.1')
+ * @method Response|HttpFoundationResponse create(\Psr\Http\Message\ResponseInterface $response, bool $streamed)
  * @package Drewlabs\Packages\Http\Factory
  */
 class LaravelResponseFactory implements ResponseFactoryInterface
@@ -27,9 +31,18 @@ class LaravelResponseFactory implements ResponseFactoryInterface
      */
     public function __construct(callable $factory = null)
     {
-        $this->responseFactory = $factory ?? self::useDefault();
+        $this->responseFactory = $factory ?? self::useDefaultFactory();
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     * 
+     * @return Response|HttpFoundationResponse
+     * 
+     * @throws BadMethodCallException 
+     * @throws MethodCallExpection 
+     */
     public function create(...$args)
     {
         return $this->overload($args, [

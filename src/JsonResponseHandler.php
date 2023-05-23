@@ -11,8 +11,6 @@ use Drewlabs\Packages\Http\Factory\BadRequestResponseFactory;
 use Drewlabs\Packages\Http\Factory\LaravelResponseFactory;
 use Drewlabs\Packages\Http\Factory\OkResponseFactory;
 use Drewlabs\Packages\Http\Factory\ServerErrorResponseFactory;
-use Drewlabs\Packages\Http\Traits\ContainerAware;
-use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use RuntimeException;
 use Throwable;
@@ -40,21 +38,14 @@ final class JsonResponseHandler implements ResponseHandler
     private $badRequestResponseFactory;
 
     /**
-     * @var bool
-     */
-    private $debug = false;
-
-    /**
      * Creates `json` response handler class instance
      * 
-     * @param bool $environment
      * @param OkResponseFactoryInterface|null $okResponseFactory 
      * @param ResponseFactoryInterface|null $responseFactory 
      * @param ServerErrorResponseFactoryInterface|null $serverErrorResponseFactory 
      * @param BadRequestResponseFactoryInterface|null $badRequestResponseFactory
      */
     public function __construct(
-        bool $environment = false,
         OkResponseFactoryInterface $okResponseFactory = null,
         ResponseFactoryInterface $responseFactory = null,
         ServerErrorResponseFactoryInterface $serverErrorResponseFactory = null,
@@ -63,7 +54,6 @@ final class JsonResponseHandler implements ResponseHandler
         $jsonFactory = function ($data = null, $status = 200, $headers = []) {
             return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         };
-        $this->debug = $environment;
         $this->okResponseFactory = $okResponseFactory ?? new OkResponseFactory($jsonFactory);
         $this->responseFactory = $responseFactory ?? new LaravelResponseFactory($jsonFactory);
         $this->serverErrorResponseFactory = $serverErrorResponseFactory ?? new ServerErrorResponseFactory($jsonFactory);
@@ -82,9 +72,7 @@ final class JsonResponseHandler implements ResponseHandler
 
     public function error(Throwable $e, $errors = null)
     {
-        Container::getInstance()->make('log')->error(sprintf('%s', $message = $e->getMessage()));
-        $message = $this->debug ? $message : 'Server Error';
-        $this->serverErrorResponseFactory->create(new RuntimeException($message, 500, $e));
+        $this->serverErrorResponseFactory->create(new RuntimeException('Server Error', 500, $e));
     }
 
     public function badRequest(array $errors)

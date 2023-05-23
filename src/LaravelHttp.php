@@ -26,7 +26,7 @@ class LaravelHttp
      * 
      * @return void 
      */
-    public static function provideJsonServices(Container $app)
+    public static function provideJson(Container $app)
     {
         $jsonFactory = function ($data = null, $status = 200, $headers = []) {
             return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -51,18 +51,8 @@ class LaravelHttp
             return new LaravelResponseFactory($jsonFactory);
         });
 
-        $app->bind(ResponseHandler::class, function ($app) {
-            return $this->createJsonResponseHandler($app);
-        });
-
-        $app->bind(HttpResponseHandler::class, function ($app) {
-            return $this->createJsonResponseHandler($app);
-        });
-    }
-
-
-    private function createJsonResponseHandler($app)
-    {
-        return new JsonResponseHandler($app->environment('debug'));
+        // Register JSON response handler
+        $app->bind(ResponseHandler::class, JsonResponseHandler::class);
+        $app->bind(HttpResponseHandler::class, JsonResponseHandler::class);
     }
 }

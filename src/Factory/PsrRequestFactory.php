@@ -38,7 +38,6 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
      * @param ServerRequestFactoryInterface $serverRequestFactory 
      * @param StreamFactoryInterface $streamFactory 
      * @param UploadedFileFactoryInterface $uploadedFileFactory 
-     * @return void 
      */
     public function __construct(
         ServerRequestFactoryInterface $serverRequestFactory,

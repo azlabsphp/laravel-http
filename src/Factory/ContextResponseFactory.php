@@ -31,10 +31,10 @@ trait ContextResponseFactory
      * 
      * @return ContextResponseFactory 
      */
-    public static function useDefault()
+    public static function useDefaultFactory()
     {
-        return new self(function ($data = null, $status = 200, $headers = []) {
+        return function ($data = null, $status = 200, $headers = []) {
             return new Response($data, $status, $headers);
-        });
+        };
     }
 }

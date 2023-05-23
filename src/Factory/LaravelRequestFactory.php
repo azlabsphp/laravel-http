@@ -11,6 +11,11 @@ use Psr\Http\Message\UriInterface;
 class LaravelRequestFactory implements RequestFactoryInterface
 {
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @return Request 
+     */
     public function create(ServerRequestInterface $psrRequest, bool $streamed = false)
     {
         $server = [];

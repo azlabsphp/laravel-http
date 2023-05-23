@@ -1,6 +1,6 @@
 # Package documentation
 
-The `drewlabs/http` package provides utility classes and functions for unified HTTP response API and middleware classes for handling CORS, and an alternative to Laravel EmptyStringToNull middleware.
+The `drewlabs/http` package provides utility classes and functions for unified HTTP response API and middleware classes for handling CORS.
 
 ## Providers
 
@@ -16,11 +16,7 @@ $app->register(Drewlabs\Packages\Http\HttpServiceProvider::class);
 // ...
 ```
 
-## Cors handler
-
-After registring the providers, publish the cors.php configuration file to configure authorized method, origin and headers.
-
-> php artisan vendor:publish --tag="drewlabs-cors"
+## Cors Middleware
 
 To use the cors middleware in your application add the following code to your kernel based on the framework being used:
 
@@ -32,7 +28,7 @@ To use the cors middleware in your application add the following code to your ke
     // ...
     protected $middleware = [
         // ...
-        \Drewlabs\Packages\Http\Middleware\Cors\Middleware::class,
+        \Drewlabs\Packages\Http\Middleware\Cors::class,
     ];
 ```
 
@@ -43,16 +39,14 @@ To use the cors middleware in your application add the following code to your ke
 
     $app->middleware([
         // Other globally registered middlewares...
-        \Drewlabs\Packages\Http\Middleware\Cors\Middleware::class,
+        \Drewlabs\Packages\Http\Middleware\Cors::class,
     ]);
     // ...
 ```
 
-### Cors config
+**Note** In order to allow any ` host` or  `method`, or  `headers` use the  `*` in the matching key of the config array.
 
-In order to allow any host or method, or headers use the `*` in the matching key of the config array.
-
-## EmptyStringToNull
+## EmptyStringToNull Middleware
 
 It's a midleware that convert all empty string query parameteres and empty request body entry to null.
 
@@ -87,4 +81,4 @@ This configuration file contains middleware aliases keys definition for the appl
 
 * Publishing the configuration files
 
-> php artisan vendor:publish --tag="drewlabs-http-configs"
+> php artisan vendor:publish --tag="drewlabs-http"

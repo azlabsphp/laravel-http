@@ -6,6 +6,8 @@ use Drewlabs\Http\Factory\AuthorizationErrorResponseFactoryInterface;
 use Drewlabs\Packages\Http\ServerRequest;
 use Throwable;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+use Illuminate\Http\Response;
 
 class AuthorizationErrorResponseFactory implements AuthorizationErrorResponseFactoryInterface
 {
@@ -18,13 +20,15 @@ class AuthorizationErrorResponseFactory implements AuthorizationErrorResponseFac
      */
     public function __construct($factory = null)
     {
-        $this->responseFactory = $factory ?? self::useDefault();
+        $this->responseFactory = $factory ?? self::useDefaultFactory();
     }
 
     /**
      * {@inheritDoc}
      * 
      * @param Request $request
+     * 
+     * @return HttpFoundationResponse|Response
      */
     public function create($request, ?Throwable $exception = null)
     {

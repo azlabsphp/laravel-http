@@ -16,18 +16,6 @@ trait InteractsWithServerRequest
      * @var Request|HttpFoundationRequest
      */
     private $request;
-
-    /**
-     * Set model attributes from framework request
-     * 
-     * @param Request $request
-     * 
-     * @return self
-     */
-    private function fromContextRequest($request)
-    {
-        return $this->withBody($request->all())->files($request->allFiles());
-    }
     
     /**
      * Context request setter and getter

@@ -20,6 +20,7 @@ class PsrResponseFactory implements PsrResponseFactoryInterface
      * @var ResponseFactoryInterface
      */
     private $responseFactory;
+
     /**
      * 
      * @var StreamFactoryInterface

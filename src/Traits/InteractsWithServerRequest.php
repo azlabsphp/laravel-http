@@ -5,7 +5,6 @@ namespace Drewlabs\Packages\Http\Traits;
 use Drewlabs\Core\Helpers\Str;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
-use Psr\Container\ContainerInterface;
 
 /**
  * @mixin \Drewlabs\Packages\Http\Traits\HasAuthenticatable
@@ -21,17 +20,13 @@ trait InteractsWithServerRequest
     /**
      * Set model attributes from framework request
      * 
-     * @param Request|HttpFoundationRequest|null $request
-     * @param ContainerInterface|null $context
+     * @param Request $request
      * 
      * @return self
      */
-    protected function fromContextRequest($request = null, $context = null)
+    private function fromContextRequest($request)
     {
-        $request = $request ?? self::createResolver('request')($context);
-        $resolver = $request->getUserResolver() ?? function () {
-        };
-        return $this->withBody($request->all())->files($request->allFiles())->setUserResolver($resolver);
+        return $this->withBody($request->all())->files($request->allFiles());
     }
     
     /**

@@ -222,8 +222,12 @@ class ServerRequest
         return $output;
     }
 
+    public function __clone()
+    {
+        $this->internal = clone $this->internal;
+    }
+
     /**
-     * 
      * @return bool 
      */
     private function throwIfNotExcepted()
@@ -243,16 +247,4 @@ class ServerRequest
     {
         return HttpFoundationRequest::createFromGlobals();
     }
-
-    // /**
-    //  * Set the framework request instance
-    //  * 
-    //  * @param Request|HttpFoundationRequest|self $request
-    //  * 
-    //  * @return HttpFoundationRequest|Request
-    //  */
-    // private function setRequest($request)
-    // {
-    //     return $request instanceof self ? $request->unwrap() : $request;
-    // }
 }

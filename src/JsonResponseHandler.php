@@ -12,14 +12,13 @@ use Drewlabs\Packages\Http\Factory\LaravelResponseFactory;
 use Drewlabs\Packages\Http\Factory\OkResponseFactory;
 use Drewlabs\Packages\Http\Factory\ServerErrorResponseFactory;
 use Drewlabs\Packages\Http\Traits\ContainerAware;
+use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use RuntimeException;
 use Throwable;
 
-class JsonResponseHandler implements ResponseHandler
+final class JsonResponseHandler implements ResponseHandler
 {
-    use ContainerAware;
-
     /**
      * @var OkResponseFactoryInterface
      */
@@ -83,7 +82,7 @@ class JsonResponseHandler implements ResponseHandler
 
     public function error(Throwable $e, $errors = null)
     {
-        self::createResolver('log')()->error(sprintf('%s', $message = $e->getMessage()));
+        Container::getInstance()->make('log')->error(sprintf('%s', $message = $e->getMessage()));
         $message = $this->debug ? $message : 'Server Error';
         $this->serverErrorResponseFactory->create(new RuntimeException($message, 500, $e));
     }

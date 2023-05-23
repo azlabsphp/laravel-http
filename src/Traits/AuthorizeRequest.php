@@ -1,12 +1,12 @@
 <?php
 
-use Drewlabs\Packages\Http\Traits\ContainerAware;
+namespace Drewlabs\Packages\Http\Traits;
+
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
 
 trait AutorizeRequest
 {
-    use ContainerAware;
-
     /**
      * Authorize a given action against a set of arguments.
      *
@@ -19,7 +19,7 @@ trait AutorizeRequest
     public function authorize($ability, $arguments = [])
     {
         [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
-        return $this->resolveGate()->authorize($ability, $arguments);
+        return $this->getGateInstance()->authorize($ability, $arguments);
     }
 
     /**
@@ -35,16 +35,17 @@ trait AutorizeRequest
     public function authorizeForUser($user, $ability, $arguments = [])
     {
         [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
-        return $this->resolveGate()->forUser($user)->authorize($ability, $arguments);
+        return $this->getGateInstance()->forUser($user)->authorize($ability, $arguments);
     }
 
     /**
+     * Creates/Get a `Gate` instance
      * 
      * @return Gate 
      */
-    private function resolveGate()
+    private function getGateInstance()
     {
-        return self::createResolver(Gate::class)();
+        return Container::getInstance()->make(Gate::class);
     }
 
     /**

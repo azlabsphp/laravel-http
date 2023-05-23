@@ -18,7 +18,8 @@
         "drewlabs/core-helpers": "^0.2",
         "drewlabs/contracts": "^0.2",
         "drewlabs/cors": "^0.2.0",
-        "drewlabs/overloadable": "^0.1.10"
+        "drewlabs/overloadable": "^0.1.10",
+        "illuminate/container": "^9.0"
     },
     "autoload": {
         "psr-4": {

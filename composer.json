@@ -14,13 +14,13 @@
     "require": {
         "php": ">=7.2",
         "illuminate/http": "^7.0|^8.0|^9.0",
+        "illuminate/container": "^7.0|^8.0|^9.0",
         "psr/http-message": "^1.0|^2.0",
         "drewlabs/http-contracts": "^0.2",
         "drewlabs/core-helpers": "^0.2",
         "drewlabs/contracts": "^0.2",
         "drewlabs/cors": "^0.2.0",
-        "drewlabs/overloadable": "^0.1.10",
-        "illuminate/container": "^7.0|^8.0|^9.0"
+        "drewlabs/overloadable": "^0.1.10|^0.2"
     },
     "autoload": {
         "psr-4": {

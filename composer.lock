@@ -3419,16 +3419,16 @@
         },
         {
             "name": "drewlabs/validation",
-            "version": "v0.2.5",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azlabsphp/validation.git",
-                "reference": "55af15ac47fe9cde680ab90fd2f263cf3d5ad1e9"
+                "reference": "b72a5ca8ea2a4e4071f1c065a32c3df42d89e474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azlabsphp/validation/zipball/55af15ac47fe9cde680ab90fd2f263cf3d5ad1e9",
-                "reference": "55af15ac47fe9cde680ab90fd2f263cf3d5ad1e9",
+                "url": "https://api.github.com/repos/azlabsphp/validation/zipball/b72a5ca8ea2a4e4071f1c065a32c3df42d89e474",
+                "reference": "b72a5ca8ea2a4e4071f1c065a32c3df42d89e474",
                 "shasum": ""
             },
             "require": {
@@ -3466,9 +3466,9 @@
             ],
             "support": {
                 "issues": "https://github.com/azlabsphp/validation/issues",
-                "source": "https://github.com/azlabsphp/validation/tree/v0.2.5"
+                "source": "https://github.com/azlabsphp/validation/tree/v0.2.6"
             },
-            "time": "2023-05-23T15:02:58+00:00"
+            "time": "2023-05-23T15:44:24+00:00"
         },
         {
             "name": "myclabs/deep-copy",

@@ -21,14 +21,15 @@ trait HttpViewModel
      */
     private $request;
 
+
     /**
-     * Set curren instance attributes from framework request attributes
+     * Boot the current instance setting required properties values
+     * from request parameters
      * 
-     * @param Request $request
-     * 
+     * @param Request $request 
      * @return void 
      */
-    private function buildInstanceFromRequestAttibutes($request = null)
+    private function bootInstance($request = null)
     {
         try {
             // Making the class injectable into controller actions
@@ -42,6 +43,21 @@ trait HttpViewModel
         } catch (\Throwable $e) {
             // We catch the exception for it to not propagate
         }
+
+    }
+
+    /**
+     * @deprecated Use `bootInstance()` instead
+     * 
+     * Set curren instance attributes from framework request attributes
+     * 
+     * @param Request $request
+     * 
+     * @return void 
+     */
+    private function buildInstanceFromRequestAttibutes($request = null)
+    {
+        $this->bootInstance();
     }
 
     /**

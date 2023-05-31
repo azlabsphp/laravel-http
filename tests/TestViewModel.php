@@ -18,9 +18,14 @@ class TestViewModel implements ViewModel
     use ProvidesRulesFactory;
     use ModelAware;
 
+    /**
+     * Creates class instance
+     * 
+     * @param Request|null $request 
+     */
     public function __construct(Request $request = null)
     {
-        $this->buildInstanceFromRequestAttibutes($request);
+        $this->bootInstance($request);
     }
 
     public function rules()

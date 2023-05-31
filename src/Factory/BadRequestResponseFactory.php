@@ -36,7 +36,7 @@ class BadRequestResponseFactory implements BadRequestResponseFactoryInterface
      *
      * @return Response|HttpFoundationResponse
      */
-    public function create(array $errors, array $headers = [])
+    public function create($errors, array $headers = [])
     {
         return $this->createResponse($errors, 422, $headers ?? []);
     }

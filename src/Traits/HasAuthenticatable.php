@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Drewlabs package.
+ * This file is part of the drewlabs namespace.
  *
  * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Drewlabs\Packages\Http\Traits;
+namespace Drewlabs\Laravel\Http\Traits;
 
 use Drewlabs\Contracts\Auth\Authenticatable;
 
@@ -23,11 +23,9 @@ trait HasAuthenticatable
     private $userResolver;
 
     /**
-     * Set authenticatable instance
-     * 
-     * @param Authenticatable|null $user 
-     * 
-     * @return self 
+     * Set authenticatable instance.
+     *
+     * @return self
      */
     public function setUser(Authenticatable $user = null)
     {
@@ -44,14 +42,13 @@ trait HasAuthenticatable
      *  // Returns an authenticatable object
      * });
      * ```
-     * 
-     * @param callable $resolver
-     * 
-     * @return self 
+     *
+     * @return self
      */
     public function setUserResolver(callable $resolver)
     {
         $this->userResolver = $resolver;
+
         return $this;
     }
 
@@ -69,10 +66,8 @@ trait HasAuthenticatable
 
     /**
      * Add / Set value of the provided key to equals the id if the currently connected user.
-     * 
-     * @param string $key
-     * 
-     * @return self 
+     *
+     * @return self
      */
     public function setAuthUserInput(string $key)
     {

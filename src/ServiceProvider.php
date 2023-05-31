@@ -1,18 +1,29 @@
 <?php
 
-namespace Drewlabs\Packages\Http;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http;
 
 use Drewlabs\Cors\ConfigurationBuilder;
 use Drewlabs\Cors\Cors;
 use Drewlabs\Cors\CorsInterface;
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Drewlabs\Packages\Http\Contracts\ResponseHandler;
-use Drewlabs\Packages\Http\Factory\LaravelRequestFactory;
-use Drewlabs\Packages\Http\Guards\GuessGuard;
+use Drewlabs\Http\ResponseHandler as HttpResponseHandler;
+use Drewlabs\Laravel\Http\Contracts\ResponseHandler;
+use Drewlabs\Laravel\Http\Factory\LaravelRequestFactory;
+use Drewlabs\Laravel\Http\Factory\ViewResponseFactory;
+use Drewlabs\Laravel\Http\Guards\GuessGuard;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Support\Facades\Auth;
-use Drewlabs\Http\ResponseHandler as HttpResponseHandler;
-use Drewlabs\Packages\Http\Factory\ViewResponseFactory;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -23,7 +34,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http');
+        $this->publishes([__DIR__.'/config' => $this->app->basePath('config')], 'drewlabs-http');
     }
 
     /**
@@ -34,22 +45,23 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         // Register cors interface
-        $this->app->bind(CorsInterface::class, function ($app) {
+        $this->app->bind(CorsInterface::class, static function ($app) {
             $config = $app['config'];
+
             return new Cors(ConfigurationManager::getInstance()->get('cors', $config->get('http.cors')) ?? ConfigurationBuilder::new()->toArray());
         });
 
         // Register request factory interface
-        $this->app->bind(RequestFactoryInterface::class, function () {
+        $this->app->bind(RequestFactoryInterface::class, static function () {
             return new LaravelRequestFactory();
         });
 
         // Register view response factory
-        $this->app->bind(ViewResponseFactoryInterface::class, function () {
+        $this->app->bind(ViewResponseFactoryInterface::class, static function () {
             return new ViewResponseFactory();
         });
 
-        // Register an anonymous guard, that allow to run application without 
+        // Register an anonymous guard, that allow to run application without
         // worrying about any undefined application guard issues
         $this->registerGuessGuard();
 
@@ -61,7 +73,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         Auth::resolved(function ($auth) {
             $auth->extend('anonymous', function ($app) {
-                return tap($this->createGuessGuard(), function ($guard) use ($app) {
+                return tap($this->createGuessGuard(), static function ($guard) use ($app) {
                     $app->refresh('request', $guard, 'setRequest');
                 });
             });
@@ -80,7 +92,7 @@ class ServiceProvider extends BaseServiceProvider
 
     /**
      * Register guess the guard.
-     * 
+     *
      * @return RequestGuard
      */
     private function createGuessGuard()
@@ -88,14 +100,13 @@ class ServiceProvider extends BaseServiceProvider
         return $this->createRequestGuard(RequestGuard::class, new GuessGuard(), $this->app->make('request'), null);
     }
 
-
     /**
      * @template T
-     * 
+     *
      * @param class-string<T> $blueprint
-     * @param mixed ...$parameters
-     * 
-     * @return T 
+     * @param mixed           ...$parameters
+     *
+     * @return T
      */
     private function createRequestGuard(string $blueprint, ...$parameters)
     {

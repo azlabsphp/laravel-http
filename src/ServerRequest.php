@@ -1,15 +1,25 @@
 <?php
 
-namespace Drewlabs\Packages\Http;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http;
 
 use Drewlabs\Core\Helpers\Arr;
-use Drewlabs\Packages\Http\Exceptions\NotSupportedMessageException;
-use Drewlabs\Packages\Http\Traits\HttpMessageTrait;
-use InvalidArgumentException;
+use Drewlabs\Laravel\Http\Exceptions\NotSupportedMessageException;
+use Drewlabs\Laravel\Http\Traits\HttpMessageTrait;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
 use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class ServerRequest
@@ -26,7 +36,7 @@ class ServerRequest
         'HTTP_X_CLUSTER_CLIENT_IP',
         'HTTP_FORWARDED_FOR',
         'HTTP_FORWARDED',
-        'REMOTE_ADDR'
+        'REMOTE_ADDR',
     ];
 
     /**
@@ -35,11 +45,11 @@ class ServerRequest
     private $internal;
 
     /**
-     * Creates class instances
-     * 
-     * @param Request|HttpFoundationRequest|null $request 
-     * 
-     * @throws InvalidArgumentException 
+     * Creates class instances.
+     *
+     * @param Request|HttpFoundationRequest|null $request
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($request = null)
     {
@@ -47,25 +57,31 @@ class ServerRequest
         $this->throwIfNotExcepted();
     }
 
+    public function __clone()
+    {
+        $this->internal = clone $this->internal;
+    }
+
     /**
      * Get the current path info for the request.
-     * 
-     * @return string 
-     * @throws SuspiciousOperationException 
-     * @throws ConflictingHeadersException 
-     * @throws NotSupportedMessageException 
+     *
+     * @throws SuspiciousOperationException
+     * @throws ConflictingHeadersException
+     * @throws NotSupportedMessageException
+     *
+     * @return string
      */
     public function getPath()
     {
         $pattern = trim($this->internal->getPathInfo(), '/');
-        return $pattern === '' ? '/' : $pattern;
+
+        return '' === $pattern ? '/' : $pattern;
     }
 
     /**
-     * Override the HTTP verb which is used to send the message
-     * 
-     * @param string $method 
-     * @return self 
+     * Override the HTTP verb which is used to send the message.
+     *
+     * @return self
      */
     public function withMethod(string $method)
     {
@@ -80,12 +96,13 @@ class ServerRequest
     }
 
     /**
-     * Returns the HTTP verb used in sending request to server
-     * 
-     * @return string 
-     * @throws InvalidArgumentException 
-     * @throws BadRequestException 
-     * @throws SuspiciousOperationException 
+     * Returns the HTTP verb used in sending request to server.
+     *
+     * @throws \InvalidArgumentException
+     * @throws BadRequestException
+     * @throws SuspiciousOperationException
+     *
+     * @return string
      */
     public function getMethod()
     {
@@ -93,13 +110,13 @@ class ServerRequest
     }
 
     /**
-     * Match the HTPP verb against the one provided by user
-     * 
-     * @param string $method 
-     * @return bool 
-     * @throws InvalidArgumentException 
-     * @throws BadRequestException 
-     * @throws SuspiciousOperationException 
+     * Match the HTPP verb against the one provided by user.
+     *
+     * @throws \InvalidArgumentException
+     * @throws BadRequestException
+     * @throws SuspiciousOperationException
+     *
+     * @return bool
      */
     public function isMethod(string $method)
     {
@@ -107,10 +124,11 @@ class ServerRequest
     }
 
     /**
-     * Creates an instance of the current class with framework request
-     * 
-     * @param Request|HttpFoundationRequest $request 
-     * @return self 
+     * Creates an instance of the current class with framework request.
+     *
+     * @param Request|HttpFoundationRequest $request
+     *
+     * @return self
      */
     public static function wrap($request)
     {
@@ -118,9 +136,9 @@ class ServerRequest
     }
 
     /**
-     * Return the framework request instance
-     * 
-     * @return Request|HttpFoundationRequest 
+     * Return the framework request instance.
+     *
+     * @return Request|HttpFoundationRequest
      */
     public function unwrap()
     {
@@ -129,21 +147,22 @@ class ServerRequest
 
     /**
      * Get the client IP address.
-     * 
-     * @return mixed 
-     * @throws ConflictingHeadersException 
+     *
+     * @throws ConflictingHeadersException
+     *
+     * @return mixed
      */
     public function ip()
     {
-        $request = is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
+        $request = \is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
+
         return empty($request) ? $this->getHeader('X-Real-IP') : $request;
     }
 
     /**
      * Get the client IP addresses.
-     * 
-     * @return array 
-     * @throws ConflictingHeadersException 
+     *
+     * @throws ConflictingHeadersException
      */
     public function ips(): array
     {
@@ -151,11 +170,11 @@ class ServerRequest
     }
 
     /**
-     * Get a server key from the request server array
-     * 
-     * @param string|null $key 
-     * @return string|array 
-     * @throws BadRequestException 
+     * Get a server key from the request server array.
+     *
+     * @throws BadRequestException
+     *
+     * @return string|array
      */
     public function server(string $key = null)
     {
@@ -163,26 +182,26 @@ class ServerRequest
     }
 
     /**
-     * Gets cookie value from the user provided name
-     * 
-     * @param string $name 
-     * @return string|array 
-     * 
-     * @throws BadRequestException 
+     * Gets cookie value from the user provided name.
+     *
+     * @param string $name
+     *
+     * @throws BadRequestException
+     *
+     * @return string|array
      */
     public function cookie(string $name = null)
     {
-        return is_string($name) ? $this->internal->cookies->get($name) : $this->internal->cookies->all();
+        return \is_string($name) ? $this->internal->cookies->get($name) : $this->internal->cookies->all();
     }
 
     /**
-     * Returns the value of the request query parameters
-     * 
-     * @param string|null $name 
+     * Returns the value of the request query parameters.
+     *
+     * @throws SuspiciousOperationException
+     * @throws ConflictingHeadersException
+     *
      * @return mixed
-     * 
-     * @throws SuspiciousOperationException 
-     * @throws ConflictingHeadersException 
      */
     public function query(string $name = null)
     {
@@ -190,58 +209,55 @@ class ServerRequest
     }
 
     /**
-     * Query for value from request parsed body
-     * 
-     * @param string|null $name
-     * 
-     * @return mixed 
+     * Query for value from request parsed body.
+     *
+     * @return mixed
      */
     public function input(string $name = null)
     {
-        $input = array_merge($this->internal->getInputSource()->all() ?? [],$this->internal->query->all() ?? []);
+        $input = array_merge($this->internal->getInputSource()->all() ?? [], $this->internal->query->all() ?? []);
+
         return $name ? Arr::get($input, $name) : $input;
     }
 
-
     /**
-     * Returns an array containing all request input or user provided keys
-     * 
-     * @param array ...$keys 
-     * @return array 
-     * @throws SuspiciousOperationException 
-     * @throws ConflictingHeadersException 
-     * @throws BadRequestException 
+     * Returns an array containing all request input or user provided keys.
+     *
+     * @param array ...$keys
+     *
+     * @throws SuspiciousOperationException
+     * @throws ConflictingHeadersException
+     * @throws BadRequestException
+     *
+     * @return array
      */
     public function all($keys = [])
     {
-        $input = array_merge($this->internal->getInputSource()->all() ?? [],$this->internal->query->all() ?? []);
+        $input = array_merge($this->internal->getInputSource()->all() ?? [], $this->internal->query->all() ?? []);
         $output = [];
-        foreach (is_array($keys) ? $keys : func_get_args() as $key) {
+        foreach (\is_array($keys) ? $keys : \func_get_args() as $key) {
             Arr::set($output, $key, Arr::get($input, $key));
         }
+
         return $output;
     }
 
-    public function __clone()
-    {
-        $this->internal = clone $this->internal;
-    }
-
     /**
-     * @return bool 
+     * @return bool
      */
     private function throwIfNotExcepted()
     {
         if (!($this->internal instanceof HttpFoundationRequest || $this->internal instanceof Request)) {
-            throw new InvalidArgumentException('Not supported request instance');
+            throw new \InvalidArgumentException('Not supported request instance');
         }
     }
 
     /**
-     * Creates server request from globals
-     * 
-     * @return HttpFoundationRequest 
-     * @throws InvalidArgumentException 
+     * Creates server request from globals.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return HttpFoundationRequest
      */
     private function createFromServerGlobals()
     {

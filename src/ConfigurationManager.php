@@ -1,6 +1,17 @@
 <?php
 
-namespace Drewlabs\Packages\Http;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http;
 
 use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Core\Helpers\Reflector;
@@ -29,7 +40,7 @@ class ConfigurationManager
     }
 
     /**
-     * @return static 
+     * @return static
      */
     public static function getInstance()
     {
@@ -48,51 +59,40 @@ class ConfigurationManager
             return array_merge($this->config ?? [], []);
         }
         $value = Arr::get($this->config, $key, $default);
+
         return null === $value ? ($default instanceof \Closure ? $default() : $default) : $value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function offsetExists($offset)
     {
         return null !== Arr::get($offset, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function offsetGet($offset)
     {
         return $this->get($offset, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function offsetSet($offset, $value)
     {
         throw new \RuntimeException('Configuration manager class is a readonly class, operations changing the class state are not allowed');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function offsetUnset($offset)
     {
         throw new \RuntimeException('Configuration manager class is a readonly class, operations changing the class state are not allowed');
     }
 
     /**
-     * Create and initialize the configuration from an array
+     * Create and initialize the configuration from an array.
      *
-     * @param array $config
      * @return static
      */
     public static function configure(array $config)
     {
-        $self = Reflector::propertySetter('config', $config ?? [])(new static);
+        $self = Reflector::propertySetter('config', $config ?? [])(new static());
         static::$instance = $self;
+
         return $self;
     }
 }

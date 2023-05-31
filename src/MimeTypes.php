@@ -2,11 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Drewlabs\Packages\Http;
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http;
 
 final class MimeTypes
 {
-    const MIME_TYPES = [
+    public const MIME_TYPES = [
         '1km' => 'application/vnd.1000minds.decision-model+xml',
         '3dml' => 'text/vnd.in3d.3dml',
         '3ds' => 'image/x-3ds',
@@ -1216,11 +1225,9 @@ final class MimeTypes
     ];
 
     /**
-     * Resolve mime type from extension string
-     * 
-     * @param string $extension
-     * 
-     * @return string|null 
+     * Resolve mime type from extension string.
+     *
+     * @return string|null
      */
     public static function get(string $extension)
     {
@@ -1228,11 +1235,9 @@ final class MimeTypes
     }
 
     /**
-     * Resolve extension from provided mime type
-     * 
-     * @param string $mime
-     * 
-     * @return string|null 
+     * Resolve extension from provided mime type.
+     *
+     * @return string|null
      */
     public static function getExtension(string $mime)
     {

@@ -12,7 +12,7 @@ By default providers are automatically registered when running Laravel applicati
 // bootstrap/app.php
 // ...
 // Register the HttpService provider
-$app->register(Drewlabs\Packages\Http\HttpServiceProvider::class);
+$app->register(Drewlabs\Laravel\Http\HttpServiceProvider::class);
 // ...
 ```
 
@@ -28,7 +28,7 @@ To use the cors middleware in your application add the following code to your ke
     // ...
     protected $middleware = [
         // ...
-        \Drewlabs\Packages\Http\Middleware\Cors::class,
+        \Drewlabs\Laravel\Http\Middleware\Cors::class,
     ];
 ```
 
@@ -39,7 +39,7 @@ To use the cors middleware in your application add the following code to your ke
 
     $app->middleware([
         // Other globally registered middlewares...
-        \Drewlabs\Packages\Http\Middleware\Cors::class,
+        \Drewlabs\Laravel\Http\Middleware\Cors::class,
     ]);
     // ...
 ```
@@ -59,7 +59,7 @@ Note: Laravel already provide implementation for such case. But if you still wan
     // ...
     protected $middleware = [
         // ...
-        \Drewlabs\Packages\Http\Middleware\EmptyStringToNull::class,
+        \Drewlabs\Laravel\Http\Middleware\EmptyStringToNull::class,
     ];
 ```
 
@@ -70,7 +70,7 @@ Note: Laravel already provide implementation for such case. But if you still wan
 
     $app->middleware([
         // Other globally registered middlewares...
-        \Drewlabs\Packages\Http\Middleware\EmptyStringToNull::class,
+        \Drewlabs\Laravel\Http\Middleware\EmptyStringToNull::class,
     ]);
     // ...
 ```

@@ -1,43 +1,47 @@
 <?php
 
-namespace Drewlabs\Packages\Http\Factory;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http\Factory;
 
 use Drewlabs\Http\Factory\Psr\PsrRequestFactoryInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+
+use const UPLOAD_ERR_NO_FILE;
 
 class PsrRequestFactory implements PsrRequestFactoryInterface
 {
     /**
-     * 
      * @var ServerRequestFactoryInterface
      */
     private $serverRequestFactory;
 
     /**
-     * 
      * @var StreamFactoryInterface
      */
     private $streamFactory;
 
     /**
-     * 
      * @var UploadedFileFactoryInterface
      */
     private $uploadedFileFactory;
 
     /**
-     * Creates new class instance
-     * 
-     * @param ServerRequestFactoryInterface $serverRequestFactory 
-     * @param StreamFactoryInterface $streamFactory 
-     * @param UploadedFileFactoryInterface $uploadedFileFactory 
+     * Creates new class instance.
      */
     public function __construct(
         ServerRequestFactoryInterface $serverRequestFactory,
@@ -51,13 +55,13 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
 
     /**
      * {@inheritDoc}
-     * 
-     * @param HttpFoundationRequest $baseRequest 
+     *
+     * @param HttpFoundationRequest $baseRequest
      */
     public function create($baseRequest)
     {
         $uri = $baseRequest->server->get('QUERY_STRING', '');
-        $uri = $baseRequest->getSchemeAndHttpHost() . $baseRequest->getBaseUrl() . $baseRequest->getPathInfo() . ('' !== $uri ? '?' . $uri : '');
+        $uri = $baseRequest->getSchemeAndHttpHost().$baseRequest->getBaseUrl().$baseRequest->getPathInfo().('' !== $uri ? '?'.$uri : '');
 
         $request = $this->serverRequestFactory->createServerRequest($baseRequest->getMethod(), $uri, $baseRequest->server->all());
 
@@ -76,26 +80,25 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
     }
 
     /**
-     *
      * @return array
      */
     /**
      * Converts framework uploaded files array to the PSR one.
-     * 
-     * @param array $uploadedFiles 
-     * @return array 
-     * @throws InvalidArgumentException 
-     * @throws RuntimeException 
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     *
+     * @return array
      */
     private function getFiles(array $uploadedFiles)
     {
         $files = [];
         foreach ($uploadedFiles as $key => $value) {
             if (null === $value) {
-                $files[$key] = $this->uploadedFileFactory->createUploadedFile($this->streamFactory->createStream(), 0, \UPLOAD_ERR_NO_FILE);
+                $files[$key] = $this->uploadedFileFactory->createUploadedFile($this->streamFactory->createStream(), 0, UPLOAD_ERR_NO_FILE);
                 continue;
             }
-            $files[$key] = $value instanceof UploadedFile ? $this->createPsrUploadedFile($value) :  $this->getFiles($value);
+            $files[$key] = $value instanceof UploadedFile ? $this->createPsrUploadedFile($value) : $this->getFiles($value);
         }
 
         return $files;
@@ -103,11 +106,11 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
 
     /**
      * Creates a PSR-7 UploadedFile instance from a framework one.
-     * 
-     * @param UploadedFile $file 
-     * @return UploadedFileInterface 
-     * @throws RuntimeException 
-     * @throws InvalidArgumentException 
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     *
+     * @return UploadedFileInterface
      */
     private function createPsrUploadedFile(UploadedFile $file)
     {
@@ -122,7 +125,6 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
         );
     }
 
-
     private function setHeaders($request, array $headers)
     {
 
@@ -132,6 +134,7 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
             } catch (\InvalidArgumentException $e) {
             }
         }
+
         return $request;
     }
 }

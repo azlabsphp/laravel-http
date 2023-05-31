@@ -1,12 +1,24 @@
 <?php
 
-namespace Drewlabs\Packages\Http\Traits;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http\Traits;
 
 use Illuminate\Http\UploadedFile;
 
 /**
- * @mixin \Drewlabs\Packages\Http\Traits\HasAuthenticatable
- * @mixin \Drewlabs\Packages\Http\Traits\AuthorizeRequest
+ * @mixin \Drewlabs\Laravel\Http\Traits\HasAuthenticatable
+ * @mixin \Drewlabs\Laravel\Http\Traits\AuthorizeRequest
+ *
  * @property \Illuminate\Http\Request $request
  */
 trait InteractsWithServerRequest
@@ -30,7 +42,7 @@ trait InteractsWithServerRequest
      */
     public static function new($attributes = [])
     {
-        return (new static)->merge($attributes ?? []);
+        return (new static())->merge($attributes ?? []);
     }
 
     /**
@@ -41,48 +53,45 @@ trait InteractsWithServerRequest
     public function set(array $values = [])
     {
         $this->request = $this->request->replace($values);
+
         return $this;
     }
 
     /**
-     * Copy the current object modifying the body attribute
-     * 
-     * @param array $values 
-     * 
-     * @return self 
+     * Copy the current object modifying the body attribute.
+     *
+     * @return self
      */
     public function withBody(array $values = [])
     {
         $self = clone $this;
         $self->set($values ?? []);
+
         return $self;
     }
 
     /**
      * Merge the object inputs with some new values provided.
-     * 
+     *
      * **Note** By default, the merge method, return a modified
      * copy of the object. To modify object internal state instead,
      * pass `true` as second parameter to the merge call `merge([...], true)`
      * or call the `update([...])` to modify the object internal state
-     * 
-     * @param array $values 
-     * @param bool $mutate 
-     * @return self 
+     *
+     * @return self
      */
     public function merge(array $values = [], bool $mutate = false)
     {
         $self = $mutate ? $this : clone $this;
         $self->request->merge($values);
+
         return $self;
     }
 
     /**
-     * Update object internal state with the provided values
-     * 
-     * @param array $values
-     * 
-     * @return self 
+     * Update object internal state with the provided values.
+     *
+     * @return self
      */
     public function update(array $values = [])
     {
@@ -157,7 +166,6 @@ trait InteractsWithServerRequest
     /**
      * Determine if the uploaded data contains a file with matching key.
      *
-     * @param  string  $key
      * @return bool
      */
     public function hasFile(string $key)

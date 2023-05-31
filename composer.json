@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Drewlabs\\Packages\\Http\\": "src/"
+            "Drewlabs\\Laravel\\Http\\": "src/"
         },
         "files": [
             "helpers.php"
@@ -32,13 +32,13 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Drewlabs\\Packages\\Http\\Tests\\": "tests/"
+            "Drewlabs\\Laravel\\Http\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Drewlabs\\Packages\\Http\\ServiceProvider"
+                "Drewlabs\\Laravel\\Http\\ServiceProvider"
             ]
         }
     },

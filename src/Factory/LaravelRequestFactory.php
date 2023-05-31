@@ -1,6 +1,17 @@
 <?php
 
-namespace Drewlabs\Packages\Http\Factory;
+declare(strict_types=1);
+
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http\Factory;
 
 use Drewlabs\Http\Factory\RequestFactoryInterface;
 use Illuminate\Http\Request;
@@ -10,11 +21,10 @@ use Psr\Http\Message\UriInterface;
 
 class LaravelRequestFactory implements RequestFactoryInterface
 {
-
     /**
      * {@inheritDoc}
-     * 
-     * @return Request 
+     *
+     * @return Request
      */
     public function create(ServerRequestInterface $psrRequest, bool $streamed = false)
     {
@@ -27,7 +37,7 @@ class LaravelRequestFactory implements RequestFactoryInterface
             $server['REQUEST_URI'] = $uri->getPath();
             $server['QUERY_STRING'] = $uri->getQuery();
             if ('' !== $server['QUERY_STRING']) {
-                $server['REQUEST_URI'] .= '?' . $server['QUERY_STRING'];
+                $server['REQUEST_URI'] .= '?'.$server['QUERY_STRING'];
             }
             if ('https' === $uri->getScheme()) {
                 $server['HTTPS'] = 'on';
@@ -51,10 +61,17 @@ class LaravelRequestFactory implements RequestFactoryInterface
     }
 
     /**
+     * Gets a temporary file path.
+     *
+     * @return string
+     */
+    protected function getTemporaryPath()
+    {
+        return tempnam(sys_get_temp_dir(), uniqid('drewlabs', true));
+    }
+
+    /**
      * Converts to the input array to $_FILES structure.
-     * 
-     * @param array $uploadedFiles 
-     * @return array 
      */
     private function getFiles(array $uploadedFiles): array
     {
@@ -68,24 +85,13 @@ class LaravelRequestFactory implements RequestFactoryInterface
 
     /**
      * Creates framework UploadedFile instance from PSR-7 ones.
-     * 
-     * @param UploadedFileInterface $psrUploadedFile 
-     * @return Drewlabs\Packages\Http\Factory\UploadedFile 
+     *
+     * @return Drewlabs\Laravel\Http\Factory\UploadedFile
      */
     private function createUploadedFile(UploadedFileInterface $psrUploadedFile): UploadedFile
     {
         return new UploadedFile($psrUploadedFile, function () {
             return $this->getTemporaryPath();
         });
-    }
-
-    /**
-     * Gets a temporary file path.
-     *
-     * @return string
-     */
-    protected function getTemporaryPath()
-    {
-        return tempnam(sys_get_temp_dir(), uniqid('drewlabs', true));
     }
 }

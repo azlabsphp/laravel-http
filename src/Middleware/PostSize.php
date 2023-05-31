@@ -1,33 +1,40 @@
 <?php
 
-namespace Drewlabs\Packages\Http\Middleware;
+declare(strict_types=1);
 
-use Closure;
-use Drewlabs\Packages\Http\Exceptions\HttpException;
-
-/**
- * @package Drewlabs\Packages\Http\Middleware
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
+namespace Drewlabs\Laravel\Http\Middleware;
+
+use Drewlabs\Laravel\Http\Exceptions\HttpException;
+
 final class PostSize
 {
     /**
      * Handle an incoming request.
-     * 
+     *
      * @template TResponse
      *
-     * @param  mixed  $request
-     * @param  \Closure  $next
-     * @param int $size
-     * 
-     * @return TResponse
+     * @param mixed $request
+     * @param int   $size
      *
      * @throws HttpException
+     *
+     * @return TResponse
      */
-    public function handle($request, Closure $next, int $size = null)
+    public function handle($request, \Closure $next, int $size = null)
     {
         if (($max = $size ?? $this->getPostMaxSize()) > 0 && $request->server('CONTENT_LENGTH') > $max) {
             throw new HttpException(413);
         }
+
         return $next($request);
     }
 
@@ -38,7 +45,7 @@ final class PostSize
      */
     private function getPostMaxSize()
     {
-        if (is_numeric($postMaxSize = ini_get('post_max_size'))) {
+        if (is_numeric($postMaxSize = \ini_get('post_max_size'))) {
             return (int) $postMaxSize;
         }
         $metric = strtoupper(substr($postMaxSize, -1));

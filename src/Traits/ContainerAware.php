@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Drewlabs package.
+ * This file is part of the drewlabs namespace.
  *
  * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
  *
@@ -11,24 +11,23 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Drewlabs\Packages\Http\Traits;
+namespace Drewlabs\Laravel\Http\Traits;
 
-use Closure;
 use Illuminate\Container\Container;
 use Psr\Container\ContainerInterface;
 
 trait ContainerAware
 {
     /**
-     * Create an abstract implementation from framework context
+     * Create an abstract implementation from framework context.
      *
      * @param mixed $abstract
-     * 
-     * @return Closure
+     *
+     * @return \Closure
      */
     protected static function createResolver($abstract = null)
     {
-        /**
+        /*
          * @param ContainerInterface|null $context
          * @return mixed
          */
@@ -36,6 +35,7 @@ trait ContainerAware
             if ($context) {
                 return null === $abstract ? $context : $context->get($abstract);
             }
+
             return null === $abstract ? Container::getInstance() : Container::getInstance()->make($abstract);
         };
     }

@@ -1,10 +1,20 @@
 <?php
 
-namespace Drewlabs\Packages\Http;
+declare(strict_types=1);
 
-use Drewlabs\Packages\Http\Traits\HttpMessageTrait;
+/*
+ * This file is part of the drewlabs namespace.
+ *
+ * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Drewlabs\Laravel\Http;
+
+use Drewlabs\Laravel\Http\Traits\HttpMessageTrait;
 use Illuminate\Http\Response as HttpResponse;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class Response
@@ -17,9 +27,9 @@ class Response
     private $internal;
 
     /**
-     * Creates new class instance
-     * 
-     * @param HttpResponse|HttpFoundationResponse|self $response 
+     * Creates new class instance.
+     *
+     * @param HttpResponse|HttpFoundationResponse|self $response
      */
     public function __construct($response)
     {
@@ -30,14 +40,16 @@ class Response
     public function setHeader(string $key, $value)
     {
         $this->internal->headers->set($key, $value, true);
+
         return $this;
     }
 
     /**
-     * Wrap http foundation response into the current response
-     * 
-     * @param mixed $response 
-     * @return Response 
+     * Wrap http foundation response into the current response.
+     *
+     * @param mixed $response
+     *
+     * @return Response
      */
     public static function wrap($response)
     {
@@ -45,9 +57,9 @@ class Response
     }
 
     /**
-     * Return the wrapped response object
-     * 
-     * @return HttpResponse|HttpFoundationResponse 
+     * Return the wrapped response object.
+     *
+     * @return HttpResponse|HttpFoundationResponse
      */
     public function unwrap()
     {
@@ -62,7 +74,7 @@ class Response
     private function throwIfNotExpected()
     {
         if (!($this->internal instanceof HttpResponse || $this->internal instanceof HttpFoundationResponse)) {
-            throw new InvalidArgumentException('Not supported response instance');
+            throw new \InvalidArgumentException('Not supported response instance');
         }
     }
 }

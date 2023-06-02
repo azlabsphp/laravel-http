@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http;
 
+use BadMethodCallException;
 use Drewlabs\Laravel\Http\Traits\HttpMessageTrait;
+use Error;
 use Illuminate\Http\Response as HttpResponse;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
@@ -22,24 +24,19 @@ class Response
     use HttpMessageTrait;
 
     /**
-     * @var HttpResponse|HttpFoundationResponse
-     */
-    private $internal;
-
-    /**
      * Creates new class instance.
      *
      * @param HttpResponse|HttpFoundationResponse|self $response
      */
     public function __construct($response)
     {
-        $this->internal = $response instanceof self ? $response->unwrap() : $response;
+        $this->message = $response instanceof self ? $response->unwrap() : $response;
         $this->throwIfNotExpected();
     }
 
     public function setHeader(string $key, $value)
     {
-        $this->internal->headers->set($key, $value, true);
+        $this->message->headers->set($key, $value, true);
 
         return $this;
     }
@@ -53,7 +50,7 @@ class Response
      */
     public static function wrap($response)
     {
-        return new self($response);
+        return new static($response);
     }
 
     /**
@@ -63,18 +60,31 @@ class Response
      */
     public function unwrap()
     {
-        return $this->internal;
+        return $this->message;
     }
 
     public function getStatusCode()
     {
-        return $this->internal->getStatusCode();
+        return $this->message->getStatusCode();
     }
 
     private function throwIfNotExpected()
     {
-        if (!($this->internal instanceof HttpResponse || $this->internal instanceof HttpFoundationResponse)) {
+        if (!($this->message instanceof HttpResponse || $this->message instanceof HttpFoundationResponse)) {
             throw new \InvalidArgumentException('Not supported response instance');
         }
+    }
+
+    // Proxy implementation
+    /**
+     * @param mixed $name 
+     * @param array|mixed $arguments 
+     * @return mixed 
+     * @throws Error 
+     * @throws BadMethodCallException 
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->proxy($this->message, $name, $arguments);
     }
 }

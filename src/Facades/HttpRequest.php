@@ -35,7 +35,7 @@ class HttpRequest
     public static function __callStatic($name, $arguments)
     {
         if (empty($arguments)) {
-            throw new \BadMethodCallException(self::class.' is facade to psr7, symfony, etc... request types, therefor calling method statically requires a least first parameter to be a supported request type');
+            throw new \BadMethodCallException(static::class.' is facade to psr7, symfony, etc... request types, therefor calling method statically requires a least first parameter to be a supported request type');
         }
 
         return (new ServerRequest($arguments[0]))->{$name}(...\array_slice($arguments, 1));

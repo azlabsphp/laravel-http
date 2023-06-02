@@ -13,8 +13,21 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Traits;
 
+use Closure;
+use Error;
+use BadMethodCallException;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+
 trait HttpMessageTrait
 {
+    /**
+     * @var Request|HttpFoundationRequest|HttpFoundationResponse|HttpResponse
+     */
+    private $message;
+
     /**
      * Checks if the HTTP message has a given header.
      *
@@ -32,7 +45,7 @@ trait HttpMessageTrait
      */
     public function getHeaders()
     {
-        return $this->internal->headers->all();
+        return $this->message->headers->all();
     }
 
     /**
@@ -46,7 +59,7 @@ trait HttpMessageTrait
      */
     public function getHeader(string $name, $default = null)
     {
-        return $this->internal->headers->get($name, $default);
+        return $this->message->headers->get($name, $default);
     }
 
     /**
@@ -58,8 +71,40 @@ trait HttpMessageTrait
      */
     public function setHeader(string $header, $value)
     {
-        $this->internal->headers->set($header, $value, true);
+        $this->message->headers->set($header, $value, true);
 
         return $this;
+    }
+
+    /**
+     * Provide a proxy to the message instance
+     * 
+     * @param mixed $object 
+     * @param mixed $method 
+     * @param array $args 
+     * @param Closure|null $default 
+     * @return mixed 
+     * @throws Error 
+     * @throws BadMethodCallException 
+     */
+    public function proxy($object, $method, $args = [], \Closure $default = null)
+    {
+        try {
+            // Call the method on the provided object
+            return $object->{$method}(...$args);
+        } catch (\Error|\BadMethodCallException $e) {
+            // Call the default method if the specified method does not exits
+            if ((null !== $default) && \is_callable($default)) {
+                return $default(...$args);
+            }
+            $pattern = '~^Call to undefined method (?P<class>[^:]+)::(?P<method>[^\(]+)\(\)$~';
+            if (!preg_match($pattern, $e->getMessage(), $matches)) {
+                throw $e;
+            }
+            if ($matches['class'] !== \get_class($object) || $matches['method'] !== $method) {
+                throw $e;
+            }
+            throw new \BadMethodCallException(sprintf('Call to undefined method %s::%s()', static::class, $method));
+        }
     }
 }

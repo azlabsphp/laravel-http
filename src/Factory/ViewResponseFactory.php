@@ -31,7 +31,7 @@ class ViewResponseFactory implements ViewResponseFactoryInterface
      */
     public function __construct(callable $viewResolver = null)
     {
-        $this->factoryResolver = $viewResolver ?? self::useDefault();
+        $this->factoryResolver = $viewResolver ?? static::useDefault();
     }
 
     /**

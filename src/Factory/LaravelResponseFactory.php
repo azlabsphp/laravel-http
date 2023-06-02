@@ -41,7 +41,7 @@ class LaravelResponseFactory implements ResponseFactoryInterface
      */
     public function __construct(callable $factory = null)
     {
-        $this->responseFactory = $factory ?? self::useDefaultFactory();
+        $this->responseFactory = $factory ?? static::useDefaultFactory();
     }
 
     /**

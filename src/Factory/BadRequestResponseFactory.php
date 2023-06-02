@@ -28,7 +28,7 @@ class BadRequestResponseFactory implements BadRequestResponseFactoryInterface
      */
     public function __construct($factory = null)
     {
-        $this->responseFactory = $factory ?? self::useDefaultFactory();
+        $this->responseFactory = $factory ?? static::useDefaultFactory();
     }
 
     /**

@@ -40,11 +40,6 @@ class ServerRequest
     ];
 
     /**
-     * @var Request|HttpFoundationRequest
-     */
-    private $internal;
-
-    /**
      * Creates class instances.
      *
      * @param Request|HttpFoundationRequest|null $request
@@ -53,13 +48,13 @@ class ServerRequest
      */
     public function __construct($request = null)
     {
-        $this->internal = null === $request ? $this->createFromServerGlobals() : ($request instanceof self ? $request->unwrap() : $request);
+        $this->message = null === $request ? static::createFromServerGlobals() : ($request instanceof self ? $request->unwrap() : $request);
         $this->throwIfNotExcepted();
     }
 
     public function __clone()
     {
-        $this->internal = clone $this->internal;
+        $this->message = clone $this->message;
     }
 
     /**
@@ -73,7 +68,7 @@ class ServerRequest
      */
     public function getPath()
     {
-        $pattern = trim($this->internal->getPathInfo(), '/');
+        $pattern = trim($this->message->getPathInfo(), '/');
 
         return '' === $pattern ? '/' : $pattern;
     }
@@ -89,7 +84,7 @@ class ServerRequest
         $self = clone $this;
 
         // Set the method value on the request instance
-        $self->internal->setMethod($method);
+        $self->message->setMethod($method);
 
         // Return the cloned instance
         return $self;
@@ -106,7 +101,7 @@ class ServerRequest
      */
     public function getMethod()
     {
-        return $this->internal->getMethod();
+        return $this->message->getMethod();
     }
 
     /**
@@ -132,7 +127,7 @@ class ServerRequest
      */
     public static function wrap($request)
     {
-        return new self($request);
+        return new static($request);
     }
 
     /**
@@ -142,7 +137,7 @@ class ServerRequest
      */
     public function unwrap()
     {
-        return $this->internal;
+        return $this->message;
     }
 
     /**
@@ -166,7 +161,7 @@ class ServerRequest
      */
     public function ips(): array
     {
-        return $this->internal->getClientIps();
+        return $this->message->getClientIps();
     }
 
     /**
@@ -178,7 +173,7 @@ class ServerRequest
      */
     public function server(string $key = null)
     {
-        return $key ? $this->internal->server->get($key) : $this->internal->server->all();
+        return $key ? $this->message->server->get($key) : $this->message->server->all();
     }
 
     /**
@@ -192,7 +187,7 @@ class ServerRequest
      */
     public function cookie(string $name = null)
     {
-        return \is_string($name) ? $this->internal->cookies->get($name) : $this->internal->cookies->all();
+        return \is_string($name) ? $this->message->cookies->get($name) : $this->message->cookies->all();
     }
 
     /**
@@ -205,7 +200,7 @@ class ServerRequest
      */
     public function query(string $name = null)
     {
-        return $name ? Arr::get($this->internal->query->all() ?? [], $name) : ($this->internal->query->all() ?? []);
+        return $name ? Arr::get($this->message->query->all() ?? [], $name) : ($this->message->query->all() ?? []);
     }
 
     /**
@@ -215,7 +210,7 @@ class ServerRequest
      */
     public function input(string $name = null)
     {
-        $input = array_merge($this->internal->getInputSource()->all() ?? [], $this->internal->query->all() ?? []);
+        $input = array_merge($this->message->getInputSource()->all() ?? [], $this->message->query->all() ?? []);
 
         return $name ? Arr::get($input, $name) : $input;
     }
@@ -233,7 +228,7 @@ class ServerRequest
      */
     public function all($keys = [])
     {
-        $input = array_merge($this->internal->getInputSource()->all() ?? [], $this->internal->query->all() ?? []);
+        $input = array_merge($this->message->getInputSource()->all() ?? [], $this->message->query->all() ?? []);
         $output = [];
         foreach (\is_array($keys) ? $keys : \func_get_args() as $key) {
             Arr::set($output, $key, Arr::get($input, $key));
@@ -247,7 +242,7 @@ class ServerRequest
      */
     private function throwIfNotExcepted()
     {
-        if (!($this->internal instanceof HttpFoundationRequest || $this->internal instanceof Request)) {
+        if (!($this->message instanceof HttpFoundationRequest || $this->message instanceof Request)) {
             throw new \InvalidArgumentException('Not supported request instance');
         }
     }
@@ -259,8 +254,20 @@ class ServerRequest
      *
      * @return HttpFoundationRequest
      */
-    private function createFromServerGlobals()
+    public static function createFromServerGlobals()
     {
         return HttpFoundationRequest::createFromGlobals();
+    }
+
+    /**
+     * @param mixed $name 
+     * @param array|mixed $arguments 
+     * @return mixed 
+     * @throws Error 
+     * @throws BadMethodCallException 
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->proxy($this->message, $name, $arguments);
     }
 }

@@ -1231,7 +1231,7 @@ final class MimeTypes
      */
     public static function get(string $extension)
     {
-        return self::MIME_TYPES[strtolower($extension)] ?? null;
+        return static::MIME_TYPES[strtolower($extension)] ?? null;
     }
 
     /**
@@ -1241,6 +1241,6 @@ final class MimeTypes
      */
     public static function getExtension(string $mime)
     {
-        return array_flip(self::MIME_TYPES)[strtolower($mime)] ?? null;
+        return array_flip(static::MIME_TYPES)[strtolower($mime)] ?? null;
     }
 }

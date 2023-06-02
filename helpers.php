@@ -70,14 +70,9 @@ if (!function_exists('drewlabs_create_psr7_request')) {
      */
     function drewlabs_create_psr7_request(Request $request = null)
     {
-        $request = $request ?? Request::createFromGlobals();
+        $request = $request ?? ServerRequest::createFromServerGlobals();
         $psr17Factory = new Psr17Factory();
-        $psrHttpFactory = new PsrRequestFactory(
-            $psr17Factory,
-            $psr17Factory,
-            $psr17Factory
-        );
-
+        $psrHttpFactory = new PsrRequestFactory($psr17Factory, $psr17Factory, $psr17Factory);
         return $psrHttpFactory->create($request);
     }
 }

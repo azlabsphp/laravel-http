@@ -9,12 +9,10 @@
             "email": "asmyns.platonnas29@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": ">=7.2",
-        "illuminate/http": "^7.0|^8.0|^9.0",
-        "illuminate/container": "^7.0|^8.0|^9.0",
+        "illuminate/http": "^8.0|^9.0|^10.0",
+        "illuminate/container": "^8.0|^9.0|^10.0",
         "psr/http-message": "^1.0|^2.0",
         "drewlabs/http-contracts": "^0.2",
         "drewlabs/core-helpers": "^0.2",
@@ -52,6 +50,9 @@
         "drewlabs/validation": "^0.2.3"
     },
     "config": {
-        "optimize-autoloader": true
-    }
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

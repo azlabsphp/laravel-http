@@ -15,6 +15,7 @@ namespace Drewlabs\Laravel\Http\Middleware;
 
 use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Http\Exceptions\HttpException;
+use Drewlabs\Laravel\Http\ServerRequest;
 
 class TrustedIpAddress
 {
@@ -27,11 +28,10 @@ class TrustedIpAddress
      */
     public function handle($request, \Closure $next, ...$addresses)
     {
-        $addresses = null !== $request->headers->get('X-Real-IP') ? Arr::wrap($request->headers->get('X-Real-IP')) : $request->ips();
-        if (empty(array_intersect($addresses, $addresses))) {
+        $serverRequest = new ServerRequest($request);
+        if (empty(array_intersect(array_merge($serverRequest->ips() ?? [], [$serverRequest->ip()]), $addresses))) {
             throw HttpException::Unauthorized($request);
         }
-
         return $next($request);
     }
 }

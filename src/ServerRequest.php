@@ -149,9 +149,9 @@ class ServerRequest
      */
     public function ip()
     {
-        $request = \is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
+        $ipAddresses = \is_array($addresses = $this->ips()) ? Arr::first($addresses) : $addresses;
 
-        return empty($request) ? $this->getHeader('X-Real-IP') : $request;
+        return empty($ipAddresses) ? $this->getHeader('X-Real-IP') : $ipAddresses;
     }
 
     /**

@@ -15,6 +15,9 @@ namespace Drewlabs\Laravel\Http\Traits;
 
 use Drewlabs\Contracts\Auth\Authenticatable;
 
+/**
+ * @method mixed __call(string $name, $arguments)
+ */
 trait HasAuthenticatable
 {
     /**

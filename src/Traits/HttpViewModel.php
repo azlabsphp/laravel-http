@@ -18,6 +18,9 @@ use Drewlabs\Validation\Traits\PreparesInputs;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 
+/**
+ * @method mixed __call(string $name, $arguments)
+ */
 trait HttpViewModel
 {
     use ArrayAccessible;

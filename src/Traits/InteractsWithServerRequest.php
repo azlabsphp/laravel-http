@@ -20,6 +20,8 @@ use Illuminate\Http\UploadedFile;
  * @mixin \Drewlabs\Laravel\Http\Traits\AuthorizeRequest
  *
  * @property \Illuminate\Http\Request $request
+ * 
+ * @method mixed __call(string $name, $arguments)
  */
 trait InteractsWithServerRequest
 {

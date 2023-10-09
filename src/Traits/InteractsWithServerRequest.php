@@ -38,7 +38,7 @@ trait InteractsWithServerRequest
      *
      * @param array $attributes
      *
-     * @return self
+     * @return static
      */
     public static function new($attributes = [])
     {
@@ -48,7 +48,7 @@ trait InteractsWithServerRequest
     /**
      * Set the attributes to validate on the validatable class.
      *
-     * @return self
+     * @return static
      */
     public function set(array $values = [])
     {
@@ -60,7 +60,7 @@ trait InteractsWithServerRequest
     /**
      * Copy the current object modifying the body attribute.
      *
-     * @return self
+     * @return static
      */
     public function withBody(array $values = [])
     {
@@ -78,7 +78,7 @@ trait InteractsWithServerRequest
      * pass `true` as second parameter to the merge call `merge([...], true)`
      * or call the `update([...])` to modify the object internal state
      *
-     * @return self
+     * @return static
      */
     public function merge(array $values = [], bool $mutate = false)
     {
@@ -91,7 +91,7 @@ trait InteractsWithServerRequest
     /**
      * Update object internal state with the provided values.
      *
-     * @return self
+     * @return static
      */
     public function update(array $values = [])
     {

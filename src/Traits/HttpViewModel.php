@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Drewlabs\Laravel\Http\Traits;
 
 use Drewlabs\Core\Helpers\Str;
-use Drewlabs\Validation\Traits\ArrayAccessible;
 use Drewlabs\Validation\Traits\PreparesInputs;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;

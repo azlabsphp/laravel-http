@@ -1,1 +1,5 @@
 # Changelogs
+
+## [v0.2.20] 2023-10-09
+
+- Fixed bug with Accessible from validation library by implementation a dedicated Accessible trait for this library

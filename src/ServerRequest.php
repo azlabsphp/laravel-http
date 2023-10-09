@@ -76,7 +76,7 @@ class ServerRequest
     /**
      * Override the HTTP verb which is used to send the message.
      *
-     * @return self
+     * @return static
      */
     public function withMethod(string $method)
     {
@@ -123,7 +123,7 @@ class ServerRequest
      *
      * @param Request|HttpFoundationRequest $request
      *
-     * @return self
+     * @return static
      */
     public static function wrap($request)
     {

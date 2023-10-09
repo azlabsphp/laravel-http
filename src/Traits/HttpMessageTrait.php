@@ -67,7 +67,7 @@ trait HttpMessageTrait
      *
      * @param mixed $value
      *
-     * @return self
+     * @return static
      */
     public function setHeader(string $header, $value)
     {

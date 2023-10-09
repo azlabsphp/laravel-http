@@ -20,7 +20,7 @@ class GuessGuard
     /**
      * Create a new guard instance.
      *
-     * @return self
+     * @return static
      */
     public function __construct()
     {

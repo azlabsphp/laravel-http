@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Traits;
 
+use Drewlabs\Laravel\Http\MimeTypes;
 use Illuminate\Http\UploadedFile;
 
 /**
@@ -153,6 +154,11 @@ trait InteractsWithServerRequest
     public function file(string $key, $value = null)
     {
         if (null !== $value) {
+            // case the provided file is an instance of splfileinfo
+            // we create Symfony uploaded file instance from the object
+            if ($value instanceof \SplFileInfo) {
+                $value = UploadedFile::createFromBase(new \Symfony\Component\HttpFoundation\File\UploadedFile($value->getPathname(), $value->getBasename(), MimeTypes::get($value->getExtension())));
+            }
             $this->request->files->set($key, $value);
         }
         return $this->request->file($key);

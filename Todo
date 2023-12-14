@@ -1,1 +1,4 @@
 # Todos
+
+- Add a middleware that adds Location Header to request that creates new resources []
+- Add middleware that lookup in framework's router to find the supported methods for a given resource []

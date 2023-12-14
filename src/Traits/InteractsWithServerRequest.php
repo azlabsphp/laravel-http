@@ -150,8 +150,11 @@ trait InteractsWithServerRequest
      *
      * @return UploadedFile[]|UploadedFile
      */
-    public function file(string $key)
+    public function file(string $key, $value = null)
     {
+        if (null !== $value) {
+            $this->request->files->set($key, $value);
+        }
         return $this->request->file($key);
     }
 

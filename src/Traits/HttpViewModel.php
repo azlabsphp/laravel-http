@@ -117,18 +117,4 @@ trait HttpViewModel
         }
 
     }
-
-    /**
-     * @deprecated Use `bootInstance()` instead
-     *
-     * Set curren instance attributes from framework request attributes
-     *
-     * @param Request $request
-     *
-     * @return void
-     */
-    private function buildInstanceFromRequestAttibutes($request = null)
-    {
-        $this->bootInstance();
-    }
 }

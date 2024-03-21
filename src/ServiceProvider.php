@@ -47,7 +47,6 @@ class ServiceProvider extends BaseServiceProvider
         // Register cors interface
         $this->app->bind(CorsInterface::class, static function ($app) {
             $config = $app['config'];
-
             return new Cors(ConfigurationManager::getInstance()->get('cors', $config->get('http.cors')) ?? ConfigurationBuilder::new()->toArray());
         });
 
@@ -64,9 +63,6 @@ class ServiceProvider extends BaseServiceProvider
         // Register an anonymous guard, that allow to run application without
         // worrying about any undefined application guard issues
         $this->registerGuessGuard();
-
-        // Register response handlers types
-        $this->registerResponseHandlers();
     }
 
     private function registerGuessGuard()
@@ -78,16 +74,6 @@ class ServiceProvider extends BaseServiceProvider
                 });
             });
         });
-    }
-
-    private function registerResponseHandlers()
-    {
-        if (!$this->app->bound(\Drewlabs\Laravel\Http\Contracts\ResponseHandler::class)) {
-            $this->app->bind(\Drewlabs\Laravel\Http\Contracts\ResponseHandler::class, JsonResponseHandler::class);
-        }
-        if (!$this->app->bound(\Drewlabs\Http\ResponseHandler::class)) {
-            $this->app->bind(\Drewlabs\Http\ResponseHandler::class, JsonResponseHandler::class);
-        }
     }
 
     /**

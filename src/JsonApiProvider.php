@@ -40,27 +40,27 @@ class JsonApiProvider
      */
     public static function provide(Container $app)
     {
-        $jsonFactory = static function ($data = null, $status = 200, $headers = []) {
+        $factory = static function ($data = null, $status = 200, $headers = []) {
             return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         };
-        $app->bind(AuthorizationErrorResponseFactoryInterface::class, static function () use ($jsonFactory) {
-            return new AuthorizationErrorResponseFactory($jsonFactory);
+        $app->bind(AuthorizationErrorResponseFactoryInterface::class, static function () use ($factory) {
+            return new AuthorizationErrorResponseFactory($factory);
         });
 
-        $app->bind(BadRequestResponseFactoryInterface::class, static function () use ($jsonFactory) {
-            return new BadRequestResponseFactory($jsonFactory);
+        $app->bind(BadRequestResponseFactoryInterface::class, static function () use ($factory) {
+            return new BadRequestResponseFactory($factory);
         });
 
-        $app->bind(OkResponseFactoryInterface::class, static function () use ($jsonFactory) {
-            return new OkResponseFactory($jsonFactory);
+        $app->bind(OkResponseFactoryInterface::class, static function () use ($factory) {
+            return new OkResponseFactory($factory);
         });
 
-        $app->bind(ServerErrorResponseFactoryInterface::class, static function () use ($jsonFactory) {
-            return new ServerErrorResponseFactory($jsonFactory);
+        $app->bind(ServerErrorResponseFactoryInterface::class, static function () use ($factory) {
+            return new ServerErrorResponseFactory($factory);
         });
 
-        $app->bind(ResponseFactoryInterface::class, static function () use ($jsonFactory) {
-            return new LaravelResponseFactory($jsonFactory);
+        $app->bind(ResponseFactoryInterface::class, static function () use ($factory) {
+            return new LaravelResponseFactory($factory);
         });
 
         // Register JSON response handler

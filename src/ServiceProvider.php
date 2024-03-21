@@ -16,8 +16,8 @@ namespace Drewlabs\Laravel\Http;
 use Drewlabs\Cors\ConfigurationBuilder;
 use Drewlabs\Cors\Cors;
 use Drewlabs\Cors\CorsInterface;
-use Drewlabs\Http\ResponseHandler as HttpResponseHandler;
-use Drewlabs\Laravel\Http\Contracts\ResponseHandler;
+use Drewlabs\Http\Factory\RequestFactoryInterface;
+use Drewlabs\Http\Factory\ViewResponseFactoryInterface;
 use Drewlabs\Laravel\Http\Factory\LaravelRequestFactory;
 use Drewlabs\Laravel\Http\Factory\ViewResponseFactory;
 use Drewlabs\Laravel\Http\Guards\GuessGuard;
@@ -34,7 +34,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__.'/config' => $this->app->basePath('config')], 'drewlabs-http');
+        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http');
     }
 
     /**
@@ -82,11 +82,11 @@ class ServiceProvider extends BaseServiceProvider
 
     private function registerResponseHandlers()
     {
-        if (!$this->app->bound(ResponseHandler::class)) {
-            $this->app->bind(ResponseHandler::class, JsonResponse::class);
+        if (!$this->app->bound(\Drewlabs\Laravel\Http\Contracts\ResponseHandler::class)) {
+            $this->app->bind(\Drewlabs\Laravel\Http\Contracts\ResponseHandler::class, JsonResponseHandler::class);
         }
-        if (!$this->app->bound(HttpResponseHandler::class)) {
-            $this->app->bind(HttpResponseHandler::class, JsonResponse::class);
+        if (!$this->app->bound(\Drewlabs\Http\ResponseHandler::class)) {
+            $this->app->bind(\Drewlabs\Http\ResponseHandler::class, JsonResponseHandler::class);
         }
     }
 

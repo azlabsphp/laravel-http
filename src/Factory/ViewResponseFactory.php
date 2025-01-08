@@ -29,7 +29,7 @@ class ViewResponseFactory implements ViewResponseFactoryInterface
      *
      * @param callable|\Closure():Illuminate\Contracts\View\Factory|null $viewResolver
      */
-    public function __construct(callable $viewResolver = null)
+    public function __construct(?callable $viewResolver = null)
     {
         $this->factoryResolver = $viewResolver ?? static::useDefault();
     }

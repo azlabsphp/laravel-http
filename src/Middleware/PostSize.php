@@ -29,7 +29,7 @@ final class PostSize
      *
      * @return TResponse
      */
-    public function handle($request, \Closure $next, int $size = null)
+    public function handle($request, \Closure $next, ?int $size = null)
     {
         if (($max = $size ?? $this->getPostMaxSize()) > 0 && $request->server('CONTENT_LENGTH') > $max) {
             throw new HttpException(413);

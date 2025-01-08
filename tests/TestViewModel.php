@@ -32,7 +32,7 @@ class TestViewModel implements ViewModel
     /**
      * Creates class instance.
      */
-    public function __construct(Request $request = null)
+    public function __construct(?Request $request = null)
     {
         $this->bootInstance($request);
     }

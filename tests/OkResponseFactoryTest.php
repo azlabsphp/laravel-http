@@ -11,6 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace Drewlabs\Laravel\Http\Tests;
+
 use Drewlabs\Laravel\Http\Factory\OkResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

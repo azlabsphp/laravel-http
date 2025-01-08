@@ -68,7 +68,7 @@ if (!function_exists('drewlabs_create_psr7_request')) {
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    function drewlabs_create_psr7_request(Request $request = null)
+    function drewlabs_create_psr7_request(?Request $request = null)
     {
         $request = $request ?? ServerRequest::createFromServerGlobals();
         $psr17Factory = new Psr17Factory();

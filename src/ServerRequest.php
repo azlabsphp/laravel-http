@@ -171,7 +171,7 @@ class ServerRequest
      *
      * @return string|array
      */
-    public function server(string $key = null)
+    public function server(?string $key = null)
     {
         return $key ? $this->message->server->get($key) : $this->message->server->all();
     }
@@ -185,7 +185,7 @@ class ServerRequest
      *
      * @return string|array
      */
-    public function cookie(string $name = null)
+    public function cookie(?string $name = null)
     {
         return \is_string($name) ? $this->message->cookies->get($name) : $this->message->cookies->all();
     }
@@ -198,7 +198,7 @@ class ServerRequest
      *
      * @return mixed
      */
-    public function query(string $name = null)
+    public function query(?string $name = null)
     {
         return $name ? Arr::get($this->message->query->all() ?? [], $name) : ($this->message->query->all() ?? []);
     }
@@ -208,7 +208,7 @@ class ServerRequest
      *
      * @return mixed
      */
-    public function input(string $name = null)
+    public function input(?string $name = null)
     {
         $input = array_merge($this->message->getInputSource()->all() ?? [], $this->message->query->all() ?? []);
 

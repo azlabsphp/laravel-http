@@ -11,6 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace Drewlabs\Laravel\Http\Tests;
+
 use Drewlabs\Laravel\Http\Factory\LaravelRequestFactory;
 use Drewlabs\Laravel\Http\Tests\TestViewModel;
 use Drewlabs\Psr7\CreatesJSONStream;
@@ -45,7 +47,7 @@ class HttpViewModelTest extends TestCase
     {
         $username = 'JohnDoe';
         $password = 'MyPassword';
-        $request = $this->createRequestInstance(['Authorization' => 'Basic '.base64_encode("$username:$password")]);
+        $request = $this->createRequestInstance(['Authorization' => 'Basic ' . base64_encode("$username:$password")]);
         $view = new TestViewModel($request);
         [$u, $p] = $view->basicAuth();
         $this->assertSame($username, $u);
@@ -54,9 +56,9 @@ class HttpViewModelTest extends TestCase
 
     public function test_has_authenticatable_user_resolver()
     {
-        $user = uniqid('id').time();
+        $user = uniqid('id') . time();
         $password = 'MyPassword';
-        $request = $this->createRequestInstance(['Authorization' => 'Basic '.base64_encode("$user:$password")]);
+        $request = $this->createRequestInstance(['Authorization' => 'Basic ' . base64_encode("$user:$password")]);
         $view = new TestViewModel($request);
         $view = $view->setUserResolver(static function () use ($view) {
             [$user] = $view->basicAuth();
@@ -64,7 +66,6 @@ class HttpViewModelTest extends TestCase
             return $user;
         });
         $this->assertSame($user, $view->user());
-
     }
 
     private function createRequestInstance(array $headers = [])

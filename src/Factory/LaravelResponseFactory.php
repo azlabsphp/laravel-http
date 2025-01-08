@@ -39,7 +39,7 @@ class LaravelResponseFactory implements ResponseFactoryInterface
      *
      * @param callable|\Closure($content = '', $status = 200, array $headers = []): \Symfony\Component\HttpFoundation\Response $factory
      */
-    public function __construct(callable $factory = null)
+    public function __construct(?callable $factory = null)
     {
         $this->responseFactory = $factory ?? static::useDefaultFactory();
     }

@@ -40,7 +40,7 @@ class AuthorizationErrorResponseFactory implements AuthorizationErrorResponseFac
      *
      * @return HttpFoundationResponse|Response
      */
-    public function create($request, \Throwable $exception = null)
+    public function create($request, ?\Throwable $exception = null)
     {
         $request = new ServerRequest($request);
         $message = $request->getMethod().' '.$request->getPath().'  Unauthorized access.'.($exception ? ' [ERROR] : '.$exception->getMessage() : '');

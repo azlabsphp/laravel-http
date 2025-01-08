@@ -108,7 +108,7 @@ trait InteractsWithServerRequest
      *
      * @return array|mixed|null
      */
-    public function get(string $key = null)
+    public function get(?string $key = null)
     {
         return $this->request->input($key);
     }

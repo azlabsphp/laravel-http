@@ -11,6 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace Drewlabs\Laravel\Http\Tests;
+
 use Drewlabs\Laravel\Http\Factory\LaravelResponseFactory;
 use Illuminate\Http\Response as HttpResponse;
 use Nyholm\Psr7\Response;

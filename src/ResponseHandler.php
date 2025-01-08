@@ -49,10 +49,10 @@ final class ResponseHandler implements AbstractResponseHandler
      * Creates `json` response handler class instance.
      */
     public function __construct(
-        OkResponseFactoryInterface $okResponseFactory = null,
-        ResponseFactoryInterface $responseFactory = null,
-        ServerErrorResponseFactoryInterface $serverErrorResponseFactory = null,
-        BadRequestResponseFactoryInterface $badRequestResponseFactory = null
+        ?OkResponseFactoryInterface $okResponseFactory = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?ServerErrorResponseFactoryInterface $serverErrorResponseFactory = null,
+        ?BadRequestResponseFactoryInterface $badRequestResponseFactory = null
     ) {
         $this->okResponseFactory = $okResponseFactory ?? new OkResponseFactory();
         $this->responseFactory = $responseFactory ?? new LaravelResponseFactory();
@@ -65,7 +65,7 @@ final class ResponseHandler implements AbstractResponseHandler
         return $this->responseFactory->create($data, $status, $headers, '1.1');
     }
 
-    public function ok($data, array $errors = null, $success = true)
+    public function ok($data, ?array $errors = null, $success = true)
     {
         return $this->okResponseFactory->create($data, []);
     }

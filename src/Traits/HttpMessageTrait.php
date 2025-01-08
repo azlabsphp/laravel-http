@@ -87,7 +87,7 @@ trait HttpMessageTrait
      * @throws Error 
      * @throws BadMethodCallException 
      */
-    public function proxy($object, $method, $args = [], \Closure $default = null)
+    public function proxy($object, $method, $args = [], ?\Closure $default = null)
     {
         try {
             // Call the method on the provided object

@@ -26,19 +26,13 @@ class_exists(Psr17Factory::class);
 
 class Cors
 {
-    /**
-     * @var CorsInterface
-     */
+    /** @var CorsInterface */
     private $cors;
 
-    /**
-     * @var PsrRequestFactoryInterface
-     */
+    /**  @var PsrRequestFactoryInterface */
     private $psrRequestFactory;
 
-    /**
-     * @var PsrResponseFactoryInterface
-     */
+    /** @var PsrResponseFactoryInterface */
     private $psrResponseFactory;
 
     /**
@@ -49,8 +43,8 @@ class Cors
      */
     public function __construct(
         CorsInterface $cors,
-        PsrRequestFactoryInterface $psrRequestFactory = null,
-        PsrResponseFactoryInterface $psrResponseFactory = null,
+        ?PsrRequestFactoryInterface $psrRequestFactory = null,
+        ?PsrResponseFactoryInterface $psrResponseFactory = null,
     ) {
         $this->cors = $cors;
 

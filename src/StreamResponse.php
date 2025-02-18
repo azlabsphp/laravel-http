@@ -23,24 +23,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StreamResponse extends Response
 {
-    /**
-     * @var StreamInterface
-     */
+    /** @var StreamInterface */
     protected $stream;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $offset;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $maxLength;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $mimeType;
 
     /**

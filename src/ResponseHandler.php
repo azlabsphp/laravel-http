@@ -25,24 +25,16 @@ use Drewlabs\Laravel\Http\Factory\ServerErrorResponseFactory;
 
 final class ResponseHandler implements AbstractResponseHandler
 {
-    /**
-     * @var OkResponseFactoryInterface
-     */
+    /** @var OkResponseFactoryInterface */
     private $okResponseFactory;
 
-    /**
-     * @var ResponseFactoryInterface
-     */
+    /** @var ResponseFactoryInterface */
     private $responseFactory;
 
-    /**
-     * @var ServerErrorResponseFactoryInterface
-     */
+    /** @var ServerErrorResponseFactoryInterface */
     private $serverErrorResponseFactory;
 
-    /**
-     * @var BadRequestResponseFactoryInterface
-     */
+    /** @var BadRequestResponseFactoryInterface */
     private $badRequestResponseFactory;
 
     /**

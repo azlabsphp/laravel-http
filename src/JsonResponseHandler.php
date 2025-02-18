@@ -53,10 +53,10 @@ final class JsonResponseHandler implements ResponseHandler
      * Creates `json` response handler class instance.
      */
     public function __construct(
-        OkResponseFactoryInterface $okResponseFactory = null,
-        ResponseFactoryInterface $responseFactory = null,
-        ServerErrorResponseFactoryInterface $serverErrorResponseFactory = null,
-        BadRequestResponseFactoryInterface $badRequestResponseFactory = null
+        ?OkResponseFactoryInterface $okResponseFactory = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?ServerErrorResponseFactoryInterface $serverErrorResponseFactory = null,
+        ?BadRequestResponseFactoryInterface $badRequestResponseFactory = null
     ) {
         $jsonFactory = static function ($data = null, $status = 200, $headers = []) {
             return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -72,7 +72,7 @@ final class JsonResponseHandler implements ResponseHandler
         return $this->responseFactory->create($data, $status, $headers, '1.1');
     }
 
-    public function ok($data, array $errors = null, $success = true)
+    public function ok($data, ?array $errors = null, $success = true)
     {
         return $this->okResponseFactory->create($data, []);
     }

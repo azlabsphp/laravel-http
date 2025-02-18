@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Exceptions;
 
-use Drewlabs\Http\Exceptions\HttpException as ExceptionsHttpException;
+use Drewlabs\Http\Exceptions\HttpException as Exception;
 
-class HttpException extends ExceptionsHttpException
+class HttpException extends Exception
 {
 }

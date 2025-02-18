@@ -26,9 +26,7 @@ class ServerRequest
 {
     use HttpMessageTrait;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private const TRUSTED_HEADERS = [
         'HTTP_CLIENT_IP',
         'HTTP_X_FORWARDED_FOR',

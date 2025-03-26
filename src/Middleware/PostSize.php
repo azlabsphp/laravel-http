@@ -23,7 +23,6 @@ final class PostSize
      * @template TResponse
      *
      * @param mixed $request
-     * @param int   $size
      *
      * @throws HttpException
      *

@@ -29,7 +29,7 @@ class Cors
     /** @var CorsInterface */
     private $cors;
 
-    /**  @var PsrRequestFactoryInterface */
+    /** @var PsrRequestFactoryInterface */
     private $psrRequestFactory;
 
     /** @var PsrResponseFactoryInterface */
@@ -37,9 +37,6 @@ class Cors
 
     /**
      * Creates class instance.
-     *
-     * @param PsrRequestFactoryInterface  $psrRequestFactory
-     * @param PsrResponseFactoryInterface $psrResponseFactory
      */
     public function __construct(
         CorsInterface $cors,

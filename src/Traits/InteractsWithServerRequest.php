@@ -21,7 +21,7 @@ use Illuminate\Http\UploadedFile;
  * @mixin \Drewlabs\Laravel\Http\Traits\AuthorizeRequest
  *
  * @property \Illuminate\Http\Request $request
- * 
+ *
  * @method mixed __call(string $name, $arguments)
  */
 trait InteractsWithServerRequest
@@ -104,8 +104,6 @@ trait InteractsWithServerRequest
     /**
      * Get a key from the user provided attributes.
      *
-     * @param string $key
-     *
      * @return array|mixed|null
      */
     public function get(?string $key = null)
@@ -161,6 +159,7 @@ trait InteractsWithServerRequest
             }
             $this->request->files->set($key, $value);
         }
+
         return $this->request->file($key);
     }
 

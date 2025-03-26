@@ -13,12 +13,9 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Traits;
 
-use Closure;
-use Error;
-use BadMethodCallException;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 trait HttpMessageTrait
@@ -77,15 +74,16 @@ trait HttpMessageTrait
     }
 
     /**
-     * Provide a proxy to the message instance
-     * 
-     * @param mixed $object 
-     * @param mixed $method 
-     * @param array $args 
-     * @param Closure|null $default 
-     * @return mixed 
-     * @throws Error 
-     * @throws BadMethodCallException 
+     * Provide a proxy to the message instance.
+     *
+     * @param mixed $object
+     * @param mixed $method
+     * @param array $args
+     *
+     * @throws \Error
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function proxy($object, $method, $args = [], ?\Closure $default = null)
     {

@@ -23,7 +23,7 @@ class CorsMiddlewareTest extends TestCase
 {
     public function test_cors_request()
     {
-        $config = require __DIR__ . '/../src/config/http.php';
+        $config = require __DIR__.'/../src/config/http.php';
         $middleware = new Middleware(new Cors($config['cors'] ?? []));
         $request = Request::create('http://127.0.0.1:8000/api/posts', 'POST');
         $request->headers->set('Origin', 'http://localhost:4200');
@@ -37,7 +37,7 @@ class CorsMiddlewareTest extends TestCase
 
     public function test_preflight_request()
     {
-        $config = require __DIR__ . '/../src/config/http.php';
+        $config = require __DIR__.'/../src/config/http.php';
         $middleware = new Middleware(new Cors($config['cors'] ?? []));
         $request = Request::create('http://127.0.0.1:8000/api/posts', 'OPTIONS');
         $request->headers->set('Origin', 'http://localhost:4200');

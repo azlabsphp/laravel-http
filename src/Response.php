@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http;
 
-use BadMethodCallException;
 use Drewlabs\Laravel\Http\Traits\HttpMessageTrait;
-use Error;
 use Illuminate\Http\Response as HttpResponse;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
@@ -32,6 +30,21 @@ class Response
     {
         $this->message = $response instanceof self ? $response->unwrap() : $response;
         $this->throwIfNotExpected();
+    }
+
+    // Proxy implementation
+    /**
+     * @param mixed       $name
+     * @param array|mixed $arguments
+     *
+     * @throws \Error
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->proxy($this->message, $name, $arguments);
     }
 
     public function setHeader(string $key, $value)
@@ -73,18 +86,5 @@ class Response
         if (!($this->message instanceof HttpResponse || $this->message instanceof HttpFoundationResponse)) {
             throw new \InvalidArgumentException('Not supported response instance');
         }
-    }
-
-    // Proxy implementation
-    /**
-     * @param mixed $name 
-     * @param array|mixed $arguments 
-     * @return mixed 
-     * @throws Error 
-     * @throws BadMethodCallException 
-     */
-    public function __call($name, $arguments)
-    {
-        return $this->proxy($this->message, $name, $arguments);
     }
 }

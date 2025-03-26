@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Drewlabs\Laravel\Http\Factory;
 
 use Drewlabs\Http\Factory\ResponseFactoryInterface;
+use Drewlabs\Laravel\Http\StreamResponse;
 use Drewlabs\Overloadable\MethodCallExpection;
 use Drewlabs\Overloadable\Overloadable;
-use Drewlabs\Laravel\Http\StreamResponse;
 use Illuminate\Http\Response;
 
 use const PREG_SPLIT_NO_EMPTY;

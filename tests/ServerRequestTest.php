@@ -25,8 +25,8 @@ class ServerRequestTest extends TestCase
         $key = Str::md5();
         // Test for Symfony Request
         $symfonyRequest = new Request();
-        $symfonyRequest->headers->set('Authorization', 'Bearer ft_' . $key);
-        $this->assertSame('Bearer ft_' . $key, HttpRequest::getHeader($symfonyRequest, 'Authorization'));
+        $symfonyRequest->headers->set('Authorization', 'Bearer ft_'.$key);
+        $this->assertSame('Bearer ft_'.$key, HttpRequest::getHeader($symfonyRequest, 'Authorization'));
     }
 
     public function test_get_method()

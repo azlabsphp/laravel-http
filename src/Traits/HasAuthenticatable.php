@@ -30,7 +30,7 @@ trait HasAuthenticatable
      *
      * @return static
      */
-    public function setUser(Authenticatable $user = null)
+    public function setUser(?Authenticatable $user = null)
     {
         return $this->setUserResolver(static function () use ($user) {
             return $user;

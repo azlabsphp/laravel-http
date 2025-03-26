@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Middleware;
 
-use Drewlabs\Core\Helpers\Arr;
 use Drewlabs\Http\Exceptions\HttpException;
 use Drewlabs\Laravel\Http\ServerRequest;
 
@@ -32,6 +31,7 @@ class TrustedIpAddress
         if (empty(array_intersect(array_merge($serverRequest->ips() ?? [], [$serverRequest->ip()]), $addresses))) {
             throw HttpException::Unauthorized($request);
         }
+
         return $next($request);
     }
 }

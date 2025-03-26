@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Drewlabs package.
+ * This file is part of the drewlabs namespace.
  *
  * (c) Sidoine Azandrew <azandrewdevelopper@gmail.com>
  *
@@ -15,6 +15,7 @@ namespace Drewlabs\Laravel\Http\Traits;
 
 /**
  * @property \Illuminate\Http\Request $request
+ *
  * @method \Illuminate\Http\Request request()
  */
 trait ArrayAccessible

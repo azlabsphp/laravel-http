@@ -11,8 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
- namespace Drewlabs\Laravel\Http\Tests;
- 
+namespace Drewlabs\Laravel\Http\Tests;
+
 use Drewlabs\Laravel\Http\Factory\BadRequestResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -35,6 +35,6 @@ class BadRequestResponseFactoryTest extends TestCase
         });
         $this->assertInstanceOf(JsonResponse::class, $response = $factory->create(['name' => ['name attribute is required']]));
         $this->assertSame(422, $response->getStatusCode());
-        $this->assertSame(json_encode(['name' => ['name attribute is required']], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES), $response->getContent());
+        $this->assertSame(json_encode(['name' => ['name attribute is required']], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), $response->getContent());
     }
 }

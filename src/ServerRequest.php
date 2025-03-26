@@ -56,6 +56,20 @@ class ServerRequest
     }
 
     /**
+     * @param mixed       $name
+     * @param array|mixed $arguments
+     *
+     * @throws Error
+     * @throws BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->proxy($this->message, $name, $arguments);
+    }
+
+    /**
      * Get the current path info for the request.
      *
      * @throws SuspiciousOperationException
@@ -177,8 +191,6 @@ class ServerRequest
     /**
      * Gets cookie value from the user provided name.
      *
-     * @param string $name
-     *
      * @throws BadRequestException
      *
      * @return string|array
@@ -236,16 +248,6 @@ class ServerRequest
     }
 
     /**
-     * @return bool
-     */
-    private function throwIfNotExcepted()
-    {
-        if (!($this->message instanceof HttpFoundationRequest || $this->message instanceof Request)) {
-            throw new \InvalidArgumentException('Not supported request instance');
-        }
-    }
-
-    /**
      * Creates server request from globals.
      *
      * @throws \InvalidArgumentException
@@ -258,14 +260,12 @@ class ServerRequest
     }
 
     /**
-     * @param mixed $name 
-     * @param array|mixed $arguments 
-     * @return mixed 
-     * @throws Error 
-     * @throws BadMethodCallException 
+     * @return bool
      */
-    public function __call($name, $arguments)
+    private function throwIfNotExcepted()
     {
-        return $this->proxy($this->message, $name, $arguments);
+        if (!($this->message instanceof HttpFoundationRequest || $this->message instanceof Request)) {
+            throw new \InvalidArgumentException('Not supported request instance');
+        }
     }
 }

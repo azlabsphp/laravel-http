@@ -34,7 +34,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/config' => $this->app->basePath('config')], 'drewlabs-http');
+        $this->publishes([__DIR__.'/config' => $this->app->basePath('config')], 'drewlabs-http');
     }
 
     /**
@@ -47,6 +47,7 @@ class ServiceProvider extends BaseServiceProvider
         // Register cors interface
         $this->app->bind(CorsInterface::class, static function ($app) {
             $config = $app['config'];
+
             return new Cors(ConfigurationManager::getInstance()->get('cors', $config->get('http.cors')) ?? ConfigurationBuilder::new()->toArray());
         });
 

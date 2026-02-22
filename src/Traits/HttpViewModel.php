@@ -115,6 +115,34 @@ trait HttpViewModel
         } catch (\Throwable $e) {
             // We catch the exception for it to not propagate
         }
+    }
 
+    /**
+     * create new instance and overried `query` and `request` attributes if provided 
+     * respectively through `$get` and `$post` parameters
+     * 
+     * @param null|array $get 
+     * @param null|array $post 
+     * @return static 
+     */
+    public function duplicate(?array $get = null, ?array $post = null)
+    {
+        $request = $this->request();
+        $query = $get ?? $request->query->all();
+        $post = $post ?? $request->input();
+        $req = new Request(
+            $query,
+            $post,
+            $request->attributes->all(),
+            $request->cookies->all(),
+            $request->files->all(),
+            $request->server->all(),
+            $request->getContent(),
+        );
+
+        // force replace request inputs
+        $req = $req->replace(array_merge($query, $post));
+
+        return new static($req);
     }
 }

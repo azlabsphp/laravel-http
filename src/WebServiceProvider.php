@@ -26,25 +26,19 @@ use Drewlabs\Laravel\Http\Factory\LaravelResponseFactory;
 use Drewlabs\Laravel\Http\Factory\OkResponseFactory;
 use Drewlabs\Laravel\Http\Factory\ServerErrorResponseFactory;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_SLASHES;
-
-
-/** @deprecated v0.4.x will be remove in version 0.5.x. use `ApiServiceProvider` class instead  */
-#[\Deprecated('will be remove in version 0.5.x. use `ApiServiceProvider` class instead', 'v0.4.x')]
-class JsonApiProvider
+class WebServiceProvider
 {
     /**
-     * Register providers for response factory in JSON based HTTP services.
+     * Register providers for response factory in web based HTTP services.
      *
      * @return void
      */
     public static function provide(Container $app)
     {
-        $factory = static function ($data = null, $status = 200, $headers = []) {
-            return new JsonResponse($data, $status, $headers, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $factory = static function ($data = '', $status = 200, $headers = []) {
+            return new Response($data, $status, $headers);
         };
         $app->bind(AuthorizationErrorResponseFactoryInterface::class, static function () use ($factory) {
             return new AuthorizationErrorResponseFactory($factory);
@@ -69,4 +63,5 @@ class JsonApiProvider
         $app->bind(ResponseHandler::class, JsonResponseHandler::class);
         $app->bind(HttpResponseHandler::class, JsonResponseHandler::class);
     }
+
 }

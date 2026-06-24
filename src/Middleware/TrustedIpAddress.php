@@ -22,6 +22,8 @@ class TrustedIpAddress
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
+     * 
+     * @param mixed ...$addresses
      *
      * @return mixed
      */

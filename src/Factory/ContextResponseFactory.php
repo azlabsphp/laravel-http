@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 trait ContextResponseFactory
 {
     /**
-     * @var \Closure($content = '', = 200, array = []): \Symfony\Component\HttpFoundation\Response
+     * @var \Closure($content = '', $status = 200, array = []): Response
      */
     private $responseFactory;
 

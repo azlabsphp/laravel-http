@@ -17,7 +17,7 @@ use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
-
+use Illuminate\Http\Response;
 trait AuthorizeRequest
 {
     /**
@@ -26,9 +26,9 @@ trait AuthorizeRequest
      * @param mixed       $ability
      * @param mixed|array $arguments
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
      *
-     * @return \Illuminate\Auth\Access\Response
+     * @return Response
      */
     public function authorize($ability, $arguments = [])
     {
@@ -44,9 +44,9 @@ trait AuthorizeRequest
      * @param mixed                                            $ability
      * @param mixed|array                                      $arguments
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
      *
-     * @return \Illuminate\Auth\Access\Response
+     * @return Response
      */
     public function authorizeForUser($user, $ability, $arguments = [])
     {

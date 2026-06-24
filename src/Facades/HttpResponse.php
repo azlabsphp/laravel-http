@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Drewlabs\Laravel\Http\Facades;
 
+use BadMethodCallException;
 use Drewlabs\Laravel\Http\Response;
 
 /**
@@ -23,10 +24,18 @@ use Drewlabs\Laravel\Http\Response;
  */
 class HttpResponse
 {
+    /**
+     * forward static calls to server response instance
+     * 
+     * @param mixed $name 
+     * @param mixed $arguments 
+     * @return mixed 
+     * @throws BadMethodCallException 
+     */
     public static function __callStatic($name, $arguments)
     {
         if (empty($arguments)) {
-            throw new \BadMethodCallException(static::class.' is facade to psr7, symfony, etc... response types, therefor calling method statically requires a least first parameter to be a supported request type');
+            throw new \BadMethodCallException(static::class.' is facade to framework response instance therefore calling method statically requires a least first parameter to be a supported request type');
         }
 
         return (new Response($arguments[0]))->{$name}(...\array_slice($arguments, 1));

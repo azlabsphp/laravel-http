@@ -17,6 +17,7 @@ use Drewlabs\Core\Helpers\Str;
 use Drewlabs\Validation\Traits\PreparesInputs;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 /**
  * @method mixed __call(string $name, $arguments)
@@ -104,17 +105,11 @@ trait HttpViewModel
     private function bootInstance($request = null)
     {
         try {
-            // Making the class injectable into controller actions
-            // by resolving the current request from the service container
             $this->request = $request ?? Container::getInstance()->make('request');
-
-            // We set the current instance user resolver property
-            $this->setUserResolver($this->request instanceof Request ? $this->request->getUserResolver() : static function () {
+            $this->setUserResolver($this->request && $this->request instanceof Request ? $this->request->getUserResolver() : static function () {
                 return null;
             });
-        } catch (\Throwable $e) {
-            // We catch the exception for it to not propagate
-        }
+        } finally {}
     }
 
     /**
@@ -130,6 +125,7 @@ trait HttpViewModel
         $request = $this->request();
         $query = $get ?? $request->query->all();
         $post = $post ?? $request->input();
+
         $req = new Request(
             $query,
             $post,
@@ -140,9 +136,6 @@ trait HttpViewModel
             $request->getContent(),
         );
 
-        // force replace request inputs
-        $req = $req->replace(array_merge($query, $post));
-
-        return new static($req);
+        return new static($req->replace(array_merge($query, $post)));
     }
 }

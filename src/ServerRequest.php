@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Drewlabs\Laravel\Http;
 
 use Drewlabs\Core\Helpers\Arr;
-use Drewlabs\Laravel\Http\Exceptions\NotSupportedMessageException;
 use Drewlabs\Laravel\Http\Traits\HttpMessageTrait;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -26,16 +25,17 @@ class ServerRequest
 {
     use HttpMessageTrait;
 
-    /** @var string[] */
-    private const TRUSTED_HEADERS = [
-        'HTTP_CLIENT_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_X_FORWARDED',
-        'HTTP_X_CLUSTER_CLIENT_IP',
-        'HTTP_FORWARDED_FOR',
-        'HTTP_FORWARDED',
-        'REMOTE_ADDR',
-    ];
+    // /** @var string[] */
+    // TODO: remove code below in future releases
+    // private const TRUSTED_HEADERS = [
+    //     'HTTP_CLIENT_IP',
+    //     'HTTP_X_FORWARDED_FOR',
+    //     'HTTP_X_FORWARDED',
+    //     'HTTP_X_CLUSTER_CLIENT_IP',
+    //     'HTTP_FORWARDED_FOR',
+    //     'HTTP_FORWARDED',
+    //     'REMOTE_ADDR',
+    // ];
 
     /**
      * Creates class instances.
@@ -59,8 +59,8 @@ class ServerRequest
      * @param mixed       $name
      * @param array|mixed $arguments
      *
-     * @throws Error
-     * @throws BadMethodCallException
+     * @throws \Error
+     * @throws \BadMethodCallException
      *
      * @return mixed
      */
@@ -74,7 +74,7 @@ class ServerRequest
      *
      * @throws SuspiciousOperationException
      * @throws ConflictingHeadersException
-     * @throws NotSupportedMessageException
+     * @throws \Exception
      *
      * @return string
      */
@@ -92,13 +92,10 @@ class ServerRequest
      */
     public function withMethod(string $method)
     {
-        // Clone the current request instance
         $self = clone $this;
 
-        // Set the method value on the request instance
         $self->message->setMethod($method);
 
-        // Return the cloned instance
         return $self;
     }
 

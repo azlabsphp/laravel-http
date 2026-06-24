@@ -69,7 +69,7 @@ class UploadedFile extends HttpUploadedFile
         $this->psrUploadedFile = $psrUploadedFile;
     }
 
-    public function move($directory, $name = null): File
+    public function move(string $directory, $name = null): File
     {
         if (!$this->isValid() || $this->test) {
             return parent::move($directory, $name);
@@ -83,7 +83,7 @@ class UploadedFile extends HttpUploadedFile
             throw new FileException(sprintf('Could not move the file "%s" to "%s" (%s)', $this->getPathname(), $target, $e->getMessage()), 0, $e);
         }
 
-        @chmod($target, 0666 & ~umask());
+        @chmod($target->getPathname(), 0666 & ~umask());
 
         return $target;
     }

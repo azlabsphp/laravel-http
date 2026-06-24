@@ -17,8 +17,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Override;
 
-/** @deprecated v0.4.x typo class name use GuestGuard instead */
-class GuessGuard implements Guard
+class GuestGuard implements Guard
 {
     /** @var Authenticatable */
     private $user;

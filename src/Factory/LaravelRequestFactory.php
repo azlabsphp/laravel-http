@@ -86,7 +86,7 @@ class LaravelRequestFactory implements RequestFactoryInterface
     /**
      * Creates framework UploadedFile instance from PSR-7 ones.
      *
-     * @return Drewlabs\Laravel\Http\Factory\UploadedFile
+     * @return UploadedFile
      */
     private function createUploadedFile(UploadedFileInterface $psrUploadedFile): UploadedFile
     {

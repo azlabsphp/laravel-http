@@ -20,8 +20,7 @@ use Drewlabs\Http\Factory\RequestFactoryInterface;
 use Drewlabs\Http\Factory\ViewResponseFactoryInterface;
 use Drewlabs\Laravel\Http\Factory\LaravelRequestFactory;
 use Drewlabs\Laravel\Http\Factory\ViewResponseFactory;
-use Drewlabs\Laravel\Http\Guards\GuessGuard;
-use Illuminate\Auth\RequestGuard;
+use Drewlabs\Laravel\Http\Guards\GuestGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -61,42 +60,13 @@ class ServiceProvider extends BaseServiceProvider
             return new ViewResponseFactory();
         });
 
-        // Register an anonymous guard, that allow to run application without
-        // worrying about any undefined application guard issues
-        $this->registerGuessGuard();
-    }
 
-    private function registerGuessGuard()
-    {
         Auth::resolved(function ($auth) {
             $auth->extend('anonymous', function ($app) {
-                return tap($this->createGuessGuard(), static function ($guard) use ($app) {
+                return tap(new GuestGuard, static function ($guard) use ($app) {
                     $app->refresh('request', $guard, 'setRequest');
                 });
             });
         });
-    }
-
-    /**
-     * Register guess the guard.
-     *
-     * @return RequestGuard
-     */
-    private function createGuessGuard()
-    {
-        return $this->createRequestGuard(RequestGuard::class, new GuessGuard(), $this->app->make('request'), null);
-    }
-
-    /**
-     * @template T
-     *
-     * @param class-string<T> $blueprint
-     * @param mixed           ...$parameters
-     *
-     * @return T
-     */
-    private function createRequestGuard(string $blueprint, ...$parameters)
-    {
-        return new $blueprint(...$parameters);
     }
 }

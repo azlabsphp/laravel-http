@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Drewlabs\Laravel\Http\Traits;
 
 use Illuminate\Container\Container;
-use Psr\Container\ContainerInterface;
 
+/** @deprecated 0.4.x will be remove in version 0.5.x */
 trait ContainerAware
 {
     /**
+     * @deprecated v0.4.x will be remove in future release
+     * 
      * Create an abstract implementation from framework context.
      *
      * @param mixed $abstract

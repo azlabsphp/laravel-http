@@ -20,24 +20,31 @@ namespace Drewlabs\Laravel\Http\Traits;
  */
 trait ArrayAccessible
 {
+    /** @param mixed $offset */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->request->offsetExists($offset);
     }
 
+    /** @param mixed $offset */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->request->offsetGet($offset);
     }
 
+    /** 
+     * @param mixed $offset
+     * @param mixed $value
+     */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         return $this->request->offsetSet($offset, $value);
     }
 
+    /** @param mixed $offset */
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {

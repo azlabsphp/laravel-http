@@ -15,19 +15,20 @@ namespace Drewlabs\Laravel\Http\Factory;
 
 use Drewlabs\Http\Factory\ViewResponseFactoryInterface;
 use Illuminate\Container\Container;
-use Illuminate\Support\Facades\View;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\View;
 
 class ViewResponseFactory implements ViewResponseFactoryInterface
 {
     /**
-     * @var \Closure():\Illuminate\Contracts\View\Factory
+     * @var \Closure():ViewFactory
      */
     private $factoryResolver;
 
     /**
      * Creates class instance.
      *
-     * @param callable|\Closure():Illuminate\Contracts\View\Factory|null $viewResolver
+     * @param callable|\Closure():ViewFactory|null $viewResolver
      */
     public function __construct(?callable $viewResolver = null)
     {
@@ -49,7 +50,7 @@ class ViewResponseFactory implements ViewResponseFactoryInterface
     /**
      * Creates and return the default view factory resolver.
      *
-     * @return \Closure():Illuminate\Contracts\View\Factory
+     * @return \Closure():ViewFactory
      */
     private static function useDefault()
     {

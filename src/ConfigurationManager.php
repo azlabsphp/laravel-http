@@ -63,11 +63,13 @@ class ConfigurationManager
         return null === $value ? ($default instanceof \Closure ? $default() : $default) : $value;
     }
 
+    /** @param mixed $offset */
     public function offsetExists($offset)
     {
         return null !== Arr::get($offset, null);
     }
 
+    /** @param mixed $offset */
     public function offsetGet($offset)
     {
         return $this->get($offset, null);

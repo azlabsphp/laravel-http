@@ -15,6 +15,7 @@ namespace Drewlabs\Laravel\Http\Factory;
 
 use Drewlabs\Http\Factory\Psr\PsrRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -125,7 +126,7 @@ class PsrRequestFactory implements PsrRequestFactoryInterface
         );
     }
 
-    private function setHeaders($request, array $headers)
+    private function setHeaders(ServerRequestInterface $request, array $headers)
     {
 
         foreach ($headers as $name => $value) {

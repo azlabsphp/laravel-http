@@ -10,15 +10,16 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
-        "illuminate/http": "^9.0|^10.0|^11.0",
-        "illuminate/container": "^9.0|^10.0|^11.0",
-        "psr/http-message": "^1.0|^2.0",
+        "php": "^8.2",
+        "drewlabs/contracts": "^0.3|^0.4",
+        "drewlabs/core-helpers": "^0.3|^0.4",
+        "drewlabs/cors": "^0.2.0|^0.3.0",
         "drewlabs/http-contracts": "^0.2",
-        "drewlabs/core-helpers": "^0.3",
-        "drewlabs/contracts": "^0.3",
-        "drewlabs/cors": "^0.2.0",
-        "drewlabs/overloadable": "^0.1.10|^0.3"
+        "drewlabs/overloadable": "^0.3",
+        "illuminate/container": "^11.0|^12.0|^13.0",
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "psr/http-message": "^1.0|^2.0",
+        "symfony/polyfill-php83": "^1.38"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +48,7 @@
         "phpunit/phpunit": "^9.5",
         "nyholm/psr7": "^1.5",
         "drewlabs/psr7": "^0.1.3",
-        "drewlabs/validation": "^0.3"
+        "drewlabs/validation": "^0.3|^0.4"
     },
     "config": {
         "optimize-autoloader": true,

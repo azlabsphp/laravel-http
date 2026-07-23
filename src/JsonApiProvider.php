@@ -33,7 +33,6 @@ use const JSON_UNESCAPED_SLASHES;
 
 
 /** @deprecated v0.4.x will be remove in version 0.5.x. use `ApiServiceProvider` class instead  */
-#[\Deprecated('will be remove in version 0.5.x. use `ApiServiceProvider` class instead', 'v0.4.x')]
 class JsonApiProvider
 {
     /**
